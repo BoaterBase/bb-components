@@ -3,7 +3,30 @@
   display: block;
   /*font-family: inherit;*/
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  box-sizing: border-box;
 
+
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+.media-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  background-color: rgba(0, 30, 50, 0.4);
+  background-image: linear-gradient(120deg, rgba(0, 30, 50, 0.25) 20%, rgba(0, 30, 50, 0) 100%);
+  transition: opacity 0.5s ease-in-out;
 }
 
 .title {
@@ -61,4 +84,112 @@
 
 .contact-button:hover {
   background-color: rgba(255, 255, 255, 0.95);
+}
+
+
+/* Specifications */
+.specifications h2 {
+  opacity: 0.75;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4rem;
+  padding: 0;
+  margin: 2rem 2rem;
+  text-align: center;
+}
+
+.specifications ul {
+  list-style: none;
+  margin: 0 2rem;
+  padding: 0;
+  font-size: 1rem;
+  columns: 20rem 2;
+}
+
+.specifications li {
+  margin: 0;
+  padding: 0.25rem 0;
+  list-style: none;
+
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  break-inside: avoid;
+}
+
+.specifications li h3 {
+  margin: 0;
+  font-size: inherit;
+  font-weight: 600;
+}
+
+.specifications li h3::after {
+  content: ':';
+}
+
+.specifications li span {
+  opacity: 0.75;
+  text-align: right;
+}
+
+
+/* Content Blocks */
+
+.content-heading h2 {
+  opacity: 0.8;
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.4rem;
+  padding: 0;
+  margin: 3.5rem 2rem;
+  text-align: center;
+}
+
+.content-text {
+  text-align: center;
+  max-width: 50rem;
+  margin: 2rem auto;
+  font-size: 1.1rem;
+  line-height: 1.4rem;
+  opacity: 0.75;
+}
+
+.content-text p {
+  margin: 0.5rem;
+}
+
+.content-quote {
+  margin: 3rem;
+  text-align: center;
+}
+
+.content-quote blockquote {
+  quotes: "“""”""‘""’";
+  font-style: italic;
+  font-size: 1.5rem;
+  line-height: 1.7rem;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: inherit;
+  opacity: 0.5;
+  text-align: center;
+  margin: 0 0 0.5rem 0;
+  padding: 0;
+}
+
+.content-quote blockquote:before {
+  font-size: 5rem;
+  line-height: 1rem;
+  content: open-quote;
+  opacity: 0.25;
+  position: relative;
+  top: 1.75rem;
+  left: -0.5rem;
+}
+
+.content-quote blockquote:after {
+  font-size: 4rem;
+  content: close-quote;
+  opacity: 0.25;
+  position: absolute;
+  margin-top: 1.25rem;
 }

@@ -10,6 +10,7 @@
   "collection": "dist/collection/collection-manifest.json",
   "collection:main": "dist/collection/index.js",
   "unpkg": "dist/bb-components/bb-components.js",
+  "jsdelivr": "dist/bb-components/bb-components.js",
   "files": [
     "dist/",
     "loader/"
@@ -19,14 +20,18 @@
     "start": "stencil build --dev --watch --serve",
     "test": "stencil test --spec --e2e",
     "test.watch": "stencil test --spec --e2e --watchAll",
-    "generate": "stencil generate"
+    "generate": "stencil generate",
+    "publish": "npm publish --access public"
   },
   "devDependencies": {
-    "@stencil/core": "^1.3.3"
+    "@stencil/core": "^1.7.5"
   },
   "license": "MIT",
   "dependencies": {
+    "@stencil/router": "^1.0.1",
+    "firebase": "^7.2.3",
     "firestore-parser": "^0.8.9",
-    "ionicons": "^4.6.3"
+    "ionicons": "^4.6.3",
+    "slugify": "^1.3.6"
   }
 }

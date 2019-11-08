@@ -1,0 +1,41 @@
+:host {
+  --bb-card-hover-background: #f1f1f1;
+  --bb-card-border-radius: 0.4rem;
+  --bb-card-border: none;
+  --bb-card-padding: 0.5rem;
+  --bb-card-margin: 0.5rem;
+  --bb-card-color: inherit;
+  --bb-card-hover-color: deepskyblue;
+
+  --bb-card-image-border-radius: 0.3rem;
+  --bb-card-image-box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.1);
+
+  display: block;
+  margin: var(--bb-card-margin);
+}
+
+
+.link {
+  border-radius: var(--bb-card-border-radius);
+  border: var(--bb-card-border);
+  padding: var(--bb-card-padding);
+  color: var(--bb-card-color);
+}
+
+.link:hover {
+  background-color: var(--bb-card-hover-background);
+}
+
+.link:hover .title {
+  color: var(--bb-card-hover-color);
+}
+
+.preview-image img {
+  border-radius: var(--bb-card-image-border-radius);
+  box-shadow: var(--bb-card-image-box-shadow);
+}
+
+.link:hover .preview-image {
+  transition: transform 0.5s;
+  transform: scale(1.01);
+}

@@ -1,0 +1,14 @@
+:host {
+  all: initial;
+  display: block;
+  font-family: sans-serif;
+}
+
+.card-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card-list-item {
+  width: 50%;
+}
