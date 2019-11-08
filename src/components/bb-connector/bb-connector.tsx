@@ -7,10 +7,22 @@ import '@stencil/router';
   shadow: true
 })
 export class BbConnector {
-  @Prop() base: string = '';
-  @Prop() path: string = '';
+  /**
+   * The base component type to start the routing from.
+   */
+  @Prop() base: 'profile' | 'listing' | 'collection';
+  /**
+   * The path or id of the base type you want to display.
+   */
+  @Prop() path: string;
+  /**
+   * The root for mapping urls e.g. /custompath .
+   */
   @Prop() root: string = '';
-  @Prop() mode: string = '';
+  /**
+   * The history mode to use for navigation.
+   */
+  @Prop() mode: 'hash' | 'browser' = 'browser';
 
   get isPathValid() {
     return !!this.path;

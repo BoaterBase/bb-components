@@ -12,9 +12,21 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 export namespace Components {
   interface BbCollection {}
   interface BbConnector {
-    'base': string;
-    'mode': string;
+    /**
+    * The base component type to start the routing from.
+    */
+    'base': 'profile' | 'listing' | 'collection';
+    /**
+    * The history mode to use for navigation.
+    */
+    'mode': 'hash' | 'browser';
+    /**
+    * The path or id of the base type you want to display.
+    */
     'path': string;
+    /**
+    * The root for mapping urls e.g. /custompath .
+    */
     'root': string;
   }
   interface BbContactForm {}
@@ -84,9 +96,21 @@ declare global {
 declare namespace LocalJSX {
   interface BbCollection {}
   interface BbConnector {
-    'base'?: string;
-    'mode'?: string;
+    /**
+    * The base component type to start the routing from.
+    */
+    'base'?: 'profile' | 'listing' | 'collection';
+    /**
+    * The history mode to use for navigation.
+    */
+    'mode'?: 'hash' | 'browser';
+    /**
+    * The path or id of the base type you want to display.
+    */
     'path'?: string;
+    /**
+    * The root for mapping urls e.g. /custompath .
+    */
     'root'?: string;
   }
   interface BbContactForm {}
