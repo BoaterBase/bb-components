@@ -10,11 +10,6 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 
 export namespace Components {
-  interface BbBoatListing {
-    'autoPlay': boolean;
-    'boatId': string;
-    'inset': number;
-  }
   interface BbCollection {}
   interface BbConnector {
     'base': string;
@@ -40,12 +35,6 @@ export namespace Components {
 
 declare global {
 
-
-  interface HTMLBbBoatListingElement extends Components.BbBoatListing, HTMLStencilElement {}
-  var HTMLBbBoatListingElement: {
-    prototype: HTMLBbBoatListingElement;
-    new (): HTMLBbBoatListingElement;
-  };
 
   interface HTMLBbCollectionElement extends Components.BbCollection, HTMLStencilElement {}
   var HTMLBbCollectionElement: {
@@ -83,7 +72,6 @@ declare global {
     new (): HTMLBbProfileElement;
   };
   interface HTMLElementTagNameMap {
-    'bb-boat-listing': HTMLBbBoatListingElement;
     'bb-collection': HTMLBbCollectionElement;
     'bb-connector': HTMLBbConnectorElement;
     'bb-contact-form': HTMLBbContactFormElement;
@@ -94,11 +82,6 @@ declare global {
 }
 
 declare namespace LocalJSX {
-  interface BbBoatListing {
-    'autoPlay'?: boolean;
-    'boatId'?: string;
-    'inset'?: number;
-  }
   interface BbCollection {}
   interface BbConnector {
     'base'?: string;
@@ -122,7 +105,6 @@ declare namespace LocalJSX {
   }
 
   interface IntrinsicElements {
-    'bb-boat-listing': BbBoatListing;
     'bb-collection': BbCollection;
     'bb-connector': BbConnector;
     'bb-contact-form': BbContactForm;
@@ -138,7 +120,6 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
   export namespace JSX {
     interface IntrinsicElements {
-      'bb-boat-listing': LocalJSX.BbBoatListing & JSXBase.HTMLAttributes<HTMLBbBoatListingElement>;
       'bb-collection': LocalJSX.BbCollection & JSXBase.HTMLAttributes<HTMLBbCollectionElement>;
       'bb-connector': LocalJSX.BbConnector & JSXBase.HTMLAttributes<HTMLBbConnectorElement>;
       'bb-contact-form': LocalJSX.BbContactForm & JSXBase.HTMLAttributes<HTMLBbContactFormElement>;

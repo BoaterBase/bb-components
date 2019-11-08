@@ -1,6 +1,6 @@
 import { Component, Host, State, h } from '@stencil/core';
 
-const apiPath = `https://firestore.googleapis.com/v1/projects/boaterbase-v2/databases/(default)/`
+//const apiPath = `https://firestore.googleapis.com/v1/projects/boaterbase-v2/databases/(default)/`
 const imagePath = `https://res.cloudinary.com/boaterbase/image/upload/`;
 
 @Component({
