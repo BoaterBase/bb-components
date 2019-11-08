@@ -1,3 +1,93 @@
 :host {
+  --primary-font: inherit;
+
+  all: initial;
   display: block;
+  font: var(--primary-font);
+}
+
+.heading-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.large-heading {
+  display: none;
+}
+
+.small-heading {
+  display: block;
+}
+
+@media(min-width: 900px) {
+  .heading-container {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .large-heading {
+    display: flex;
+  }
+
+  .small-heading {
+    display: none;
+  }
+
+
+}
+
+.hover-zoom {
+  cursor: zoom-in;
+  transition: all 0.25s ease-in-out;
+}
+
+.hover-zoom:hover {
+  transform: scale(1.01);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.specs {
+  list-style: none;
+  margin: 3rem 2rem;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.specs li {
+  flex: auto;
+  width: 50%;
+  display: block;
+  list-style: none;
+  margin: 0 0;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.specs li h3 {
+  display: inline;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.specs li h3::after {
+  content: ':';
+  margin-right: 1rem;
+}
+
+.specs li span {
+  opacity: 0.75;
+}
+
+
+.gallery-thumb {
+  opacity: 0.5;
+  transition: opacity 0.25s;
+}
+
+.gallery-thumb:hover {
+  opacity: 1.0;
 }

@@ -22,7 +22,11 @@ export namespace Components {
     'path': string;
     'root': string;
   }
-  interface BbListing {}
+  interface BbContactForm {}
+  interface BbListing {
+    'history': any;
+    'listingPath': string;
+  }
   interface BbListingCard {
     'history': any;
     'listingData': any;
@@ -30,7 +34,7 @@ export namespace Components {
   }
   interface BbProfile {
     'history': any;
-    'profileHandle': string;
+    'profilePath': string;
   }
 }
 
@@ -55,6 +59,12 @@ declare global {
     new (): HTMLBbConnectorElement;
   };
 
+  interface HTMLBbContactFormElement extends Components.BbContactForm, HTMLStencilElement {}
+  var HTMLBbContactFormElement: {
+    prototype: HTMLBbContactFormElement;
+    new (): HTMLBbContactFormElement;
+  };
+
   interface HTMLBbListingElement extends Components.BbListing, HTMLStencilElement {}
   var HTMLBbListingElement: {
     prototype: HTMLBbListingElement;
@@ -76,6 +86,7 @@ declare global {
     'bb-boat-listing': HTMLBbBoatListingElement;
     'bb-collection': HTMLBbCollectionElement;
     'bb-connector': HTMLBbConnectorElement;
+    'bb-contact-form': HTMLBbContactFormElement;
     'bb-listing': HTMLBbListingElement;
     'bb-listing-card': HTMLBbListingCardElement;
     'bb-profile': HTMLBbProfileElement;
@@ -95,7 +106,11 @@ declare namespace LocalJSX {
     'path'?: string;
     'root'?: string;
   }
-  interface BbListing {}
+  interface BbContactForm {}
+  interface BbListing {
+    'history'?: any;
+    'listingPath'?: string;
+  }
   interface BbListingCard {
     'history'?: any;
     'listingData'?: any;
@@ -103,13 +118,14 @@ declare namespace LocalJSX {
   }
   interface BbProfile {
     'history'?: any;
-    'profileHandle'?: string;
+    'profilePath'?: string;
   }
 
   interface IntrinsicElements {
     'bb-boat-listing': BbBoatListing;
     'bb-collection': BbCollection;
     'bb-connector': BbConnector;
+    'bb-contact-form': BbContactForm;
     'bb-listing': BbListing;
     'bb-listing-card': BbListingCard;
     'bb-profile': BbProfile;
@@ -125,6 +141,7 @@ declare module "@stencil/core" {
       'bb-boat-listing': LocalJSX.BbBoatListing & JSXBase.HTMLAttributes<HTMLBbBoatListingElement>;
       'bb-collection': LocalJSX.BbCollection & JSXBase.HTMLAttributes<HTMLBbCollectionElement>;
       'bb-connector': LocalJSX.BbConnector & JSXBase.HTMLAttributes<HTMLBbConnectorElement>;
+      'bb-contact-form': LocalJSX.BbContactForm & JSXBase.HTMLAttributes<HTMLBbContactFormElement>;
       'bb-listing': LocalJSX.BbListing & JSXBase.HTMLAttributes<HTMLBbListingElement>;
       'bb-listing-card': LocalJSX.BbListingCard & JSXBase.HTMLAttributes<HTMLBbListingCardElement>;
       'bb-profile': LocalJSX.BbProfile & JSXBase.HTMLAttributes<HTMLBbProfileElement>;

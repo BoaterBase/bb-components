@@ -1,7 +1,11 @@
 {
   "name": "@boaterbase/bb-components",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "BoaterBase Web Components",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BoaterBase/bb-components.git"
+  },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "es2015": "dist/esm/index.mjs",
@@ -30,7 +34,6 @@
   "dependencies": {
     "@stencil/router": "^1.0.1",
     "firebase": "^7.2.3",
-    "firestore-parser": "^0.8.9",
     "ionicons": "^4.6.3",
     "slugify": "^1.3.6"
   }

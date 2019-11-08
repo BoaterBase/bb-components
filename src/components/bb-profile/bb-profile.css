@@ -4,6 +4,28 @@
   font-family: sans-serif;
 }
 
+.header {
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 1rem;
+}
+
+.search-select {
+  font-weight: 300;
+  appearance: none;
+  font-size: 1rem;
+  border: none;
+  background: rgba(200, 200, 200, 0.5);
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+}
+
 .card-list {
   display: flex;
   flex-wrap: wrap;

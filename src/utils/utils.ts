@@ -16,3 +16,11 @@ export function cdnAsset(info, format = undefined, transform = 't_small_thumbnai
   return `${imagePath}${info.resource_type}/upload/${transform}/${info.public_id}${format ? '.' + format : ''}`;
   //f_immutable_cache,c_scale,w_auto,dpr_auto,q_auto,fl_lossy,f_auto/c_limit,w_2000
 }
+
+export function formatCurrency(amount, currency = 'USD') {
+  return (new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: currency,
+  })).format(amount);
+}
+

@@ -7,10 +7,11 @@
 
 ## Properties
 
-| Property  | Attribute | Description | Type     | Default     |
-| --------- | --------- | ----------- | -------- | ----------- |
-| `boatId`  | `boat-id` |             | `string` | `undefined` |
-| `padding` | `padding` |             | `string` | `undefined` |
+| Property   | Attribute   | Description | Type      | Default     |
+| ---------- | ----------- | ----------- | --------- | ----------- |
+| `autoPlay` | `auto-play` |             | `boolean` | `false`     |
+| `boatId`   | `boat-id`   |             | `string`  | `undefined` |
+| `inset`    | `inset`     |             | `number`  | `0`         |
 
 
 ## Dependencies
