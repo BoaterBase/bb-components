@@ -1,5 +1,4 @@
 import { Component, Host, State, h } from '@stencil/core';
-import FireStoreParser from 'firestore-parser';
 
 const apiPath = `https://firestore.googleapis.com/v1/projects/boaterbase-v2/databases/(default)/`
 const imagePath = `https://res.cloudinary.com/boaterbase/image/upload/`;
@@ -16,7 +15,7 @@ export class BbCollection {
   @State() search: string = '';
 
   async componentWillLoad() {
-    this.collection = await fetch(apiPath + 'documents/listings').then((r) => r.json()).then(json => FireStoreParser(json));
+    //this.collection = await fetch(apiPath + 'documents/listings').then((r) => r.json()).then(json => FireStoreParser(json));
     this.loaded = true;
   }
 
