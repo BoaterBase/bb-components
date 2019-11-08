@@ -8,6 +8,7 @@ import { firestore } from 'firebase';
   shadow: true
 })
 export class BbProfile {
+
   @Prop() profilePath: string;
   @Prop() history: any;
 

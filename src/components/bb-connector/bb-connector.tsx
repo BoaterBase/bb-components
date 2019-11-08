@@ -38,7 +38,7 @@ export class BbConnector {
         <stencil-router historyType={this.mode == 'hash' ? 'hash' : 'browser'}>
           {
             this.isRootValid && this.isPathValid && this.base == 'listing' && <stencil-route-switch scrollTopOffset={0}>
-              <stencil-route url={this.root + '/'} exact={true} routeRender={() => (<div>Listing {this.path}</div>)}></stencil-route>
+              <stencil-route url={[this.root, this.root + '/']} exact={true} routeRender={() => (<div>Listing {this.path}</div>)}></stencil-route>
               <stencil-route url={this.root + '/updates/:updateId'} exact={true} routeRender={(props) => (<div>Listing Update {this.path} {props.match.params.updateId}</div>)}></stencil-route>
               <stencil-route routeRender={() => (<div>404 - Listing</div>)}></stencil-route>
             </stencil-route-switch>
@@ -46,7 +46,7 @@ export class BbConnector {
 
           {
             this.isRootValid && this.isPathValid && this.base == 'profile' && <stencil-route-switch scrollTopOffset={0}>
-              <stencil-route url={this.root + '/'} exact={true} routeRender={(props) => <bb-profile profilePath={this.path} history={this.historyHelper(props.history)}></bb-profile>}></stencil-route>
+              <stencil-route url={[this.root, this.root + '/']} exact={true} routeRender={(props) => <bb-profile profilePath={this.path} history={this.historyHelper(props.history)}></bb-profile>}></stencil-route>
               <stencil-route url={this.root + '/listings/:listingId'} exact={true} routeRender={(props) => (<bb-listing listingPath={props.match.params.listingId} history={this.historyHelper(props.history)}></bb-listing>)}></stencil-route>
 
               <stencil-route url={this.root + '/updates/:updateId'} exact={true} routeRender={(props) => (<div>Profile/Update {this.path} {props.match.params.updateId}</div>)}></stencil-route>
@@ -59,7 +59,7 @@ export class BbConnector {
 
           {
             this.isRootValid && this.isPathValid && this.base == 'collection' && <stencil-route-switch scrollTopOffset={0}>
-              <stencil-route url={this.root + '/'} exact={true} routeRender={() => (<div>Collection {this.path}</div>)}></stencil-route>
+              <stencil-route url={[this.root, this.root + '/']} exact={true} routeRender={() => (<div>Collection {this.path}</div>)}></stencil-route>
               <stencil-route url={this.root + '/listings/:listingId'} exact={true} routeRender={(props) => (<div>Collection/Listing {this.path} {props.match.params.collectionId}</div>)}></stencil-route>
               <stencil-route url={this.root + '/listings/:listingId/updates/:updateId'} exact={true} routeRender={(props) => (<div>Collection/Listing/Update {this.path} {props.match.params.collectionId}</div>)}></stencil-route>
               <stencil-route routeRender={() => (<div>404 - Collection</div>)}></stencil-route>
