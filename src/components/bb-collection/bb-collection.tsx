@@ -1,7 +1,6 @@
-import { Component, Host, State, h } from '@stencil/core';
-
-//const apiPath = `https://firestore.googleapis.com/v1/projects/boaterbase-v2/databases/(default)/`
-const imagePath = `https://res.cloudinary.com/boaterbase/image/upload/`;
+import { Component, Host, Prop, State, h } from '@stencil/core';
+import { fb } from '../../utils/utils';
+import { firestore } from 'firebase';
 
 @Component({
   tag: 'bb-collection',
@@ -9,46 +8,46 @@ const imagePath = `https://res.cloudinary.com/boaterbase/image/upload/`;
   shadow: true
 })
 export class BbCollection {
-  @State() collection: any;
-  @State() loaded: boolean = false;
+  @Prop() collectionPath: string;
+  @Prop() history: any;
 
-  @State() search: string = '';
+  @State() collectionsSnaphot: firestore.DocumentSnapshot;
 
-  async componentWillLoad() {
-    //this.collection = await fetch(apiPath + 'documents/listings').then((r) => r.json()).then(json => FireStoreParser(json));
-    this.loaded = true;
+  get collectionId() {
+    // Allow for pretty urls where the id is at the end
+    return this.collectionPath.split('-').pop();
   }
 
-  searchHandler = (ev: InputEvent) => {
-    var el = ev.target as HTMLInputElement;
-    this.search = el.value;
+  async componentDidLoad() {
+    this.collectionsSnaphot = await fb.firestore().collection('collections').doc(this.collectionId).get();
   }
 
   render() {
-    if (this.loaded && this.collection && this.collection.documents) {
-      let boats = this.collection.documents.filter(({ fields }) => fields.title.toLowerCase().indexOf(this.search) != -1);
+    if (!this.collectionsSnaphot)
+      return <Host>
+        <ion-icon name="help-buoy" class="spin" style={{ width: '2rem', display: 'block', margin: '40vh auto', color: '#cde' }}></ion-icon>
+      </Host>
+    if (!this.collectionsSnaphot.exists)
+      return <Host>Missing</Host>
 
-      boats = [...boats, ...boats, ...boats]
-      return (
-        <Host>
-          <h1>Featured Boats</h1>
-          <form>
-            <input type="search" placeholder="Search" value={this.search} onInput={this.searchHandler}></input>
-          </form>
-          <ul>
-            {boats.map(({ name, fields }) => (<li key={name}>
-              <div style={{ padding: '0.5rem' }}>
-                {fields.media && <img onClick={() => { this.loaded = false }} onLoad={(ev) => (ev.target as any).style.opacity = 1.0} style={{ transition: 'opacity 0.5s', opacity: '0', backgroundColor: fields.media[0].info.colors ? fields.media[0].info.colors[0].color : 'black', display: 'block', width: '100%' }} sizes="100vw" src={`${imagePath}c_scale,w_auto,dpr_auto,q_auto,fl_lossy,f_auto/c_limit,w_800/${fields.media[0].info.public_id}`} />}
+    let collection = this.collectionsSnaphot.data();
 
-                <h3>{fields.title}</h3>
-              </div>
-            </li>))}
-          </ul>
-        </Host>
-      );
-    }
-    else
-      return (<Host></Host>)
+    let filteredListings = collection.listings;
+
+    return (<Host>
+      <div class="header" style={{ backgroundImage: collection.header && collection.header.info && collection.header.info.secure_url && `url('${collection.header.info.secure_url}')` }}>
+        <svg viewBox="0 0 2 1" style={{ display: 'block', width: '100%' }}></svg>
+        <div class="header-overlay">
+          <h1 style={{ margin: '0.5rem 1rem' }}>{collection.title}</h1>
+          <div style={{ margin: '0.5rem 1rem' }}>{collection.summary}</div>
+
+
+        </div>
+      </div>
+      {filteredListings && <div class="card-grid">
+        {filteredListings.map(listing => <div class="card-grid-item"><bb-listing-card listingId={listing.id} listingData={listing.data} history={this.history}></bb-listing-card></div>)}
+      </div>}
+    </Host>)
   }
 
 }

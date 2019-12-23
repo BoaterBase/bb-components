@@ -1,9 +1,8 @@
 :host {
-  --bb-card-hover-background: #f1f1f1;
   --bb-card-border-radius: 0.4rem;
   --bb-card-border: none;
-  --bb-card-padding: 0.5rem;
-  --bb-card-margin: 0.5rem;
+  --bb-card-padding: 0rem;
+  --bb-card-margin: 0rem;
   --bb-card-color: inherit;
   --bb-card-hover-color: deepskyblue;
 
@@ -22,9 +21,7 @@
   color: var(--bb-card-color);
 }
 
-.link:hover {
-  background-color: var(--bb-card-hover-background);
-}
+.link:hover {}
 
 .link:hover .title {
   color: var(--bb-card-hover-color);

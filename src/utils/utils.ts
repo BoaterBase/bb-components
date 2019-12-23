@@ -23,4 +23,3 @@ export function formatCurrency(amount, currency = 'USD') {
     currency: currency,
   })).format(amount);
 }
-

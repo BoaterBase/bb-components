@@ -18,11 +18,13 @@
 
 ### Used by
 
+ - [bb-collection](../bb-collection)
  - [bb-profile](../bb-profile)
 
 ### Graph
 ```mermaid
 graph TD;
+  bb-collection --> bb-listing-card
   bb-profile --> bb-listing-card
   style bb-listing-card fill:#f9f,stroke:#333,stroke-width:4px
 ```

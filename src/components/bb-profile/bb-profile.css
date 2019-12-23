@@ -6,31 +6,69 @@
 
 .header {
   margin: 1rem;
-  display: flex;
-  flex-direction: column;
+  position: relative;
+  background-color: cornflowerblue;
+  border-radius: 0.5rem;
+  background-position: center center;
+  background-size: cover;
+}
+
+.header-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  color: white;
+  text-align: center;
+}
+
+.header-avatar {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 100%;
+  object-fit: cover;
+  margin: 0.5rem 1rem;
 }
 
 .search-form {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  column-gap: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0.5rem;
+}
+
+.search-form-item {
+  flex: 1 1 250px;
+  margin: 0.5rem;
 }
 
 .search-select {
-  font-weight: 300;
-  appearance: none;
+  font-weight: 400;
   font-size: 1rem;
+  color: #eee;
+  opacity: 0.9;
+  appearance: none;
   border: none;
   background: rgba(200, 200, 200, 0.5);
   border-radius: 0.25rem;
   padding: 0.5rem;
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeD0iMTJweCIgeT0iMHB4IiB3aWR0aD0iMjRweCIgaGVpZ2h0PSIzcHgiIHZpZXdCb3g9IjAgMCA2IDMiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDYgMyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHBvbHlnb24gcG9pbnRzPSI1Ljk5MiwwIDIuOTkyLDMgLTAuMDA4LDAgIi8+PC9zdmc+);
+  background-position: calc(100% - 10px) center;
+  background-size: 10px 10px;
+  background-repeat: no-repeat;
+  outline: none;
 }
 
-.card-list {
+.search-select:focus {
+  box-shadow: 0 0 0 2px lightskyblue;
+}
+
+.card-grid {
   display: flex;
   flex-wrap: wrap;
+  margin: 0.5rem;
 }
 
-.card-list-item {
-  width: 50%;
+.card-grid-item {
+  flex: 1 1 400px;
+  margin: 0.5rem;
 }

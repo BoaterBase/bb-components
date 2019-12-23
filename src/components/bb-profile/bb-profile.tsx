@@ -1,4 +1,4 @@
-import { Component, Prop, Host, h, State } from '@stencil/core';
+import { Component, Prop, Host, h, State, Watch } from '@stencil/core';
 import { fb } from '../../utils/utils';
 import { firestore } from 'firebase';
 
@@ -32,6 +32,39 @@ export class BbProfile {
       this.collectionsSnaphot = await fb.firestore().collection('collections').where('uid', '==', this.profileSnaphot.get('uid')).get();
     }
   }
+
+  @State() loadCount = 6;
+
+  @Watch('filter')
+  watchFilterHandler() {
+    // Reset the load count
+    this.loadCount = 6;
+  }
+
+  private loadMoreIntersectionObserver?: IntersectionObserver;
+
+  loadMoreRefHandler = (button) => {
+
+    if ('IntersectionObserver' in window) {
+      if (button) {
+        this.loadMoreIntersectionObserver && this.loadMoreIntersectionObserver.disconnect();
+        this.loadMoreIntersectionObserver = new IntersectionObserver(data => {
+          if (data[0].isIntersecting) {
+            this.loadCount = this.loadCount + 6;
+          }
+        });
+        this.loadMoreIntersectionObserver.observe(button);
+      } else {
+        // ref is called with null when removed so remove the observer        
+        this.loadMoreIntersectionObserver && this.loadMoreIntersectionObserver.disconnect();
+      }
+    }
+  }
+
+  loadMoreClickHandler = () => {
+    this.loadCount = this.loadCount + 6;
+  }
+
   render() {
     if (!this.profileSnaphot)
       return <Host>Loading...</Host>
@@ -47,6 +80,7 @@ export class BbProfile {
 
       //const featuredCollection = collections && collections[0];
 
+      // Combine all collections
       let allListings = collections && collections.reduce((prev, collection) => prev.concat(collection.data.listings), []);
       // Only unique
       allListings = allListings && allListings.filter((obj, index, arr) => arr.findIndex(f => (f.id === obj.id)) === index);
@@ -57,42 +91,50 @@ export class BbProfile {
       let filteredListings = allListings;
 
       if (this.filter.collection) {
-        filteredListings = collections.filter(({ id }) => id == this.filter.collection)[0].data.listings;
+        filteredListings = filteredListings && collections.filter(({ id }) => id == this.filter.collection)[0].data.listings;
       }
       if (this.filter.model) {
-        filteredListings = filteredListings.filter(l => l.data.specifications.model == this.filter.model);
+        filteredListings = filteredListings && filteredListings.filter(l => l.data.specifications.model == this.filter.model);
       }
 
       if (this.filter.manufacturer) {
-        filteredListings = filteredListings.filter(l => l.data.specifications.manufacturer == this.filter.manufacturer);
+        filteredListings = filteredListings && filteredListings.filter(l => l.data.specifications.manufacturer == this.filter.manufacturer);
       }
 
+      const filteredCount = filteredListings ? filteredListings.length : 0;
+      filteredListings = filteredListings && filteredListings.slice(0, this.loadCount);
+
       return <Host>
-        <div class="header">
-          <h1 style={{ margin: '0' }}>{profile.name}</h1>
-          <div style={{ margin: '1rem 0' }}>{profile.summary}</div>
+        <div class="header" style={{ backgroundImage: profile.header && profile.header.info && profile.header.info.secure_url && `url('${profile.header.info.secure_url}')` }}>
+          <svg viewBox="0 0 2 1" style={{ display: 'block', width: '100%' }}></svg>
+          <div class="header-overlay">
+            {profile.avatar && profile.avatar.info && profile.avatar.info.secure_url && <img src={profile.avatar.info.secure_url} class="header-avatar" />}
+            <h1 style={{ margin: '0.5rem 1rem' }}>{profile.name}</h1>
+            <div style={{ margin: '0.5rem 1rem' }}>{profile.summary}</div>
 
-          <form class="search-form">
-            <select class="search-select" onChange={({ target }) => this.filter = { ...this.filter, collection: (target as HTMLSelectElement).value }}>
-              <option selected={this.filter.collection == ''} value="">All Collections</option>
-              {collections && collections.map(collection => <option selected={this.filter.collection == collection.id} value={collection.id}>{collection.data.title}</option>)}
-            </select>
+            <form class="search-form">
+              <select class="search-form-item search-select" onChange={({ target }) => this.filter = { ...this.filter, collection: (target as HTMLSelectElement).value }}>
+                <option selected={this.filter.collection == ''} value="">All Collections</option>
+                {collections && collections.map(collection => <option selected={this.filter.collection == collection.id} value={collection.id}>{collection.data.title}</option>)}
+              </select>
 
-            <select class="search-select" onChange={({ target }) => this.filter = { ...this.filter, model: (target as HTMLSelectElement).value }}>
-              <option selected={this.filter.model == ''} value="">All Models</option>
-              {models && models.map(model => <option selected={this.filter.model == model} value={model}>{model}</option>)}
-            </select>
-            <select class="search-select" onChange={({ target }) => this.filter = { ...this.filter, manufacturer: (target as HTMLSelectElement).value }}>
-              <option selected={this.filter.manufacturer == ''} value="">All Manufacturers</option>
-              {manufacturers && manufacturers.map(manufacturer => <option selected={this.filter.manufacturer == manufacturer} value={manufacturer}>{manufacturer}</option>)}
-            </select>
-          </form>
+              <select class="search-form-item search-select" onChange={({ target }) => this.filter = { ...this.filter, model: (target as HTMLSelectElement).value }}>
+                <option selected={this.filter.model == ''} value="">All Models</option>
+                {models && models.map(model => <option selected={this.filter.model == model} value={model}>{model}</option>)}
+              </select>
+              <select class="search-form-item search-select" onChange={({ target }) => this.filter = { ...this.filter, manufacturer: (target as HTMLSelectElement).value }}>
+                <option selected={this.filter.manufacturer == ''} value="">All Manufacturers</option>
+                {manufacturers && manufacturers.map(manufacturer => <option selected={this.filter.manufacturer == manufacturer} value={manufacturer}>{manufacturer}</option>)}
+              </select>
+            </form>
+
+          </div>
         </div>
-        {filteredListings && <div class="card-list">
-          {filteredListings.map(listing => <div class="card-list-item"><bb-listing-card listingId={listing.id} listingData={listing.data} history={this.history}></bb-listing-card></div>)}
+        {filteredListings && <div class="card-grid">
+          {filteredListings.map(listing => <div class="card-grid-item"><bb-listing-card listingId={listing.id} listingData={listing.data} history={this.history}></bb-listing-card></div>)}
         </div>}
+        {(this.loadCount < filteredCount) && <button ref={this.loadMoreRefHandler} onClick={this.loadMoreClickHandler}>Load More</button>}
       </Host>
-
     }
   }
 

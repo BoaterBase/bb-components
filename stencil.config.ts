@@ -17,6 +17,6 @@ export const config: Config = {
   ],
   devServer: {
     port: 4444,
-    reloadStrategy: 'pageReload'
+    reloadStrategy: 'hmr'
   }
 };

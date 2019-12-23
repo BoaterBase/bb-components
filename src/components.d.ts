@@ -10,7 +10,10 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 
 export namespace Components {
-  interface BbCollection {}
+  interface BbCollection {
+    'collectionPath': string;
+    'history': any;
+  }
   interface BbConnector {
     /**
     * The base component type to start the routing from.
@@ -94,7 +97,10 @@ declare global {
 }
 
 declare namespace LocalJSX {
-  interface BbCollection {}
+  interface BbCollection {
+    'collectionPath'?: string;
+    'history'?: any;
+  }
   interface BbConnector {
     /**
     * The base component type to start the routing from.
