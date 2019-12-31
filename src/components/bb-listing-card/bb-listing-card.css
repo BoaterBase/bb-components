@@ -36,3 +36,11 @@
   transition: transform 0.5s;
   transform: scale(1.01);
 }
+
+.overlay-header {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0) 100%);
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  border-radius: var(--bb-card-border-radius);
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}

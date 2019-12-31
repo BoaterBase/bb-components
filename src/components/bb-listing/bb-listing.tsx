@@ -62,15 +62,15 @@ export class BbListing {
 
     //const primaryVariant = listing.variants && listing.variants[0];
 
-    const shortTitle = ([specs.year, specs.manufacturer, specs.model]).filter(Boolean);
+    const shortTitle = ([specs.year, specs.manufacturer, specs.manufacturer && specs.model, specs.category, specs.classification]).filter(Boolean).slice(0, 3);
 
 
 
-    let mediaStack = listing.media || [];
+    let mediaStack = (listing.media || []).slice(0, 12);
 
     return (
       <Host>
-        <div style={{ margin: '1rem' }}>
+        <div style={{ display: 'none', margin: '1rem' }}>
           {primaryMedia && <div onClick={() => this.overlay = { kind: 'media', selected: 0 }} style={{ position: 'relative' }}>
             {primaryMedia.info.resource_type == 'image' && <img class="hover-zoom" style={{ borderRadius: '0.25rem', display: 'block', margin: 'auto', maxWidth: '100%', maxHeight: '90vh' }} src={cdnAsset(primaryMedia.info, 'jpg', 't_large_image')} />}
             {primaryMedia.info.resource_type == 'video' && <video class="hover-zoom" style={{ borderRadius: '0.25rem', display: 'block', margin: 'auto', maxWidth: '100%', maxHeight: '90vh' }} poster={cdnAsset(primaryMedia.info, 'jpg', 't_large_image')} controls>
@@ -83,10 +83,36 @@ export class BbListing {
                     */}
             </video>}
           </div>}
-
+        </div>
+        <div class="hover-zoom" style={{ margin: '1rem', position: 'relative' }} >
+          <svg viewBox="0 0 16 9" style={{ display: 'block', width: '100%', background: 'lightblue', borderRadius: '0.5rem' }}></svg>
+          {primaryMedia && <div onClick={() => this.overlay = { kind: 'media', selected: 0 }} style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%' }}>
+            {primaryMedia.info.resource_type == 'image' && <img style={{ borderRadius: '0.25rem', display: 'block', width: '100%', height: '100%', objectFit: 'cover' }} src={cdnAsset(primaryMedia.info, 'jpg', 't_large_image')} />}
+            {primaryMedia.info.resource_type == 'video' && <video style={{ borderRadius: '0.25rem', display: 'block', width: '100%', height: '100%', objectFit: 'cover' }} poster={cdnAsset(primaryMedia.info, 'jpg', 't_large_image')} controls>
+              <source src={cdnAsset(primaryMedia.info, 'm3u8', 't_streaming_video')} type="application/x-mpegURL" />
+              <source src={cdnAsset(primaryMedia.info, 'mp4', 't_progressive_video')} type="video/mp4" />
+              {/*                    
+                    <source src={cdnAsset(m.info, 'mpd', 't_streaming_video')} type="application/dash+xml" />
+                    <source src={cdnAsset(m.info, 'webm', 't_progressive_video')} type="video/webm" />
+                    <source src={cdnAsset(m.info, 'ogv', 't_progressive_video')} type="video/ogg" />
+                    */}
+            </video>}
+          </div>}
+          {listing.message && <div style={{ position: 'absolute', top: '0.5rem', left: '0.5rem', background: 'rgba(255,50,0,0.8)', color: 'white', fontSize: '0.85rem', fontWeight: '600', padding: '0.5rem', borderRadius: '3px' }}>{listing.message}</div>}
+          <div style={{ position: 'absolute', paddingTop: '1rem', bottom: '0', left: '0', width: '100%', color: '#fff' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-end', margin: '0.5rem' }}>
+              <div style={{ flex: 'auto' }}>
+                <div style={{ fontWeight: '600', fontSize: '1.5rem', margin: '0 0 0.25rem 0' }}>{shortTitle.join(' · ')}</div>
+                {listing.location && <div style={{ color: 'inherit', opacity: '0.5', fontWeight: '400' }}><ion-icon name="pin" style={{ opacity: '0.25' }}></ion-icon>{listing.location}</div>}
+              </div>
+              <div style={{ flex: 'auto', textAlign: 'right' }}>
+                <div style={{ fontSize: '0.8rem', fontWeight: '500', textTransform: 'uppercase', opacity: '0.5' }}>{listing.label || '–'}</div>
+                <div style={{ fontSize: '1.3rem', fontWeight: '700' }}>{listing.price && formatCurrency(listing.price, listing.currency)}</div>
+              </div>
+            </div>
+          </div>
         </div>
         <div>
-
           <div style={{ margin: '1rem', display: 'flex', flexWrap: 'wrap' }}>
             <div style={{ flex: '5 1 600px', paddingRight: '1rem' }}>
               <h1 class="title">{listing.title}</h1>
@@ -100,30 +126,8 @@ export class BbListing {
                   <span style={{ fontSize: '1rem', opacity: '0.8' }}>{listing.profile && listing.profile.data && listing.profile.data.name ? ` ${listing.profile.data.name}` : 'Owner'}</span>
                 </div>
               </button>
-              <h2 style={{ textAlign: 'center', fontSize: '1.25rem', fontWeight: '500', margin: '0.25rem' }}>{shortTitle.join(' · ')}</h2>
-              {listing.location && <div style={{ textAlign: 'center', marginBottom: '1rem', fontSize: '0.9rem', fontWeight: '500', opacity: '0.5' }}><ion-icon name="pin" style={{ opacity: '0.25' }}></ion-icon>{listing.location}</div>}
             </div>
           </div>
-          <div>
-            {listing.variants && listing.variants.map(variant => (
-              <div style={{ display: 'flex', alignItems: 'center', color: '#000', padding: '1rem' }}>
-                <div>
-                  <div style={{ textTransform: 'uppercase', fontSize: '0.75rem' }}>{variant.name}</div>
-                  {variant.rate == 'hidden' ? <strong style={{ fontSize: '1.5rem', fontWeight: '600' }}>Price on Request</strong> : <strong style={{ fontSize: '1.5rem', fontWeight: '600' }}>{formatCurrency(variant.amount, variant.currency)}{variant.rate != 'once' && <small style={{ opacity: '0.5', fontWeight: '100', fontSize: '0.9rem' }}>/{variant.rate}</small>}</strong>}
-                </div>
-                {variant.description && <div style={{ flex: 'auto', color: '#aaa', marginLeft: '1rem', paddingLeft: '1rem', borderLeft: '1px solid #eee' }}>
-                  {variant.description}
-                </div>
-                }
-                <div style={{ display: 'none' }}>
-                  {variant.action} {variant.button} {variant.link}
-                </div>
-              </div>
-
-            ))}
-
-          </div>
-
 
           <ul class="specs">
             {specs.category && <li><h3>Category</h3><span>{specs.category}</span></li>}
@@ -180,7 +184,30 @@ export class BbListing {
             </div>)}
           </div>
 
+
+
+          <div>
+            {listing.variants && listing.variants.map(variant => (
+              <div style={{ display: 'flex', alignItems: 'center', color: '#000', padding: '1rem' }}>
+                <div>
+                  <div style={{ textTransform: 'uppercase', fontSize: '0.75rem' }}>{variant.name}</div>
+                  {variant.rate == 'hidden' ? <strong style={{ fontSize: '1.5rem', fontWeight: '600' }}>Price on Request</strong> : <strong style={{ fontSize: '1.5rem', fontWeight: '600' }}>{formatCurrency(variant.amount, variant.currency)}{variant.rate != 'once' && <small style={{ opacity: '0.5', fontWeight: '100', fontSize: '0.9rem' }}>/{variant.rate}</small>}</strong>}
+                </div>
+                {variant.description && <div style={{ flex: 'auto', color: '#aaa', marginLeft: '1rem', paddingLeft: '1rem', borderLeft: '1px solid #eee' }}>
+                  {variant.description}
+                </div>
+                }
+                <div style={{ display: 'none' }}>
+                  {variant.action} {variant.button} {variant.link}
+                </div>
+              </div>
+
+            ))}
+          </div>
         </div>
+
+
+
         {this.overlay && this.overlay.kind == 'contact' && <div onClick={() => { this.overlay = null }} style={{ position: 'fixed', zIndex: '999999', top: '0', left: '0', width: '100%', height: '100%', background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(5px)' }}>
           <form style={{ display: 'flex' }}>
             <input name="a" type="hidden" value={Date.now()}></input>

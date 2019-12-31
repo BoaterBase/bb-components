@@ -7,11 +7,12 @@
 
 ## Properties
 
-| Property      | Attribute      | Description | Type     | Default     |
-| ------------- | -------------- | ----------- | -------- | ----------- |
-| `history`     | `history`      |             | `any`    | `undefined` |
-| `listingData` | `listing-data` |             | `any`    | `undefined` |
-| `listingId`   | `listing-id`   |             | `string` | `undefined` |
+| Property      | Attribute      | Description | Type                            | Default     |
+| ------------- | -------------- | ----------- | ------------------------------- | ----------- |
+| `display`     | `display`      |             | `"card" \| "list" \| "overlay"` | `'overlay'` |
+| `history`     | `history`      |             | `any`                           | `undefined` |
+| `listingData` | `listing-data` |             | `any`                           | `undefined` |
+| `listingId`   | `listing-id`   |             | `string`                        | `undefined` |
 
 
 ## Dependencies

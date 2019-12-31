@@ -38,6 +38,7 @@ export namespace Components {
     'listingPath': string;
   }
   interface BbListingCard {
+    'display': 'card' | 'list' | 'overlay';
     'history': any;
     'listingData': any;
     'listingId': string;
@@ -125,6 +126,7 @@ declare namespace LocalJSX {
     'listingPath'?: string;
   }
   interface BbListingCard {
+    'display'?: 'card' | 'list' | 'overlay';
     'history'?: any;
     'listingData'?: any;
     'listingId'?: string;
