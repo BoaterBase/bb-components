@@ -36,6 +36,7 @@ graph TD;
   bb-connector --> bb-listing
   bb-connector --> bb-collection
   bb-profile --> bb-listing-card
+  bb-listing-card --> ion-icon
   bb-listing --> ion-icon
   bb-collection --> ion-icon
   bb-collection --> bb-listing-card

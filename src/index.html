@@ -9,10 +9,28 @@
   <script type="module" src="/build/bb-components.esm.js"></script>
   <script nomodule src="/build/bb-components.js"></script>
 
+  <script type="text/javascript">
+    function changeProfile(el) {
+      document.querySelector('bb-connector').path = el.value;
+      console.log(document.querySelector('bb-connector'));
+    }
+  </script>
 </head>
 
 <body style="font-family:sans-serif;font-size:1rem;color:red;padding:0;margin:0 auto;max-width:70rem;">
+  <select onchange="changeProfile(this)">
+    <option value="hUPV62yx">J/Boats Profile</option>
+    <option value="Bob1b2HW">Sail Northwest Profile</option>
+    <option value="cQEBJhCO">Maritime Solutions Profile</option>
+    <option value="hXH5f9y7">Stearns Profile</option>
+    <option value="qF59nB5W">Sail Cal Profile</option>
+    <option value="rYzLF3xs">MarineMotion Profile</option>
 
+
+
+
+
+  </select>
   <bb-connector mode="hash" base="profile" path="hUPV62yx"></bb-connector>
 
 </body>

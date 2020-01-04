@@ -29,6 +29,7 @@
 graph TD;
   bb-collection --> ion-icon
   bb-collection --> bb-listing-card
+  bb-listing-card --> ion-icon
   bb-connector --> bb-collection
   style bb-collection fill:#f9f,stroke:#333,stroke-width:4px
 ```

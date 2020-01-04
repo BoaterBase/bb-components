@@ -3,7 +3,7 @@ import { fb } from '../../utils/utils';
 import { converter } from '../../utils/converter';
 
 import { firestore } from 'firebase';
-import { cdnAsset, formatCurrency } from '../../utils/utils';
+import { cdnAsset, formatCurrency, markdown } from '../../utils/utils';
 
 
 @Component({
@@ -17,9 +17,16 @@ export class BbListing {
 
   @State() listingSnaphot: firestore.DocumentSnapshot;
 
-  @State() overlay: { kind: string, selected?: number } = {
+  @State() overlay: { kind: '' | 'spinner' | 'contact' | 'media', selected?: number } = {
     kind: '',
     selected: 0,
+  };
+
+  @State() message = {
+    name: '',
+    email: '',
+    telephone: '',
+    content: ''
   };
 
   get listingId() {
@@ -37,6 +44,38 @@ export class BbListing {
     //const title = await document.querySelector("head title"); //.componentOnReady();
 
 
+  }
+
+  sendMessage = async () => {
+    this.overlay = {
+      kind: 'spinner',
+      selected: 0
+    };
+
+    let response = await fetch(`https://beta.boaterbase.com/api/listings/${this.listingId}/messages`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: "POST",
+      body: JSON.stringify(this.message)
+    });
+
+    if (response.status != 200) {
+      this.overlay = {
+        kind: 'contact',
+        selected: 0
+      };
+      alert('There was an error, please try again!');
+
+      let body = await response.json();
+      console.log(response, body);
+    } else {
+      this.overlay = {
+        kind: '',
+        selected: 0
+      };
+    }
   }
 
   render() {
@@ -62,10 +101,10 @@ export class BbListing {
 
     //const primaryVariant = listing.variants && listing.variants[0];
 
-    const shortTitle = ([specs.year, specs.manufacturer, specs.manufacturer && specs.model, specs.category, specs.classification]).filter(Boolean).slice(0, 3);
+    const shortTitle = ([specs.loa && Math.round(converter('length', 'm', 'ft', specs.loa)) + "'", specs.year, specs.manufacturer, specs.manufacturer && specs.model, specs.category, specs.classification]).filter(Boolean).slice(0, 3);
 
 
-
+    let mediaLength = (listing.media || []).length;
     let mediaStack = (listing.media || []).slice(0, 12);
 
     return (
@@ -103,10 +142,10 @@ export class BbListing {
             <div style={{ display: 'flex', alignItems: 'flex-end', margin: '0.5rem' }}>
               <div style={{ flex: 'auto' }}>
                 <div style={{ fontWeight: '600', fontSize: '1.5rem', margin: '0 0 0.25rem 0' }}>{shortTitle.join(' · ')}</div>
-                {listing.location && <div style={{ color: 'inherit', opacity: '0.5', fontWeight: '400' }}><ion-icon name="pin" style={{ opacity: '0.25' }}></ion-icon>{listing.location}</div>}
+                {listing.location && <div style={{ color: 'inherit', opacity: '0.5', fontWeight: '400' }}><ion-icon name="pin"></ion-icon>{listing.location}</div>}
               </div>
               <div style={{ flex: 'auto', textAlign: 'right' }}>
-                <div style={{ fontSize: '0.8rem', fontWeight: '500', textTransform: 'uppercase', opacity: '0.5' }}>{listing.label || '–'}</div>
+                <div style={{ fontSize: '0.8rem', fontWeight: '500', textTransform: 'uppercase', opacity: '0.5' }}>{listing.label}</div>
                 <div style={{ fontSize: '1.3rem', fontWeight: '700' }}>{listing.price && formatCurrency(listing.price, listing.currency)}</div>
               </div>
             </div>
@@ -142,8 +181,8 @@ export class BbListing {
             {specs.loa ? <li><h3>Length Overall</h3><span>{converter('length', 'm', 'ft', specs.loa)} <small>ft</small></span></li> : null}
             {specs.lwl ? <li><h3>Length At Waterline</h3><span>{converter('length', 'm', 'ft', specs.lwl)} <small>ft</small></span></li> : null}
 
-            {specs.beam ? <li><h3>Beam</h3><span>{converter('length', 'm', 'ft', specs.beam)} <small>ft</small></span></li> : null}
-            {specs.draft ? <li><h3>Draft</h3><span>{converter('length', 'm', 'ft', specs.draft)} <small>ft</small></span></li> : null}
+            {specs.beam ? <li><h3>Beam</h3><span>{converter('length', 'm', 'ft', specs.beam).toFixed(2)} <small>ft</small></span></li> : null}
+            {specs.draft ? <li><h3>Draft</h3><span>{converter('length', 'm', 'ft', specs.draft).toFixed(2)} <small>ft</small></span></li> : null}
 
             {specs.haw ? <li><h3>Height Above Waterline</h3><span>{converter('length', 'm', 'ft', specs.haw)} <small>ft</small></span></li> : null}
 
@@ -176,29 +215,34 @@ export class BbListing {
 
           <div class="media-flex">
             {mediaStack.map((m, i) => (<div><img class="hover-zoom" onClick={() => { this.overlay = { kind: 'media', selected: i } }} src={cdnAsset(m.info, 'jpg', 't_small_image')} /></div>))}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1rem', background: '#eee', color: '#666', borderRadius: '0.25rem' }} class="hover-zoom" onClick={() => { this.overlay = { kind: 'media', selected: 0 } }}>
+              <ion-icon name="photos"></ion-icon>
+              {mediaLength}
+            </div>
           </div>
 
-          <div style={{ margin: '1rem', fontSize: '1rem', lineHeight: '1.4rem' }}>
-            {content.map(({ kind, text }) => <div>
-              {kind == 'text' && text.split(/[\r?\n|\r]\s*[\r?\n|\r]/).map(p => <p>{p}</p>)}
+          <div style={{ margin: '1rem', fontSize: '1rem', lineHeight: '1.4rem', padding: '1px 0' }}>
+            {content.map(({ kind, text }) => <div class="markdown">
+              {kind == 'text' && markdown(text)}
             </div>)}
           </div>
-
-
 
           <div>
             {listing.variants && listing.variants.map(variant => (
               <div style={{ display: 'flex', alignItems: 'center', color: '#000', padding: '1rem' }}>
                 <div>
-                  <div style={{ textTransform: 'uppercase', fontSize: '0.75rem' }}>{variant.name}</div>
-                  {variant.rate == 'hidden' ? <strong style={{ fontSize: '1.5rem', fontWeight: '600' }}>Price on Request</strong> : <strong style={{ fontSize: '1.5rem', fontWeight: '600' }}>{formatCurrency(variant.amount, variant.currency)}{variant.rate != 'once' && <small style={{ opacity: '0.5', fontWeight: '100', fontSize: '0.9rem' }}>/{variant.rate}</small>}</strong>}
+                  <div style={{ textTransform: 'uppercase', fontSize: '0.75rem' }}>{variant.label}</div>
+                  {!variant.amount ? <strong style={{ fontSize: '1.5rem', fontWeight: '600' }}>Price on Request</strong> : <strong style={{ fontSize: '1.5rem', fontWeight: '600' }}>{formatCurrency(variant.amount, variant.currency)}{variant.rate != 'once' && <small style={{ opacity: '0.5', fontWeight: '100', fontSize: '0.9rem' }}>/{variant.rate}</small>}</strong>}
                 </div>
-                {variant.description && <div style={{ flex: 'auto', color: '#aaa', marginLeft: '1rem', paddingLeft: '1rem', borderLeft: '1px solid #eee' }}>
-                  {variant.description}
+
+                <div style={{ flex: 'auto', marginLeft: '1rem', paddingLeft: '1rem', borderLeft: '1px solid #eee' }}>
+                  <h5 style={{ margin: '0', fontSize: '1rem' }}>{variant.name}</h5>
+                  <p style={{ color: '#aaa', fontWeight: '300', margin: '0' }}>{variant.description}</p>
                 </div>
-                }
-                <div style={{ display: 'none' }}>
-                  {variant.action} {variant.button} {variant.link}
+
+                <div>
+                  {variant.action == 'contact' && <button class="contact-button" style={{ padding: '0.75rem', fontSize: '1rem', fontWeight: '500' }} onClick={() => this.overlay = { kind: 'contact' }}>{variant.button || 'Contact'}</button>}
+                  {variant.action == 'link' && <a class="contact-button" href={variant.link} style={{ padding: '0.75rem', fontSize: '1rem', fontWeight: '500' }}>{variant.button || 'Link'}</a>}
                 </div>
               </div>
 
@@ -207,23 +251,29 @@ export class BbListing {
         </div>
 
 
+        {this.overlay && this.overlay.kind == 'spinner' && <div style={{ position: 'fixed', zIndex: '999999', top: '0', left: '0', width: '100%', height: '100%', background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(5px)' }}>
+          <button onClick={() => this.overlay = null} style={{ cursor: 'pointer', position: 'absolute', top: '3px', right: '3px', padding: '9px', borderRadius: '3px', appearance: 'none', border: 'none', background: 'rgba(0,0,0,0.5)', color: 'white' }}>
+            <ion-icon name="close" size="large"></ion-icon>
+          </button>
+          <ion-icon name="help-buoy" class="spin" style={{ width: '2rem', display: 'block', margin: '40vh auto', color: '#cde' }}></ion-icon>
+        </div>}
 
-        {this.overlay && this.overlay.kind == 'contact' && <div onClick={() => { this.overlay = null }} style={{ position: 'fixed', zIndex: '999999', top: '0', left: '0', width: '100%', height: '100%', background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(5px)' }}>
-          <form style={{ display: 'flex' }}>
-            <input name="a" type="hidden" value={Date.now()}></input>
-            <input name="b" type="hidden" value={Date.now()}></input>
-            <input name="c" type="hidden"></input>
-            <div>
-              <input style={{ display: 'block' }} placeholder="Name"></input>
-              <input style={{ display: 'block' }} placeholder="Email"></input>
-              <input style={{ display: 'block' }} placeholder="Telephone"></input>
-            </div>
-            <div>
-              <textarea style={{ display: 'block' }} placeholder="Message"></textarea>
-              <button style={{ display: 'block' }} type="submit">Send Message</button>
-            </div>
+        {this.overlay && this.overlay.kind == 'contact' && <div style={{ position: 'fixed', zIndex: '999999', top: '0', left: '0', width: '100%', height: '100%', background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(5px)' }}>
+          <button onClick={() => this.overlay = null} style={{ cursor: 'pointer', position: 'absolute', top: '3px', right: '3px', padding: '9px', borderRadius: '3px', appearance: 'none', border: 'none', background: 'rgba(0,0,0,0.5)', color: 'white' }}>
+            <ion-icon name="close" size="large"></ion-icon>
+          </button>
+          <form onSubmit={this.sendMessage} class="contact-form" style={{ display: 'flex', flexDirection: 'column' }}>
+            <h2>Contact {listing.profile && listing.profile.data && listing.profile.data.name ? ` ${listing.profile.data.name}` : 'Owner'}</h2>
+            <input type="text" required placeholder="Name *" value={this.message.name} onChange={(event) => this.message = { ...this.message, name: (event.target as HTMLInputElement).value }}></input>
+            <input type="email" required placeholder="Email *" value={this.message.email} onChange={(event) => this.message = { ...this.message, email: (event.target as HTMLInputElement).value }}></input>
+            <input type="telephone" placeholder="Telephone" value={this.message.telephone} onChange={(event) => this.message = { ...this.message, telephone: (event.target as HTMLInputElement).value }}></input>
+            <textarea required placeholder="Message *" value={this.message.content} onChange={(event) => this.message = { ...this.message, content: (event.target as HTMLInputElement).value }}></textarea>
+            <button type="submit">Send Message</button>
+
           </form>
         </div>}
+
+
         {this.overlay && this.overlay.kind == 'media' && <div id="mediaOverlay" style={{ position: 'fixed', zIndex: '999999', top: '0', left: '0', width: '100%', height: '100%', background: 'rgba(0,0,0,0.9)', backdropFilter: 'blur(15px)' }}>
           <div style={{ position: 'absolute', bottom: '0', width: '100%', height: '58px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div style={{ flex: 'none', display: 'flex', overflowX: 'auto' }}>
@@ -243,10 +293,10 @@ export class BbListing {
             </video>}
           </div>
 
-          <button onClick={() => { this.overlay = { kind: 'media', selected: Math.max(0, this.overlay.selected - 1) } }} style={{ cursor: 'pointer', position: 'absolute', left: '3px', top: '50%', padding: '9px', borderRadius: '3px', appearance: 'none', border: 'none', background: 'rgba(0,0,0,0.1)', color: 'white' }}>
+          <button onClick={() => { this.overlay = { kind: 'media', selected: Math.max(0, this.overlay.selected - 1) } }} style={{ display: this.overlay.selected == 0 ? 'none' : 'block', cursor: 'pointer', position: 'absolute', left: '3px', top: '50%', padding: '9px', borderRadius: '3px', appearance: 'none', border: 'none', background: 'rgba(0,0,0,0.1)', color: 'white' }}>
             <ion-icon name="arrow-back" size="large"></ion-icon>
           </button>
-          <button onClick={() => { this.overlay = { kind: 'media', selected: Math.min(media.length, this.overlay.selected + 1) } }} style={{ cursor: 'pointer', position: 'absolute', right: '3px', top: '50%', padding: '9px', borderRadius: '3px', appearance: 'none', border: 'none', background: 'rgba(0,0,0,0.1)', color: 'white' }}>
+          <button onClick={() => { this.overlay = { kind: 'media', selected: Math.min(media.length - 1, this.overlay.selected + 1) } }} style={{ display: this.overlay.selected == media.length - 1 ? 'none' : 'block', cursor: 'pointer', position: 'absolute', right: '3px', top: '50%', padding: '9px', borderRadius: '3px', appearance: 'none', border: 'none', background: 'rgba(0,0,0,0.1)', color: 'white' }}>
             <ion-icon name="arrow-forward" size="large"></ion-icon>
           </button>
           <button onClick={() => this.overlay = null} style={{ cursor: 'pointer', position: 'absolute', top: '3px', right: '3px', padding: '9px', borderRadius: '3px', appearance: 'none', border: 'none', background: 'rgba(0,0,0,0.1)', color: 'white' }}>

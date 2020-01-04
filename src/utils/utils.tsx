@@ -1,3 +1,4 @@
+import { h } from '@stencil/core';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
@@ -22,4 +23,27 @@ export function formatCurrency(amount, currency = 'USD') {
     style: 'currency',
     currency: currency,
   })).format(amount);
+}
+
+/*
+  Mimimal markdown parser
+*/
+export function markdown(text) {
+  let lines = text.trim().split(/[\r?\n|\r]/);
+  let out = [];
+
+  lines.forEach((line: string) => {
+    if (line.replace(/\w/, '') == '') {
+      //out.push(<br />);
+    } else if (line.startsWith('## ')) {
+      out.push(<h4>{line.slice(3)}</h4>)
+    } else if (line.startsWith('# ')) {
+      out.push(<h3>{line.slice(2)}</h3>)
+    } else if (line.startsWith('- ')) {
+      out.push(<li>{line.slice(2)}</li>)
+    } else {
+      out.push(<p>{line}</p>);
+    }
+  });
+  return out; //text.split(/[\r?\n|\r]\s*[\r?\n|\r]/).map(p => <p>{p} </p>)
 }

@@ -22,9 +22,14 @@
  - [bb-collection](../bb-collection)
  - [bb-profile](../bb-profile)
 
+### Depends on
+
+- ion-icon
+
 ### Graph
 ```mermaid
 graph TD;
+  bb-listing-card --> ion-icon
   bb-collection --> bb-listing-card
   bb-profile --> bb-listing-card
   style bb-listing-card fill:#f9f,stroke:#333,stroke-width:4px
