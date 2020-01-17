@@ -7,12 +7,12 @@
 
 ## Properties
 
-| Property | Attribute | Description                                          | Type                                     | Default     |
-| -------- | --------- | ---------------------------------------------------- | ---------------------------------------- | ----------- |
-| `base`   | `base`    | The base component type to start the routing from.   | `"collection" \| "listing" \| "profile"` | `undefined` |
-| `mode`   | `mode`    | The history mode to use for navigation.              | `"browser" \| "hash"`                    | `'browser'` |
-| `path`   | `path`    | The path or id of the base type you want to display. | `string`                                 | `undefined` |
-| `root`   | `root`    | The root for mapping urls e.g. /custompath .         | `string`                                 | `''`        |
+| Property           | Attribute           | Description                                    | Type                             | Default     |
+| ------------------ | ------------------- | ---------------------------------------------- | -------------------------------- | ----------- |
+| `collectionHeader` | `collection-header` | Collection header layout .                     | `"image" \| "none" \| "overlay"` | `'overlay'` |
+| `path`             | `path`              | The path of the component you want to display. | `string`                         | `undefined` |
+| `profileHeader`    | `profile-header`    | Profile header layout .                        | `"image" \| "none" \| "overlay"` | `'overlay'` |
+| `root`             | `root`              | The root for mapping urls e.g. listing/id .    | `string`                         | `'#/'`      |
 
 
 ## Dependencies

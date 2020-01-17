@@ -9,7 +9,9 @@ import { firestore } from 'firebase';
 })
 export class BbCollection {
   @Prop() collectionPath: string;
-  @Prop() history: any;
+  @Prop() root: string = '/';
+
+  @Prop() collectionHeader: 'none' | 'overlay' | 'image' = 'overlay';
 
   @State() collectionsSnaphot: firestore.DocumentSnapshot;
 
@@ -18,7 +20,13 @@ export class BbCollection {
     return this.collectionPath.split('-').pop();
   }
 
-  async componentDidLoad() {
+  async componentWillLoad() {
+    console.log('componentWillLoad')
+    this.collectionsSnaphot = await fb.firestore().collection('collections').doc(this.collectionId).get();
+  }
+
+  async componentWillUpdate() {
+    console.log('componentWillUpdate')
     this.collectionsSnaphot = await fb.firestore().collection('collections').doc(this.collectionId).get();
   }
 
@@ -35,17 +43,17 @@ export class BbCollection {
     let filteredListings = collection.listings;
 
     return (<Host>
-      <div class="header" style={{ backgroundImage: collection.header && collection.header.info && collection.header.info.secure_url && `url('${collection.header.info.secure_url}')` }}>
-        <svg viewBox="0 0 2 1" style={{ display: 'block', width: '100%' }}></svg>
+      {this.collectionHeader == 'overlay' && <div class="header" style={{ backgroundImage: collection.header && collection.header.info && collection.header.info.secure_url && `url('${collection.header.info.secure_url}')` }}>
+        <svg viewBox="0 0 3 1" style={{ display: 'block', width: '100%' }}></svg>
         <div class="header-overlay">
           <h1 style={{ margin: '0.5rem 1rem' }}>{collection.title}</h1>
           <div style={{ margin: '0.5rem 1rem' }}>{collection.summary}</div>
-
-
         </div>
-      </div>
+      </div>}
+
       {filteredListings && <div class="card-grid">
-        {filteredListings.map(listing => <div class="card-grid-item"><bb-listing-card listingId={listing.id} listingData={listing.data} history={this.history}></bb-listing-card></div>)}
+        {filteredListings.map(listing => <div class="card-grid-item"><bb-listing-card listingId={listing.id} listingData={listing.data} root={this.root}></bb-listing-card></div>)}
+        <div class="card-grid-item"></div>
       </div>}
     </Host>)
   }

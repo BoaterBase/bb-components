@@ -11,41 +11,43 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 export namespace Components {
   interface BbCollection {
+    'collectionHeader': 'none' | 'overlay' | 'image';
     'collectionPath': string;
-    'history': any;
+    'root': string;
   }
   interface BbConnector {
     /**
-    * The base component type to start the routing from.
+    * Collection header layout .
     */
-    'base': 'profile' | 'listing' | 'collection';
+    'collectionHeader': 'none' | 'overlay' | 'image';
     /**
-    * The history mode to use for navigation.
-    */
-    'mode': 'hash' | 'browser';
-    /**
-    * The path or id of the base type you want to display.
+    * The path of the component you want to display.
     */
     'path': string;
     /**
-    * The root for mapping urls e.g. /custompath .
+    * Profile header layout .
+    */
+    'profileHeader': 'none' | 'overlay' | 'image';
+    /**
+    * The root for mapping urls e.g. listing/id .
     */
     'root': string;
   }
   interface BbContactForm {}
   interface BbListing {
-    'history': any;
     'listingPath': string;
+    'root': string;
   }
   interface BbListingCard {
     'display': 'card' | 'list' | 'overlay';
-    'history': any;
     'listingData': any;
     'listingId': string;
+    'root': string;
   }
   interface BbProfile {
-    'history': any;
+    'profileHeader': 'none' | 'overlay' | 'image';
     'profilePath': string;
+    'root': string;
   }
 }
 
@@ -99,41 +101,45 @@ declare global {
 
 declare namespace LocalJSX {
   interface BbCollection {
+    'collectionHeader'?: 'none' | 'overlay' | 'image';
     'collectionPath'?: string;
-    'history'?: any;
+    'root'?: string;
   }
   interface BbConnector {
     /**
-    * The base component type to start the routing from.
+    * Collection header layout .
     */
-    'base'?: 'profile' | 'listing' | 'collection';
+    'collectionHeader'?: 'none' | 'overlay' | 'image';
     /**
-    * The history mode to use for navigation.
-    */
-    'mode'?: 'hash' | 'browser';
-    /**
-    * The path or id of the base type you want to display.
+    * The path of the component you want to display.
     */
     'path'?: string;
     /**
-    * The root for mapping urls e.g. /custompath .
+    * Profile header layout .
+    */
+    'profileHeader'?: 'none' | 'overlay' | 'image';
+    /**
+    * The root for mapping urls e.g. listing/id .
     */
     'root'?: string;
   }
   interface BbContactForm {}
   interface BbListing {
-    'history'?: any;
     'listingPath'?: string;
+    'root'?: string;
   }
   interface BbListingCard {
     'display'?: 'card' | 'list' | 'overlay';
-    'history'?: any;
     'listingData'?: any;
     'listingId'?: string;
+    'onLinkClick'?: (event: CustomEvent<any>) => void;
+    'root'?: string;
   }
   interface BbProfile {
-    'history'?: any;
+    'onLinkClick'?: (event: CustomEvent<any>) => void;
+    'profileHeader'?: 'none' | 'overlay' | 'image';
     'profilePath'?: string;
+    'root'?: string;
   }
 
   interface IntrinsicElements {

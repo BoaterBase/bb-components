@@ -164,7 +164,7 @@
 }
 
 .markdown li {
-  display: block;
+  display: list-item;
   opacity: 0.75;
   font-size: 0.9rem;
   list-style: " – ";

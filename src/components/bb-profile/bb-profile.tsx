@@ -1,4 +1,4 @@
-import { Component, Prop, Host, h, State, Watch } from '@stencil/core';
+import { Component, Prop, Host, h, State, Event, EventEmitter, Watch } from '@stencil/core';
 import { fb } from '../../utils/utils';
 import { firestore } from 'firebase';
 
@@ -10,7 +10,9 @@ import { firestore } from 'firebase';
 export class BbProfile {
 
   @Prop() profilePath: string;
-  @Prop() history: any;
+  @Prop() root: string = '/';
+
+  @Prop() profileHeader: 'none' | 'overlay' | 'image' = 'overlay';
 
   @State() profileSnaphot: firestore.DocumentSnapshot;
   @State() collectionsSnaphot: firestore.QuerySnapshot;
@@ -22,7 +24,24 @@ export class BbProfile {
     location: ''
   };
 
-  async componentDidLoad() {
+  @Event({
+    eventName: 'linkClick',
+    composed: true,
+    cancelable: true,
+    bubbles: true,
+  }) linkClick: EventEmitter;
+
+  linkClickHandler = (path) => (ev) => {
+    let event = this.linkClick.emit({
+      path: path
+    });
+
+    if (event.defaultPrevented) {
+      ev.preventDefault();
+    }
+  }
+
+  async componentWillLoad() {
     // Handles is a list so we must do a query and grab the first item
     const profilesSnaphot = await fb.firestore().collection('profiles').where('handles', 'array-contains', this.profilePath).get();
 
@@ -124,22 +143,23 @@ export class BbProfile {
       filteredListings = filteredListings && filteredListings.slice(0, this.loadCount);
 
       return <Host>
-        <div class="header" style={{ backgroundImage: profile.header && profile.header.info && profile.header.info.secure_url && `url('${profile.header.info.secure_url}')` }}>
+        {this.profileHeader == 'overlay' && <div class="header" style={{ backgroundImage: profile.header && profile.header.info && profile.header.info.secure_url && `url('${profile.header.info.secure_url}')` }}>
           <svg viewBox="0 0 2 1" style={{ display: 'block', width: '100%' }}></svg>
           <div class="header-overlay">
             {profile.avatar && profile.avatar.info && profile.avatar.info.secure_url && <img src={profile.avatar.info.secure_url} class="header-avatar" />}
             <h1 style={{ margin: '0.5rem 1rem' }}>{profile.name}</h1>
             <div style={{ display: 'none', margin: '0.5rem 1rem' }}>{profile.summary}</div>
           </div>
-        </div>
+        </div>}
+
         {collections && <div style={{ display: 'flex', margin: '-0.5rem 0.5rem', overflow: 'auto' }}>
-          {collections.map((collection) => (<a onClick={() => this.filter = { ...this.filter, collection: collection.id }} style={{ position: 'relative', flex: '2 0 250px', color: '#fff', fontSize: '1.1rem', fontWeight: '500', background: 'skyblue', borderRadius: '0.5rem', margin: '0.5rem' }}>
+          {collections.map((collection) => (<a onClick={this.linkClickHandler(`collections/${collection.id}`)} href={`${this.root}collections/${collection.id}`} class={`collection-header collection-header-${collection.id}`}>
             <svg viewBox="0 0 4 1" style={{ display: 'block', width: '100%' }}></svg>
             <div style={{ position: 'absolute', left: '0', width: '100%', bottom: '0', padding: '0.5rem' }}>{collection.data.title}</div>
           </a>))}
         </div>}
 
-        <form class="search-form">
+        <form style={{ display: 'none' }} class="search-form">
           <select class="search-form-select" onChange={({ target }) => this.filter = { ...this.filter, location: (target as HTMLSelectElement).value }}>
             <option selected={this.filter.location == ''} value="">All Locations</option>
             {locations && locations.map(location => <option selected={this.filter.location == location} value={location}>{location}</option>)}
@@ -156,7 +176,7 @@ export class BbProfile {
 
         {filteredListings && <div class="card-grid">
           {filteredListings.map(listing => <div class="card-grid-item">
-            <bb-listing-card listingId={listing.id} listingData={listing.data} history={this.history}></bb-listing-card>
+            <bb-listing-card listingId={listing.id} listingData={listing.data} root={this.root}></bb-listing-card>
           </div>)}
           <div class="card-grid-item"></div>
         </div>}

@@ -7,10 +7,11 @@
 
 ## Properties
 
-| Property         | Attribute         | Description | Type     | Default     |
-| ---------------- | ----------------- | ----------- | -------- | ----------- |
-| `collectionPath` | `collection-path` |             | `string` | `undefined` |
-| `history`        | `history`         |             | `any`    | `undefined` |
+| Property           | Attribute           | Description | Type                             | Default     |
+| ------------------ | ------------------- | ----------- | -------------------------------- | ----------- |
+| `collectionHeader` | `collection-header` |             | `"image" \| "none" \| "overlay"` | `'overlay'` |
+| `collectionPath`   | `collection-path`   |             | `string`                         | `undefined` |
+| `root`             | `root`              |             | `string`                         | `'/'`       |
 
 
 ## Dependencies

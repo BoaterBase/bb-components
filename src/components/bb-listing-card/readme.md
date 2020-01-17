@@ -10,9 +10,16 @@
 | Property      | Attribute      | Description | Type                            | Default     |
 | ------------- | -------------- | ----------- | ------------------------------- | ----------- |
 | `display`     | `display`      |             | `"card" \| "list" \| "overlay"` | `'overlay'` |
-| `history`     | `history`      |             | `any`                           | `undefined` |
 | `listingData` | `listing-data` |             | `any`                           | `undefined` |
 | `listingId`   | `listing-id`   |             | `string`                        | `undefined` |
+| `root`        | `root`         |             | `string`                        | `'/'`       |
+
+
+## Events
+
+| Event       | Description | Type               |
+| ----------- | ----------- | ------------------ |
+| `linkClick` |             | `CustomEvent<any>` |
 
 
 ## Dependencies

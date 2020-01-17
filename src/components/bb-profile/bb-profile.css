@@ -2,13 +2,14 @@
   all: initial;
   display: block;
   font-family: sans-serif;
+  --header-background-color: var(--bb-header-background-color, rgb(0, 102, 255));
 }
 
 .header {
   margin: 1rem;
   position: relative;
-  background-color: cornflowerblue;
-  border-radius: 0.5rem;
+  background-color: var(--bb-header-background-color);
+  border-radius: var(--bb-border-radius);
   background-position: center center;
   background-size: cover;
 }
@@ -35,6 +36,24 @@
   margin: 0.5rem 1rem;
 }
 
+.collection-header {
+  position: relative;
+  flex: 2 0 250px;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 500;
+  background: skyblue;
+  background-color: var(--header-background-color);
+  border-radius: var(--bb-border-radius);
+  margin: 0.5rem;
+  cursor: pointer;
+}
+
+.collection-header:hover {
+  transition: transform 0.5s;
+  transform: scale(1.01);
+}
+
 .search-form {
   display: flex;
   flex-wrap: wrap;
@@ -51,7 +70,7 @@
   appearance: none;
   border: none;
   background: rgba(200, 200, 200, 0.5);
-  border-radius: 0.25rem;
+  border-radius: var(--bb-border-radius);
   padding: 0.5rem;
   background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeD0iMTJweCIgeT0iMHB4IiB3aWR0aD0iMjRweCIgaGVpZ2h0PSIzcHgiIHZpZXdCb3g9IjAgMCA2IDMiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDYgMyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHBvbHlnb24gcG9pbnRzPSI1Ljk5MiwwIDIuOTkyLDMgLTAuMDA4LDAgIi8+PC9zdmc+);
   background-position: calc(100% - 10px) center;

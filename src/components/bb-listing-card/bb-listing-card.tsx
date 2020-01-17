@@ -1,5 +1,4 @@
-import { Component, Host, Prop, State, h } from '@stencil/core';
-import { Link } from '../../functional/Link';
+import { Component, Host, Prop, State, Event, EventEmitter, h } from '@stencil/core';
 import { cdnAsset, formatCurrency } from '../../utils/utils';
 import { converter } from '../../utils/converter';
 
@@ -11,12 +10,32 @@ import slugify from 'slugify';
   shadow: true
 })
 export class BbListingCard {
-  @Prop() history: any;
+  @Prop() root: string = '/';
   @Prop() listingId: string;
   @Prop() listingData: any;
   @Prop() display: 'card' | 'list' | 'overlay' = 'overlay';
 
+
   @State() selectedMedia = 0;
+
+  @Event({
+    eventName: 'linkClick',
+    composed: true,
+    cancelable: true,
+    bubbles: true,
+  }) linkClick: EventEmitter;
+
+  // TODO - see collection handler with (path) for other links
+  linkClickHandler = (ev) => {
+    let event = this.linkClick.emit({
+      path: `listings/${slugify(this.listingData.title)}-${this.listingId}`
+    });
+
+    if (event.defaultPrevented) {
+      ev.preventDefault();
+    }
+  }
+
   render() {
     if (!this.listingData)
       return (<Host>
@@ -32,7 +51,7 @@ export class BbListingCard {
     if (this.display == 'card')
       return (
         <Host style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
-          <Link class="link" style={{ flex: 'auto', display: 'block', textDecoration: 'none' }} href={`/listings/${slugify(this.listingData.title)}-${this.listingId}`} history={this.history}>
+          <a onClick={this.linkClickHandler} class="link" style={{ flex: 'auto', display: 'block', textDecoration: 'none' }} href={`${this.root}listings/${slugify(this.listingData.title)}-${this.listingId}`}>
             <div class="preview-image" style={{ position: 'relative' }}>
               <svg viewBox="0 0 6 4" style={{ display: 'block', width: '100%' }}></svg>
               {primaryMedia && <img style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', objectFit: 'cover' }} src={cdnAsset(primaryMedia.info, 'jpg', 't_large_image')} />}
@@ -51,19 +70,19 @@ export class BbListingCard {
                 <div style={{ fontSize: '1.1rem', fontWeight: '700' }}>{listing.price && formatCurrency(listing.price, listing.currency)}</div>
               </div>
             </div>
-          </Link>
+          </a>
         </Host>
       );
 
     if (this.display == 'overlay')
       return (
         <Host class="overlay-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
-          <Link class="link" style={{ flex: 'auto', display: 'block', textDecoration: 'none' }} href={`/listings/${slugify(this.listingData.title)}-${this.listingId}`} history={this.history}>
+          <a onClick={this.linkClickHandler} class="link" style={{ flex: 'auto', display: 'block', textDecoration: 'none' }} href={`${this.root}listings/${slugify(this.listingData.title)}-${this.listingId}`}>
             <div class="preview-image" style={{ position: 'relative' }}>
               <svg viewBox="0 0 6 4" style={{ display: 'block', width: '100%' }}></svg>
               {primaryMedia && <img style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', objectFit: 'cover' }} src={cdnAsset(primaryMedia.info, 'jpg', 't_large_image')} />}
-              {this.listingData.message && <div style={{ position: 'absolute', top: '0.5rem', left: '0.5rem', background: 'rgba(220,50,0,0.85)', color: 'white', fontSize: '0.7rem', textTransform: 'uppercase', fontWeight: '500', padding: '0.5rem', borderRadius: '3px' }}>{this.listingData.message}</div>}
-              <div class="overlay-header" style={{ position: 'absolute', paddingTop: '1rem', bottom: '0', left: '0', width: '100%', color: '#fff' }}>
+              {this.listingData.message && <div class="message">{this.listingData.message}</div>}
+              <div class="overlay-header">
                 <div style={{ display: 'flex', margin: '0.5rem', alignItems: 'flex-end' }}>
                   <div style={{ flex: 'auto' }}>
                     <div class="title" style={{ fontWeight: '600' }}>{shortTitle.join(' · ')}</div>
@@ -79,7 +98,7 @@ export class BbListingCard {
                 </div>
               </div>
             </div>
-          </Link>
+          </a>
         </Host>
       );
   }

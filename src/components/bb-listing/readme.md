@@ -9,8 +9,8 @@
 
 | Property      | Attribute      | Description | Type     | Default     |
 | ------------- | -------------- | ----------- | -------- | ----------- |
-| `history`     | `history`      |             | `any`    | `undefined` |
 | `listingPath` | `listing-path` |             | `string` | `undefined` |
+| `root`        | `root`         |             | `string` | `'/'`       |
 
 
 ## Dependencies

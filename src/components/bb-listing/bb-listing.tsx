@@ -13,7 +13,7 @@ import { cdnAsset, formatCurrency, markdown } from '../../utils/utils';
 })
 export class BbListing {
   @Prop() listingPath: string;
-  @Prop() history: any;
+  @Prop() root: string = '/';
 
   @State() listingSnaphot: firestore.DocumentSnapshot;
 
@@ -35,7 +35,7 @@ export class BbListing {
   }
 
 
-  async componentDidLoad() {
+  async componentWillLoad() {
     // load async
     this.listingSnaphot = await fb.firestore().collection('listings').doc(this.listingId).get();
 
@@ -109,25 +109,11 @@ export class BbListing {
 
     return (
       <Host>
-        <div style={{ display: 'none', margin: '1rem' }}>
-          {primaryMedia && <div onClick={() => this.overlay = { kind: 'media', selected: 0 }} style={{ position: 'relative' }}>
-            {primaryMedia.info.resource_type == 'image' && <img class="hover-zoom" style={{ borderRadius: '0.25rem', display: 'block', margin: 'auto', maxWidth: '100%', maxHeight: '90vh' }} src={cdnAsset(primaryMedia.info, 'jpg', 't_large_image')} />}
-            {primaryMedia.info.resource_type == 'video' && <video class="hover-zoom" style={{ borderRadius: '0.25rem', display: 'block', margin: 'auto', maxWidth: '100%', maxHeight: '90vh' }} poster={cdnAsset(primaryMedia.info, 'jpg', 't_large_image')} controls>
-              <source src={cdnAsset(primaryMedia.info, 'm3u8', 't_streaming_video')} type="application/x-mpegURL" />
-              <source src={cdnAsset(primaryMedia.info, 'mp4', 't_progressive_video')} type="video/mp4" />
-              {/*                    
-                    <source src={cdnAsset(m.info, 'mpd', 't_streaming_video')} type="application/dash+xml" />
-                    <source src={cdnAsset(m.info, 'webm', 't_progressive_video')} type="video/webm" />
-                    <source src={cdnAsset(m.info, 'ogv', 't_progressive_video')} type="video/ogg" />
-                    */}
-            </video>}
-          </div>}
-        </div>
-        <div class="hover-zoom" style={{ margin: '1rem', position: 'relative' }} >
-          <svg viewBox="0 0 16 9" style={{ display: 'block', width: '100%', background: 'lightblue', borderRadius: '0.5rem' }}></svg>
+        <div class="hover-zoom" style={{ margin: '1rem', position: 'relative', borderRadius: 'var(--bb-border-radius)' }} >
+          <svg viewBox="0 0 16 9" style={{ display: 'block', width: '100%', background: 'lightblue', borderRadius: 'var(--bb-border-radius)' }}></svg>
           {primaryMedia && <div onClick={() => this.overlay = { kind: 'media', selected: 0 }} style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%' }}>
-            {primaryMedia.info.resource_type == 'image' && <img style={{ borderRadius: '0.25rem', display: 'block', width: '100%', height: '100%', objectFit: 'cover' }} src={cdnAsset(primaryMedia.info, 'jpg', 't_large_image')} />}
-            {primaryMedia.info.resource_type == 'video' && <video style={{ borderRadius: '0.25rem', display: 'block', width: '100%', height: '100%', objectFit: 'cover' }} poster={cdnAsset(primaryMedia.info, 'jpg', 't_large_image')} controls>
+            {primaryMedia.info.resource_type == 'image' && <img style={{ borderRadius: 'var(--bb-border-radius)', display: 'block', width: '100%', height: '100%', objectFit: 'cover' }} src={cdnAsset(primaryMedia.info, 'jpg', 't_large_image')} />}
+            {primaryMedia.info.resource_type == 'video' && <video style={{ borderRadius: 'var(--bb-border-radius)', display: 'block', width: '100%', height: '100%', objectFit: 'cover' }} poster={cdnAsset(primaryMedia.info, 'jpg', 't_large_image')} controls>
               <source src={cdnAsset(primaryMedia.info, 'm3u8', 't_streaming_video')} type="application/x-mpegURL" />
               <source src={cdnAsset(primaryMedia.info, 'mp4', 't_progressive_video')} type="video/mp4" />
               {/*                    

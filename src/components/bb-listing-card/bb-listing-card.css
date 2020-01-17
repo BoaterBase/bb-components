@@ -13,7 +13,6 @@
   margin: var(--bb-card-margin);
 }
 
-
 .link {
   border-radius: var(--bb-card-border-radius);
   border: var(--bb-card-border);
@@ -27,20 +26,40 @@
   color: var(--bb-card-hover-color);
 }
 
-.preview-image img {
-  border-radius: var(--bb-card-image-border-radius);
-  box-shadow: var(--bb-card-image-box-shadow);
-}
-
 .link:hover .preview-image {
   transition: transform 0.5s;
   transform: scale(1.01);
 }
 
 .overlay-header {
+  position: absolute;
+  padding-top: 1rem;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  color: #fff;
   background: linear-gradient(0deg, rgba(0, 10, 20, 0.25) 0%, rgba(0, 10, 20, 0) 100%);
   text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
-  border-radius: var(--bb-card-border-radius);
+  border-radius: var(--bb-border-radius);
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+
+.preview-image img {
+  border-radius: var(--bb-border-radius);
+  box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.1);
+}
+
+.message {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  background: rgba(220, 50, 0, 0.85);
+  color: white;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  font-weight: 500;
+  padding: 0.5rem;
+  border-radius: calc(var(--bb-border-radius) / 1.5);
+
 }

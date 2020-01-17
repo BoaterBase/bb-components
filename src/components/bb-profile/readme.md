@@ -7,10 +7,18 @@
 
 ## Properties
 
-| Property      | Attribute      | Description | Type     | Default     |
-| ------------- | -------------- | ----------- | -------- | ----------- |
-| `history`     | `history`      |             | `any`    | `undefined` |
-| `profilePath` | `profile-path` |             | `string` | `undefined` |
+| Property        | Attribute        | Description | Type                             | Default     |
+| --------------- | ---------------- | ----------- | -------------------------------- | ----------- |
+| `profileHeader` | `profile-header` |             | `"image" \| "none" \| "overlay"` | `'overlay'` |
+| `profilePath`   | `profile-path`   |             | `string`                         | `undefined` |
+| `root`          | `root`           |             | `string`                         | `'/'`       |
+
+
+## Events
+
+| Event       | Description | Type               |
+| ----------- | ----------- | ------------------ |
+| `linkClick` |             | `CustomEvent<any>` |
 
 
 ## Dependencies
