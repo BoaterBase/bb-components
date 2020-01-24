@@ -1,3 +1,4 @@
 :root {
-  --bb-border-radius: 0.5rem;
+  --bb-border-radius: 0.25rem;
+  --bb-list-card-width: 400px;
 }

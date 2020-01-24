@@ -7,11 +7,15 @@
 
 ## Properties
 
-| Property           | Attribute           | Description | Type                             | Default     |
-| ------------------ | ------------------- | ----------- | -------------------------------- | ----------- |
-| `collectionHeader` | `collection-header` |             | `"image" \| "none" \| "overlay"` | `'overlay'` |
-| `collectionPath`   | `collection-path`   |             | `string`                         | `undefined` |
-| `root`             | `root`              |             | `string`                         | `'/'`       |
+| Property                   | Attribute                    | Description | Type                             | Default                |
+| -------------------------- | ---------------------------- | ----------- | -------------------------------- | ---------------------- |
+| `collectionFilters`        | `collection-filters`         |             | `string`                         | `'manufacturer,model'` |
+| `collectionHeader`         | `collection-header`          |             | `"image" \| "none" \| "overlay"` | `'overlay'`            |
+| `collectionList`           | `collection-list`            |             | `"card" \| "overlay"`            | `'overlay'`            |
+| `collectionLocationFilter` | `collection-location-filter` |             | `string`                         | `'All Locations'`      |
+| `collectionPath`           | `collection-path`            |             | `string`                         | `undefined`            |
+| `collectionProfileFilter`  | `collection-profile-filter`  |             | `string`                         | `'All Profiles'`       |
+| `root`                     | `root`                       |             | `string`                         | `'/'`                  |
 
 
 ## Dependencies

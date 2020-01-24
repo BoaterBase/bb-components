@@ -3,6 +3,7 @@
   --heading-font-family: var(--base-font-family);
   --alternate-font-family: "Palatino Linotype", Palatino, Palladio, "URW Palladio L", "Book Antiqua", Baskerville, "Bookman Old Style", "Bitstream Charter", "Nimbus Roman No9 L", Garamond, "Apple Garamond", "ITC Garamond Narrow", "New Century Schoolbook", "Century Schoolbook", "Century Schoolbook L", Georgia, serif;
 
+  --border-radius: var(--bb-border-radius, 0.25rem);
 
   all: initial;
   display: block;
@@ -191,6 +192,23 @@
   break-inside: avoid;
 }
 
+.content-more-button {
+  border-radius: 1rem;
+  border: none;
+  display: block;
+  padding: 0.25rem 1rem;
+  margin: 0;
+  font-size: 1rem;
+  background-color: deepskyblue;
+  color: white;
+  cursor: pointer;
+}
+
+.content-more-button:hover {
+  background-color: dodgerblue;
+}
+
+
 @keyframes spin {
   0% {
     transform: rotateZ(0);
@@ -203,17 +221,23 @@
 
 
 .contact-button {
-  display: flex;
-  width: 100%;
+  flex: auto;
+  margin: 0.25rem;
+  display: block;
   appearance: none;
   outline: none;
   padding: 0;
-  margin: 1rem 0 0 0;
   background: rgb(245, 245, 245);
   border-radius: 0.25rem;
   border: 1px solid #eee;
   color: #123;
   cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 0.25rem 1rem;
+  text-decoration: none;
+
 }
 
 .contact-button:hover {
@@ -261,4 +285,55 @@
 .contact-form button:hover {
   background: rgb(173, 216, 255);
   border: 1px solid rgb(139, 199, 255);
+}
+
+
+
+
+.watch-form {
+  margin: 1rem 0;
+  display: flex;
+}
+
+.watch-input {
+  border-radius: var(--border-radius);
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border: 2px solid deepskyblue;
+  display: block;
+  flex: auto;
+  width: auto;
+  min-width: auto;
+  padding: 0.25rem 0.5rem;
+  margin: 0;
+  font-size: 1rem;
+  outline: none;
+}
+
+.watch-input:focus {
+  border-color: dodgerblue;
+}
+
+.watch-button {
+  border-radius: var(--border-radius);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+
+  border: none;
+  display: block;
+  padding: 0.25rem 1rem;
+  margin: 0;
+  font-size: 1rem;
+  background-color: deepskyblue;
+  color: white;
+  cursor: pointer;
+  outline: none;
+}
+
+.watch-button:focus {
+  background-color: dodgerblue;
+}
+
+.watch-button:hover {
+  background-color: dodgerblue;
 }

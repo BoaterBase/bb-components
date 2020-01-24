@@ -1,5 +1,5 @@
 import { Component, Host, Prop, State, Event, EventEmitter, h } from '@stencil/core';
-import { cdnAsset, formatCurrency } from '../../utils/utils';
+import { cdnAsset, formatCurrency, cleanText } from '../../utils/utils';
 import { converter } from '../../utils/converter';
 
 import slugify from 'slugify';
@@ -51,22 +51,29 @@ export class BbListingCard {
     if (this.display == 'card')
       return (
         <Host style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
-          <a onClick={this.linkClickHandler} class="link" style={{ flex: 'auto', display: 'block', textDecoration: 'none' }} href={`${this.root}listings/${slugify(this.listingData.title)}-${this.listingId}`}>
+          <a onClick={this.linkClickHandler} class="card link scale-hover" style={{ flex: 'auto', display: 'block', textDecoration: 'none' }} href={`${this.root}listings/${slugify(this.listingData.title)}-${this.listingId}`}>
             <div class="preview-image" style={{ position: 'relative' }}>
               <svg viewBox="0 0 6 4" style={{ display: 'block', width: '100%' }}></svg>
               {primaryMedia && <img style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', objectFit: 'cover' }} src={cdnAsset(primaryMedia.info, 'jpg', 't_large_image')} />}
-              {this.listingData.message && <div style={{ position: 'absolute', top: '0.5rem', left: '0.5rem', background: 'rgba(255,50,0,0.8)', color: 'white', fontSize: '0.85rem', fontWeight: '600', padding: '0.5rem', borderRadius: '3px' }}>{this.listingData.message}</div>}
+              {this.listingData.message && <div style={{ position: 'absolute', bottom: '0', left: '0', right: '0', background: 'rgba(255,50,0,0.8)', color: 'white', fontSize: '0.85rem', fontWeight: '500', padding: '0.5rem', textTransform: 'uppercase' }}>{cleanText(this.listingData.message)}</div>}
+              {listing.profile?.data?.avatar?.info && <img src={listing.profile.data.avatar.info.thumbnail_url} style={{ position: 'absolute', top: '0.5rem', right: '0.5rem', width: '3rem', height: '3rem', border: '1px solid white', borderRadius: '100%' }} />}
             </div>
-            <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'flex-end' }}>
-              <div style={{ width: '50%' }}>
-                <div class="title" style={{ fontWeight: '600' }}>{shortTitle.join(' · ')}</div>
-                {this.listingData.location && <div style={{ color: 'inherit', opacity: '0.5', fontWeight: '400' }}>
-                  <ion-icon name="pin"></ion-icon>
-                  {this.listingData.location}
+            <h2 style={{ display: 'block', color: '#445566', background: '#f6f6f6', margin: '0', padding: '1rem 0.75rem 0.5rem 0.75rem', fontWeight: '400', fontSize: '1.65rem' }}>
+              {this.listingData.specifications?.model || this.listingData.title}
+            </h2>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', background: '#f6f6f6', padding: '0.75rem' }}>
+
+              <div style={{ flex: 'auto' }}>
+                <div class="title" style={{ fontWeight: '600', fontSize: '0.9rem', display: 'flex', alignItems: 'center' }}>
+                  <ion-icon name="information-circle" style={{ marginRight: '3px', opacity: '0.5' }}></ion-icon>
+                  {shortTitle.join(' · ')}</div>
+                {(listing.location || listing.profile?.data?.name) && <div style={{ display: 'flex', alignItems: 'center', color: 'inherit', opacity: '0.5', fontWeight: '400', fontSize: '0.9rem' }}>
+                  <ion-icon name="compass" style={{ marginRight: '3px', opacity: '0.5' }}></ion-icon>
+                  {[listing.profile?.data?.name, listing.location].filter(Boolean).join(', ')}
                 </div>}
               </div>
-              <div style={{ width: '50%', textAlign: 'right' }}>
-                <div style={{ fontSize: '0.8rem', fontWeight: '500', textTransform: 'uppercase', opacity: '0.5' }}>{listing.label}</div>
+              <div style={{ flex: 'auto', textAlign: 'right' }}>
+                <div style={{ fontSize: '0.8rem', fontWeight: '500', textTransform: 'uppercase', opacity: '0.5' }}>{cleanText(listing.label)}</div>
                 <div style={{ fontSize: '1.1rem', fontWeight: '700' }}>{listing.price && formatCurrency(listing.price, listing.currency)}</div>
               </div>
             </div>
@@ -81,7 +88,7 @@ export class BbListingCard {
             <div class="preview-image" style={{ position: 'relative' }}>
               <svg viewBox="0 0 6 4" style={{ display: 'block', width: '100%' }}></svg>
               {primaryMedia && <img style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', objectFit: 'cover' }} src={cdnAsset(primaryMedia.info, 'jpg', 't_large_image')} />}
-              {this.listingData.message && <div class="message">{this.listingData.message}</div>}
+              {this.listingData.message && <div class="message">{cleanText(this.listingData.message)}</div>}
               <div class="overlay-header">
                 <div style={{ display: 'flex', margin: '0.5rem', alignItems: 'flex-end' }}>
                   <div style={{ flex: 'auto' }}>

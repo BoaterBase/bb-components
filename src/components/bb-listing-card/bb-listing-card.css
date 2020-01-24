@@ -1,32 +1,33 @@
 :host {
-  --bb-card-border-radius: 0.4rem;
-  --bb-card-border: none;
-  --bb-card-padding: 0rem;
-  --bb-card-margin: 0rem;
-  --bb-card-color: inherit;
-  --bb-card-hover-color: deepskyblue;
+  --card-border-radius: var(--bb-border-radius, 0.25rem);
+  --card-border: none;
+  --card-padding: 0rem;
+  --card-margin: 0rem;
+  --card-color: inherit;
+  --card-hover-color: deepskyblue;
 
-  --bb-card-image-border-radius: 0.3rem;
-  --bb-card-image-box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.1);
+  --card-image-border-radius: var(--bb-border-radius, 0.25rem);
+  --card-image-box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.1);
 
   display: block;
-  margin: var(--bb-card-margin);
+  margin: var(--card-margin);
 }
 
 .link {
-  border-radius: var(--bb-card-border-radius);
-  border: var(--bb-card-border);
-  padding: var(--bb-card-padding);
-  color: var(--bb-card-color);
+  border-radius: var(--card-border-radius);
+  border: var(--card-border);
+  padding: var(--card-padding);
+  color: var(--card-color);
+}
+
+.card .link {
+  border-top-left-radius: var(--card-border-radius);
+  border-top-right-radius: var(--card-border-radius);
 }
 
 .link:hover {}
 
-.link:hover .title {
-  color: var(--bb-card-hover-color);
-}
-
-.link:hover .preview-image {
+.scale-hover:hover {
   transition: transform 0.5s;
   transform: scale(1.01);
 }
@@ -40,14 +41,21 @@
   color: #fff;
   background: linear-gradient(0deg, rgba(0, 10, 20, 0.25) 0%, rgba(0, 10, 20, 0) 100%);
   text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
-  border-radius: var(--bb-border-radius);
+  border-radius: var(--border-radius);
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
 
 .preview-image img {
-  border-radius: var(--bb-border-radius);
+  border-radius: var(--card-border-radius);
   box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.1);
+}
+
+.card .preview-image img {
+  border-top-left-radius: var(--card-border-radius);
+  border-top-right-radius: var(--card-border-radius);
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 .message {
@@ -60,6 +68,6 @@
   text-transform: uppercase;
   font-weight: 500;
   padding: 0.5rem;
-  border-radius: calc(var(--bb-border-radius) / 1.5);
+  border-radius: calc(var(--border-radius) / 1.5);
 
 }

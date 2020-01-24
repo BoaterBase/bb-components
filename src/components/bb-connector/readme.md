@@ -7,12 +7,16 @@
 
 ## Properties
 
-| Property           | Attribute           | Description                                    | Type                             | Default     |
-| ------------------ | ------------------- | ---------------------------------------------- | -------------------------------- | ----------- |
-| `collectionHeader` | `collection-header` | Collection header layout .                     | `"image" \| "none" \| "overlay"` | `'overlay'` |
-| `path`             | `path`              | The path of the component you want to display. | `string`                         | `undefined` |
-| `profileHeader`    | `profile-header`    | Profile header layout .                        | `"image" \| "none" \| "overlay"` | `'overlay'` |
-| `root`             | `root`              | The root for mapping urls e.g. listing/id .    | `string`                         | `'#/'`      |
+| Property                   | Attribute                    | Description                                    | Type                             | Default                |
+| -------------------------- | ---------------------------- | ---------------------------------------------- | -------------------------------- | ---------------------- |
+| `collectionFilters`        | `collection-filters`         |                                                | `string`                         | `'manufacturer,model'` |
+| `collectionHeader`         | `collection-header`          | Collection header layout .                     | `"image" \| "none" \| "overlay"` | `'overlay'`            |
+| `collectionList`           | `collection-list`            | Collection list layout .                       | `"card" \| "overlay"`            | `'overlay'`            |
+| `collectionLocationFilter` | `collection-location-filter` |                                                | `string`                         | `'All Locations'`      |
+| `collectionProfileFilter`  | `collection-profile-filter`  |                                                | `string`                         | `'All Profiles'`       |
+| `path`                     | `path`                       | The path of the component you want to display. | `string`                         | `undefined`            |
+| `profileHeader`            | `profile-header`             | Profile header layout .                        | `"image" \| "none" \| "overlay"` | `'overlay'`            |
+| `root`                     | `root`                       | The root for mapping urls e.g. listing/id .    | `string`                         | `'#/'`                 |
 
 
 ## Dependencies

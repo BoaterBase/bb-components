@@ -1,9 +1,9 @@
-import { Component, Host, Prop, State, h } from '@stencil/core';
-import { fb } from '../../utils/utils';
+import { Component, h, Host, Prop, State, Watch } from '@stencil/core';
 import { converter } from '../../utils/converter';
-
-import { firestore } from 'firebase';
 import { cdnAsset, formatCurrency, markdown } from '../../utils/utils';
+
+//let BB_API = 'http://localhost:5000/api'
+let BB_API = 'https://www.boaterbase.com/api';
 
 
 @Component({
@@ -15,7 +15,7 @@ export class BbListing {
   @Prop() listingPath: string;
   @Prop() root: string = '/';
 
-  @State() listingSnaphot: firestore.DocumentSnapshot;
+  @State() listingResponse: any;
 
   @State() overlay: { kind: '' | 'spinner' | 'contact' | 'media', selected?: number } = {
     kind: '',
@@ -29,30 +29,49 @@ export class BbListing {
     content: ''
   };
 
+  @State() watch = {
+    email: ''
+  };
+
+  @State() showContent = false;
+
+
   get listingId() {
     // Allow for pretty urls where the id is at the end
     return this.listingPath.split('-').pop();
   }
 
-
-  async componentWillLoad() {
-    // load async
-    this.listingSnaphot = await fb.firestore().collection('listings').doc(this.listingId).get();
-
-    // Change meta data
-    document.title = this.listingSnaphot.exists ? this.listingSnaphot.get('title') : 'Listing Not Found';
-    //const title = await document.querySelector("head title"); //.componentOnReady();
-
-
+  fetchData() {
+    return fetch(`${BB_API}/listings/${this.listingId}`, {
+      headers: {
+        'Accept': 'application/json',
+      },
+      method: 'GET'
+    }).then();
   }
 
-  sendMessage = async () => {
+  async componentWillLoad() {
+    console.log('componentWillLoad')
+    this.listingResponse = await this.fetchData().then(response => response.json());
+    // Change meta data
+    document.title = this.listingResponse.title ? this.listingResponse.title : 'Listing Not Found';
+  }
+
+  @Watch('listingPath')
+  async watchPath(newValue: string, oldValue: string) {
+    console.log('Path Changed', newValue, oldValue)
+    this.listingResponse = await this.fetchData().then(response => response.json());
+  }
+
+  sendMessage = async (ev: Event) => {
+    ev.preventDefault();
+
     this.overlay = {
       kind: 'spinner',
       selected: 0
     };
 
-    let response = await fetch(`https://beta.boaterbase.com/api/listings/${this.listingId}/messages`, {
+    let response = await fetch(`${BB_API}/listings/${this.listingId}/messages`, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -68,8 +87,7 @@ export class BbListing {
       };
       alert('There was an error, please try again!');
 
-      let body = await response.json();
-      console.log(response, body);
+      console.log(response);
     } else {
       this.overlay = {
         kind: '',
@@ -78,18 +96,43 @@ export class BbListing {
     }
   }
 
+  watchListing = async (ev: Event) => {
+    ev.preventDefault();
+
+    try {
+      let response = await fetch(`${BB_API}/listings/${this.listingId}/subscribers`, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: "POST",
+        body: JSON.stringify(this.watch)
+      });
+
+      if (response.status != 200) {
+
+        alert('There was an error, please try again!');
+        console.log(response);
+      } else {
+        alert('Subscribed to updates!')
+        this.watch = {
+          email: ''
+        }
+      }
+    } catch (err) {
+      alert('There was an error, please try again!');
+      console.log(err);
+    }
+  }
+
   render() {
-    console.log(this.listingSnaphot)
-    if (!this.listingSnaphot)
-      return <Host>
-        <ion-icon name="help-buoy" class="spin" style={{ width: '2rem', display: 'block', margin: '40vh auto', color: '#cde' }}></ion-icon>
-      </Host>
-    if (!this.listingSnaphot.exists)
+    //console.log(this.listingResponse)
+
+    if (!this.listingResponse)
       return <Host>Missing</Host>
 
 
-    const listing = this.listingSnaphot.data();
-    console.log(listing, listing.created.toDate())
+    const listing = this.listingResponse;
 
     const specs = listing.specifications || {};
     const media = listing.media || [];
@@ -139,18 +182,25 @@ export class BbListing {
         </div>
         <div>
           <div style={{ margin: '1rem', display: 'flex', flexWrap: 'wrap' }}>
-            <div style={{ flex: '5 1 600px', paddingRight: '1rem' }}>
+            <div style={{ flex: '5 1 600px', paddingRight: '1rem', paddingBottom: '1rem' }}>
               <h1 class="title">{listing.title}</h1>
               <p class="summary">{listing.summary}</p>
             </div>
-            <div style={{ flex: '1 1 300px' }}>
-              <button class="contact-button" onClick={() => this.overlay = { kind: 'contact' }}>
-                <img style={{ display: 'none', borderRadius: '0.2rem', width: '4rem', height: '4rem' }} src="https://gravatar.com/avatar/b6de1b5951e1ab139a39968f907c4f77?d=mp" />
-                <div style={{ flex: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0.5rem' }}>
-                  <span style={{ fontSize: '1.5rem', fontWeight: '600', display: 'block' }}>Contact</span>
-                  <span style={{ fontSize: '1rem', opacity: '0.8' }}>{listing.profile && listing.profile.data && listing.profile.data.name ? ` ${listing.profile.data.name}` : 'Owner'}</span>
-                </div>
-              </button>
+            <div style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', alignItems: 'center', border: '1px solid #f1f1f1', borderRadius: '0.25rem', paddingTop: '0.5rem' }}>
+              <img src={listing.profile?.data?.avatar?.info ? listing.profile.data.avatar.info.thumbnail_url : `https://gravatar.com/avatar/b6de1b5951e1ab139a39968f907c4f77?d=mp`} style={{ display: 'inline-block', border: '1px solid #eeeeee', borderRadius: '100%', width: '4rem', height: '4rem' }} />
+
+              <span style={{ fontSize: '1rem', opacity: '0.8', fontWeight: 'bold' }}>{listing.profile && listing.profile.data && listing.profile.data.name ? ` ${listing.profile.data.name}` : 'Owner'}</span>
+              <div style={{ fontSize: '1.5rem' }}>
+                {listing.profile?.data?.twitter && <a style={{ color: '#ccc' }} href={`https://twitter.com/${listing.profile.data.twitter}`}><ion-icon name="logo-twitter"></ion-icon></a>}
+                {listing.profile?.data?.facebook && <a style={{ color: '#ccc' }} href={`https://facebook.com/${listing.profile.data.facebook}`}><ion-icon name="logo-facebook"></ion-icon></a>}
+                {listing.profile?.data?.website && <a style={{ color: '#ccc' }} href={`${listing.profile.data.website}`}><ion-icon name="link"></ion-icon></a>}
+              </div>
+
+              <div style={{ display: 'flex', padding: '0.25rem' }}>
+                <button class="contact-button" onClick={() => this.overlay = { kind: 'contact' }}>Message</button>
+                {listing.profile?.data?.email && <a class="contact-button" href={`javascript:window.location.href='mailto:'+atob('${btoa(listing.profile?.data?.email)}')`}>Email</a>}
+                {listing.profile?.data?.telephone && <a class="contact-button" href={`javascript:window.location.href='tel:'+atob('${btoa(listing.profile?.data?.telephone)}')`}>Call</a>}
+              </div>
             </div>
           </div>
 
@@ -207,10 +257,13 @@ export class BbListing {
             </div>
           </div>
 
-          <div style={{ margin: '1rem', fontSize: '1rem', lineHeight: '1.4rem', padding: '1px 0' }}>
+          <div style={{ position: 'relative', overflow: this.showContent ? 'visible' : 'hidden', maxHeight: this.showContent ? 'none' : '20rem', margin: '1rem', fontSize: '1rem', lineHeight: '1.4rem', padding: '1px 0' }}>
             {content.map(({ kind, text }) => <div class="markdown">
               {kind == 'text' && markdown(text)}
             </div>)}
+            {!this.showContent && <div style={{ position: 'absolute', bottom: '0', left: '0', width: '100%', display: 'flex', padding: '3rem 1rem 1rem 1rem', justifyContent: 'center', background: 'linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 75%)' }}>
+              <button class="content-more-button" type="button" onClick={() => { this.showContent = true; }}>Show More</button>
+            </div>}
           </div>
 
           <div>
@@ -291,14 +344,15 @@ export class BbListing {
           <div style={{ position: 'absolute', top: '5px', height: '50px', left: '60px', right: '60px', color: 'white', opacity: '0.9', display: 'block', textOverflow: 'ellipsis', fontWeight: '300', lineHeight: '16px', fontSize: '14px', textAlign: 'center', overflow: 'hidden', lineClamp: '3' }}>{selectedMedia.description}</div>
         </div>}
 
-        <div style={{ display: 'none' }}>
-          <form style={{ borderRadius: '0.5rem', background: '#f1f1f1', padding: '1rem' }}>
-            Updates
-          <input type="email" placeholder="Enter your email for updates..."></input>
-            <button>Subscribe</button>
+        <div style={{ margin: '1rem' }}>
+          <h2 style={{ fontSize: '1.25rem' }}>Subscribe to news and updates about this listing...</h2>
+          <form class="watch-form" onSubmit={this.watchListing}>
+            <input class="watch-input" required type="email" name="email" autocomplete="email" placeholder="Enter your email address..." value={this.watch.email} onChange={(event) => this.watch = { ...this.watch, email: (event.target as HTMLInputElement).value }}></input>
+            <button class="watch-button" type="submit">Watch</button>
           </form>
+          <div style={{ opacity: '0.5', padding: '0.5rem 0' }}>Listing Created on {(new Date(listing.created)).toDateString()}</div>
         </div>
-        <div style={{ display: 'none', opacity: '0.5' }}>Listing Created on {listing.created.toDate().toLocaleString()}</div>
+
 
       </Host>
     );

@@ -11,15 +11,26 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 export namespace Components {
   interface BbCollection {
+    'collectionFilters': string;
     'collectionHeader': 'none' | 'overlay' | 'image';
+    'collectionList': 'card' | 'overlay';
+    'collectionLocationFilter': string;
     'collectionPath': string;
+    'collectionProfileFilter': string;
     'root': string;
   }
   interface BbConnector {
+    'collectionFilters': string;
     /**
     * Collection header layout .
     */
     'collectionHeader': 'none' | 'overlay' | 'image';
+    /**
+    * Collection list layout .
+    */
+    'collectionList': 'card' | 'overlay';
+    'collectionLocationFilter': string;
+    'collectionProfileFilter': string;
     /**
     * The path of the component you want to display.
     */
@@ -101,15 +112,26 @@ declare global {
 
 declare namespace LocalJSX {
   interface BbCollection {
+    'collectionFilters'?: string;
     'collectionHeader'?: 'none' | 'overlay' | 'image';
+    'collectionList'?: 'card' | 'overlay';
+    'collectionLocationFilter'?: string;
     'collectionPath'?: string;
+    'collectionProfileFilter'?: string;
     'root'?: string;
   }
   interface BbConnector {
+    'collectionFilters'?: string;
     /**
     * Collection header layout .
     */
     'collectionHeader'?: 'none' | 'overlay' | 'image';
+    /**
+    * Collection list layout .
+    */
+    'collectionList'?: 'card' | 'overlay';
+    'collectionLocationFilter'?: string;
+    'collectionProfileFilter'?: string;
     /**
     * The path of the component you want to display.
     */

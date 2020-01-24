@@ -17,8 +17,8 @@
       console.log(document.querySelector('bb-connector'));
     }
     function changeCollection(el) {
-      document.querySelector('bb-connector').path = el.value;
-      console.log(document.querySelector('bb-connector'));
+      document.querySelector('bb-collection').collectionPath = el.value;
+      console.log(document.querySelector('bb-collection'));
     }
 
     console.log('Page Loaded')
@@ -42,11 +42,13 @@
   </select>
   <select onchange="changeCollection(this)">
     <option>Change</option>
-    <option value="collection/FTj4CM3F">Highfield Inflatables</option>
-    <option value="collection/SicLIyzH">Achilles Inflatables</option>
+    <option value="FTj4CM3F">Highfield Inflatables</option>
+    <option value="SicLIyzH">Achilles Inflatables</option>
+    <option value="2EUZn0BQ">J/Boats</option>
   </select>
-  <bb-connector path="profile/hUPV62yx" root="#/"></bb-connector>
-  <x-bb-collection collection-path="SicLIyzH" collection-header="none" root="#/mypage/"></x-bb-collection>
+  <bb-connector root="/" path="collection/2EUZn0BQ" collection-list="card" collection-filters="model"
+    collection-profile-filter="All Dealers">
+  </bb-connector>
 
 </body>
 

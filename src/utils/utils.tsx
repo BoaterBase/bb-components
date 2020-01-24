@@ -25,6 +25,11 @@ export function formatCurrency(amount, currency = 'USD') {
   })).format(amount);
 }
 
+/* Remove junk from user entered text */
+export function cleanText(text) {
+  return text.replace(/[^a-zA-Z0-9\-\s]/g, '');
+}
+
 /*
   Mimimal markdown parser
 */
