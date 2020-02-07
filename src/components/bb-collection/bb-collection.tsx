@@ -80,7 +80,7 @@ export class BbCollection {
 
     const allLocations = [...new Set(allListings.map(l => l.data.location).filter(Boolean))];
 
-    const allProfiles = allListings.map(l => ({ handle: l.data.profile.data.handle, name: l.data.profile.data.name })).filter((obj, pos, arr) => {
+    const allProfiles = allListings.map(l => (l.data.profile?.data?.handle && { handle: l.data.profile?.data?.handle, name: l.data.profile?.data?.name || l.data.profile?.data?.handle })).filter(Boolean).filter((obj, pos, arr) => {
       return arr.map(mapObj => mapObj.handle).indexOf(obj.handle) === pos;
     })
 
