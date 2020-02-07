@@ -1,6 +1,6 @@
 import { Component, h, Host, Prop, State, Watch } from '@stencil/core';
 import { converter } from '../../utils/converter';
-import { cdnAsset, formatCurrency, markdown } from '../../utils/utils';
+import { cdnAsset, formatCurrency } from '../../utils/utils';
 
 //let BB_API = 'http://localhost:5000/api'
 let BB_API = 'https://www.boaterbase.com/api';
@@ -258,9 +258,7 @@ export class BbListing {
           </div>
 
           <div style={{ position: 'relative', overflow: this.showContent ? 'visible' : 'hidden', maxHeight: this.showContent ? 'none' : '20rem', margin: '1rem', fontSize: '1rem', lineHeight: '1.4rem', padding: '1px 0' }}>
-            {content.map(({ kind, text }) => <div class="markdown">
-              {kind == 'text' && markdown(text)}
-            </div>)}
+            <bb-content content={content}></bb-content>
             {!this.showContent && <div style={{ position: 'absolute', bottom: '0', left: '0', width: '100%', display: 'flex', padding: '3rem 1rem 1rem 1rem', justifyContent: 'center', background: 'linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 75%)' }}>
               <button class="content-more-button" type="button" onClick={() => { this.showContent = true; }}>Show More</button>
             </div>}

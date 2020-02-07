@@ -45,6 +45,9 @@ export namespace Components {
     'root': string;
   }
   interface BbContactForm {}
+  interface BbContent {
+    'content': any[];
+  }
   interface BbListing {
     'listingPath': string;
     'root': string;
@@ -54,6 +57,10 @@ export namespace Components {
     'listingData': any;
     'listingId': string;
     'root': string;
+  }
+  interface BbMedia {
+    'display': string;
+    'items': any[];
   }
   interface BbProfile {
     'profileHeader': 'none' | 'overlay' | 'image';
@@ -83,6 +90,12 @@ declare global {
     new (): HTMLBbContactFormElement;
   };
 
+  interface HTMLBbContentElement extends Components.BbContent, HTMLStencilElement {}
+  var HTMLBbContentElement: {
+    prototype: HTMLBbContentElement;
+    new (): HTMLBbContentElement;
+  };
+
   interface HTMLBbListingElement extends Components.BbListing, HTMLStencilElement {}
   var HTMLBbListingElement: {
     prototype: HTMLBbListingElement;
@@ -95,6 +108,12 @@ declare global {
     new (): HTMLBbListingCardElement;
   };
 
+  interface HTMLBbMediaElement extends Components.BbMedia, HTMLStencilElement {}
+  var HTMLBbMediaElement: {
+    prototype: HTMLBbMediaElement;
+    new (): HTMLBbMediaElement;
+  };
+
   interface HTMLBbProfileElement extends Components.BbProfile, HTMLStencilElement {}
   var HTMLBbProfileElement: {
     prototype: HTMLBbProfileElement;
@@ -104,8 +123,10 @@ declare global {
     'bb-collection': HTMLBbCollectionElement;
     'bb-connector': HTMLBbConnectorElement;
     'bb-contact-form': HTMLBbContactFormElement;
+    'bb-content': HTMLBbContentElement;
     'bb-listing': HTMLBbListingElement;
     'bb-listing-card': HTMLBbListingCardElement;
+    'bb-media': HTMLBbMediaElement;
     'bb-profile': HTMLBbProfileElement;
   }
 }
@@ -146,6 +167,9 @@ declare namespace LocalJSX {
     'root'?: string;
   }
   interface BbContactForm {}
+  interface BbContent {
+    'content'?: any[];
+  }
   interface BbListing {
     'listingPath'?: string;
     'root'?: string;
@@ -156,6 +180,10 @@ declare namespace LocalJSX {
     'listingId'?: string;
     'onLinkClick'?: (event: CustomEvent<any>) => void;
     'root'?: string;
+  }
+  interface BbMedia {
+    'display'?: string;
+    'items'?: any[];
   }
   interface BbProfile {
     'onLinkClick'?: (event: CustomEvent<any>) => void;
@@ -168,8 +196,10 @@ declare namespace LocalJSX {
     'bb-collection': BbCollection;
     'bb-connector': BbConnector;
     'bb-contact-form': BbContactForm;
+    'bb-content': BbContent;
     'bb-listing': BbListing;
     'bb-listing-card': BbListingCard;
+    'bb-media': BbMedia;
     'bb-profile': BbProfile;
   }
 }
@@ -183,8 +213,10 @@ declare module "@stencil/core" {
       'bb-collection': LocalJSX.BbCollection & JSXBase.HTMLAttributes<HTMLBbCollectionElement>;
       'bb-connector': LocalJSX.BbConnector & JSXBase.HTMLAttributes<HTMLBbConnectorElement>;
       'bb-contact-form': LocalJSX.BbContactForm & JSXBase.HTMLAttributes<HTMLBbContactFormElement>;
+      'bb-content': LocalJSX.BbContent & JSXBase.HTMLAttributes<HTMLBbContentElement>;
       'bb-listing': LocalJSX.BbListing & JSXBase.HTMLAttributes<HTMLBbListingElement>;
       'bb-listing-card': LocalJSX.BbListingCard & JSXBase.HTMLAttributes<HTMLBbListingCardElement>;
+      'bb-media': LocalJSX.BbMedia & JSXBase.HTMLAttributes<HTMLBbMediaElement>;
       'bb-profile': LocalJSX.BbProfile & JSXBase.HTMLAttributes<HTMLBbProfileElement>;
     }
   }

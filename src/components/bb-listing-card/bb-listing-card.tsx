@@ -73,7 +73,7 @@ export class BbListingCard {
                 </div>}
               </div>
               <div style={{ flex: 'auto', textAlign: 'right' }}>
-                <div style={{ fontSize: '0.8rem', fontWeight: '500', textTransform: 'uppercase', opacity: '0.5' }}>{cleanText(listing.label)}</div>
+                {listing.label && <div style={{ fontSize: '0.8rem', fontWeight: '500', textTransform: 'uppercase', opacity: '0.5' }}>{cleanText(listing.label)}</div>}
                 <div style={{ fontSize: '1.1rem', fontWeight: '700' }}>{listing.price && formatCurrency(listing.price, listing.currency)}</div>
               </div>
             </div>
@@ -99,7 +99,7 @@ export class BbListingCard {
                     </div>}
                   </div>
                   <div style={{ flex: 'auto', textAlign: 'right', alignItems: 'flex-end' }}>
-                    <div style={{ fontSize: '0.8rem', fontWeight: '500', textTransform: 'uppercase', opacity: '0.5' }}>{listing.label}</div>
+                    {listing.label && <div style={{ fontSize: '0.8rem', fontWeight: '500', textTransform: 'uppercase', opacity: '0.5' }}>{listing.label}</div>}
                     <div style={{ fontSize: '1.1rem', fontWeight: '700' }}>{listing.price && formatCurrency(listing.price, listing.currency)}</div>
                   </div>
                 </div>

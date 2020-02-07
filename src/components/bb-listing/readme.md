@@ -22,11 +22,14 @@
 ### Depends on
 
 - ion-icon
+- [bb-content](../content)
 
 ### Graph
 ```mermaid
 graph TD;
   bb-listing --> ion-icon
+  bb-listing --> bb-content
+  bb-content --> bb-media
   bb-connector --> bb-listing
   style bb-listing fill:#f9f,stroke:#333,stroke-width:4px
 ```

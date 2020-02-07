@@ -76,7 +76,7 @@ export class BbConnector {
         <stencil-router historyType={this.root.includes('#') ? 'hash' : 'browser'}>
           {
             this.isPathValid && this.base == 'listing' && <stencil-route-switch scrollTopOffset={1}>
-              <stencil-route url={[this.routerRoot, this.routerRoot + '/']} exact={true} routeRender={() => (<div>Listing {this.path}</div>)}></stencil-route>
+              <stencil-route url={[this.routerRoot, this.routerRoot + '/']} exact={true} routeRender={(props) => { this.history = props.history; return <bb-listing listingPath={this.id} root={this.root}></bb-listing> }}></stencil-route>
               <stencil-route url={this.routerRoot + '/updates/:updateId'} exact={true} routeRender={(props) => (<div>Listing Update {this.path} {props.match.params.updateId}</div>)}></stencil-route>
               <stencil-route routeRender={() => (<div>404 - Listing</div>)}></stencil-route>
             </stencil-route-switch>

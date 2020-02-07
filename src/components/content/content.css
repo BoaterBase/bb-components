@@ -1,0 +1,67 @@
+:host {
+  display: block;
+}
+
+.content h2 {
+  font-size: 1.5rem;
+  font-weight: 300;
+  opacity: 0.9;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.content h2:before,
+.content h2:after {
+  content: '';
+  border-top: 1px solid;
+  margin: 0 2rem 0 0;
+  flex: 1 0 2rem;
+  opacity: 0.2;
+}
+
+.content h2:after {
+  margin: 0 0 0 2rem;
+}
+
+.markdown {
+  columns: 2 20rem;
+  /* Fix chrome column bug */
+  transform: translateZ(0);
+}
+
+.markdown p {
+  opacity: 0.75;
+  font-size: 0.9rem;
+  margin: 0 0 1rem 0;
+}
+
+.markdown li {
+  display: list-item;
+  opacity: 0.75;
+  font-size: 0.9rem;
+  list-style: " – ";
+  list-style-position: outside;
+  break-inside: avoid;
+}
+
+.markdown h3 {
+  margin: 1rem 0;
+  font-size: 1.25rem;
+  font-weight: 500;
+  column-span: all;
+  break-inside: avoid;
+}
+
+
+.markdown h4 {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  opacity: 0.85;
+  column-span: all;
+  break-inside: avoid;
+}

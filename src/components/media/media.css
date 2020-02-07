@@ -1,0 +1,33 @@
+:host {
+  display: block;
+}
+
+.display-grid {
+  display: grid;
+  margin: 1rem 0;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-column-gap: 2%;
+  grid-row-gap: 2%;
+}
+
+.display-grid-item {
+  position: relative;
+  cursor: zoom-in;
+  transition: transform 0.25s ease-in-out;
+}
+
+.display-grid-item:hover {
+  transform: scale(1.01);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.display-grid-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: var(--bb-border-radius);
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

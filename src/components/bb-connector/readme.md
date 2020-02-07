@@ -26,8 +26,8 @@
 - stencil-router
 - stencil-route-switch
 - stencil-route
-- [bb-profile](../bb-profile)
 - [bb-listing](../bb-listing)
+- [bb-profile](../bb-profile)
 - [bb-collection](../bb-collection)
 
 ### Graph
@@ -36,12 +36,14 @@ graph TD;
   bb-connector --> stencil-router
   bb-connector --> stencil-route-switch
   bb-connector --> stencil-route
-  bb-connector --> bb-profile
   bb-connector --> bb-listing
+  bb-connector --> bb-profile
   bb-connector --> bb-collection
+  bb-listing --> ion-icon
+  bb-listing --> bb-content
+  bb-content --> bb-media
   bb-profile --> bb-listing-card
   bb-listing-card --> ion-icon
-  bb-listing --> ion-icon
   bb-collection --> ion-icon
   bb-collection --> bb-listing-card
   style bb-connector fill:#f9f,stroke:#333,stroke-width:4px
