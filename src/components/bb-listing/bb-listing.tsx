@@ -319,7 +319,7 @@ export class BbListing {
           </div>
           <div key={this.overlay.selected} style={{ position: 'absolute', left: '0', width: '100%', top: '60px', bottom: '60px', padding: '0 10px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             {selectedMedia.info.resource_type == 'image' && <img onLoad={(ev) => (ev.target as HTMLElement).style.opacity = '1.0'} style={{ opacity: '0', transition: 'opacity 0.5s', borderRadius: '3px', boxShadow: '0 0 20px rgba(0,0,0,0.5)', display: 'block', margin: 'auto', maxWidth: '100%', maxHeight: '100%' }} src={cdnAsset(selectedMedia.info, 'jpg', 't_large_image')} />}
-            {selectedMedia.info.resource_type == 'video' && <video onLoad={(ev) => (ev.target as HTMLElement).style.opacity = '1.0'} style={{ opacity: '0', transition: 'opacity 0.5s', borderRadius: '3px', boxShadow: '0 0 20px rgba(0,0,0,0.5)', display: 'block', margin: 'auto', maxWidth: '100%', maxHeight: '100%' }} autoplay poster={cdnAsset(selectedMedia.info, 'jpg', 't_large_image')} controls>
+            {selectedMedia.info.resource_type == 'video' && <video onCanPlay={(ev) => (ev.target as HTMLElement).style.opacity = '1.0'} style={{ opacity: '0', transition: 'opacity 0.5s', borderRadius: '3px', boxShadow: '0 0 20px rgba(0,0,0,0.5)', display: 'block', margin: 'auto', maxWidth: '100%', maxHeight: '100%' }} autoplay poster={cdnAsset(selectedMedia.info, 'jpg', 't_large_image')} controls>
               <source src={cdnAsset(selectedMedia.info, 'm3u8', 't_streaming_video')} type="application/x-mpegURL" />
               <source src={cdnAsset(selectedMedia.info, 'mp4', 't_progressive_video')} type="video/mp4" />
               {/*                    
