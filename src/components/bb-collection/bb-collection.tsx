@@ -50,6 +50,7 @@ export class BbCollection {
   async componentWillLoad() {
     //console.log('componentWillLoad')
     this.collectionResponse = await this.fetchData().then(response => response.json());
+    console.log(this.collectionResponse)
   }
 
   @Watch('collectionPath')
@@ -97,13 +98,14 @@ export class BbCollection {
     if (this.profileFilter) {
       filteredListings = filteredListings.filter(l => l.data.profile?.data?.handle == this.profileFilter);
     }
-
     return (<Host>
-      {this.collectionHeader == 'overlay' && <div class="header" style={{ backgroundImage: collection.header && collection.header.info && collection.header.info.secure_url && `url('${collection.header.info.secure_url}')` }}>
-        <svg viewBox="0 0 2 1" style={{ display: 'block', width: '100%' }}></svg>
+      {this.collectionHeader == 'overlay' && <div class="header" style={{ backgroundColor: collection?.header?.info?.colors[0]?.color, backgroundImage: collection.header && collection.header.info && collection.header.info.secure_url && `url('${collection.header.info.secure_url}')` }}>
+        <svg viewBox="0 0 2 1" style={{ display: 'block', width: '100%', minHeight: '300px' }}></svg>
         <div class="header-overlay">
-          <h1 style={{ margin: '0.5rem 1rem' }}>{collection.title}</h1>
-          <div style={{ margin: '0.5rem 1rem' }}>{collection.summary}</div>
+          <div class="header-text">
+            <h1>{collection.title}</h1>
+            <p>{collection.summary}</p>
+          </div>
           <form class="search-form">
             {specFilters.map((f) => (<select class="search-form-select" onChange={({ target }) => this.specsFilter = { ...this.specsFilter, [f.key]: (target as HTMLSelectElement).value }}>
               <option selected={this.specsFilter[f.key] == ''} value="">{f.title}</option>
@@ -119,11 +121,21 @@ export class BbCollection {
               {allProfiles.map((item: any) => <option selected={this.profileFilter == item.handle} value={item.handle}>{item.name}</option>)}
             </select>
           </form>
+
         </div>
       </div>}
 
       {filteredListings && <div class="card-grid">
-        {filteredListings.map(listing => <div class="card-grid-item"><bb-listing-card listingId={listing.id} listingData={listing.data} root={this.root} display={this.collectionList}></bb-listing-card></div>)}
+        {filteredListings.map(listing => {
+          let mergedListing = {
+            ...listing.data,
+            title: listing.title || listing.data.title,
+            message: listing.message || listing.data.message,
+            messageDisplay: listing.messageDisplay
+          };
+
+          return <div class="card-grid-item"><bb-listing-card listingId={listing.id} listingData={mergedListing} root={this.root} display={this.collectionList}></bb-listing-card></div>
+        })}
         <div class="card-grid-item"></div>
       </div>}
 

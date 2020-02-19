@@ -55,13 +55,16 @@ export class BbListingCard {
             <div class="preview-image" style={{ position: 'relative' }}>
               <svg viewBox="0 0 6 4" style={{ display: 'block', width: '100%' }}></svg>
               {primaryMedia && <img style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', objectFit: 'cover' }} src={cdnAsset(primaryMedia.info, 'jpg', 't_large_image')} />}
-              {this.listingData.message && <div style={{ position: 'absolute', bottom: '0', left: '0', right: '0', background: 'rgba(255,50,0,0.8)', color: 'white', fontSize: '0.85rem', fontWeight: '500', padding: '0.5rem', textTransform: 'uppercase' }}>{cleanText(this.listingData.message)}</div>}
               {listing.profile?.data?.avatar?.info && <img src={listing.profile.data.avatar.info.thumbnail_url} style={{ position: 'absolute', top: '0.5rem', right: '0.5rem', width: '3rem', height: '3rem', border: '1px solid white', borderRadius: '100%' }} />}
             </div>
-            <h2 style={{ display: 'block', color: '#445566', background: '#f6f6f6', margin: '0', padding: '1rem 0.75rem 0.5rem 0.75rem', fontWeight: '400', fontSize: '1.65rem' }}>
-              {this.listingData.specifications?.model || this.listingData.title}
-            </h2>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', background: '#f6f6f6', padding: '0.75rem' }}>
+            <div style={{ display: 'flex', background: '#f1f1f1', padding: '1rem 0.75rem 0.5rem 0.75rem' }}>
+              <h2 style={{ flex: 'auto', color: '#445566', margin: '0', fontWeight: '400', fontSize: '1.65rem' }}>
+                {this.listingData.title}
+              </h2>
+              {this.listingData.messageDisplay == 'highlight' && this.listingData.message && <div style={{ background: 'rgba(255,50,0,0.8)', color: 'white', fontSize: '0.75rem', borderRadius: '0.25rem', fontWeight: '500', padding: '0.5rem', textTransform: 'uppercase' }}>{cleanText(this.listingData.message)}</div>}
+              {this.listingData.messageDisplay == 'visible' && this.listingData.message && <div style={{ background: 'rgba(50,50,50,0.8)', color: 'white', fontSize: '0.75rem', borderRadius: '0.25rem', fontWeight: '500', padding: '0.5rem', textTransform: 'uppercase' }}>{cleanText(this.listingData.message)}</div>}
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', background: '#f1f1f1', padding: '0.75rem' }}>
 
               <div style={{ flex: 'auto' }}>
                 <div class="title" style={{ fontWeight: '600', fontSize: '0.9rem', display: 'flex', alignItems: 'center' }}>

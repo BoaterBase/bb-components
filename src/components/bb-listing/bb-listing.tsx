@@ -1,4 +1,4 @@
-import { Component, h, Host, Prop, State, Watch } from '@stencil/core';
+import { Component, h, Host, Prop, State, Watch, Element } from '@stencil/core';
 import { converter } from '../../utils/converter';
 import { cdnAsset, formatCurrency } from '../../utils/utils';
 
@@ -12,10 +12,13 @@ let BB_API = 'https://www.boaterbase.com/api';
   shadow: true
 })
 export class BbListing {
+  @Element() el: HTMLElement;
+
   @Prop() listingPath: string;
   @Prop() root: string = '/';
 
   @State() listingResponse: any;
+  @State() updatesResponse: any;
 
   @State() overlay: { kind: '' | 'spinner' | 'contact' | 'media', selected?: number } = {
     kind: '',
@@ -50,17 +53,31 @@ export class BbListing {
     }).then();
   }
 
+  fetchUpdates() {
+    return fetch(`${BB_API}/listings/${this.listingId}/updates`, {
+      headers: {
+        'Accept': 'application/json',
+      },
+      method: 'GET'
+    }).then(response => response.json());
+  }
+
   async componentWillLoad() {
-    console.log('componentWillLoad')
     this.listingResponse = await this.fetchData().then(response => response.json());
     // Change meta data
     document.title = this.listingResponse.title ? this.listingResponse.title : 'Listing Not Found';
+  }
+
+  async componentDidLoad() {
+    this.updatesResponse = await this.fetchUpdates();
+    this.el.scrollIntoView();
   }
 
   @Watch('listingPath')
   async watchPath(newValue: string, oldValue: string) {
     console.log('Path Changed', newValue, oldValue)
     this.listingResponse = await this.fetchData().then(response => response.json());
+    this.updatesResponse = await this.fetchUpdates();
   }
 
   sendMessage = async (ev: Event) => {
@@ -144,7 +161,7 @@ export class BbListing {
 
     //const primaryVariant = listing.variants && listing.variants[0];
 
-    const shortTitle = ([specs.loa && Math.round(converter('length', 'm', 'ft', specs.loa)) + "'", specs.year, specs.manufacturer, specs.manufacturer && specs.model, specs.category, specs.classification]).filter(Boolean).slice(0, 3);
+    //const shortTitle = ([specs.loa && Math.round(converter('length', 'm', 'ft', specs.loa)) + "'", specs.year, specs.manufacturer, specs.manufacturer && specs.model, specs.category, specs.classification]).filter(Boolean).slice(0, 3);
 
 
     let mediaLength = (listing.media || []).length;
@@ -156,7 +173,7 @@ export class BbListing {
           <svg viewBox="0 0 16 9" style={{ display: 'block', width: '100%', background: 'lightblue', borderRadius: 'var(--bb-border-radius)' }}></svg>
           {primaryMedia && <div onClick={() => this.overlay = { kind: 'media', selected: 0 }} style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%' }}>
             {primaryMedia.info.resource_type == 'image' && <img style={{ borderRadius: 'var(--bb-border-radius)', display: 'block', width: '100%', height: '100%', objectFit: 'cover' }} src={cdnAsset(primaryMedia.info, 'jpg', 't_large_image')} />}
-            {primaryMedia.info.resource_type == 'video' && <video style={{ borderRadius: 'var(--bb-border-radius)', display: 'block', width: '100%', height: '100%', objectFit: 'cover' }} poster={cdnAsset(primaryMedia.info, 'jpg', 't_large_image')} controls>
+            {primaryMedia.info.resource_type == 'video' && <video style={{ borderRadius: 'var(--bb-border-radius)', display: 'block', width: '100%', height: '100%', objectFit: 'cover' }} autoplay muted playsInline poster={cdnAsset(primaryMedia.info, 'jpg', 't_large_image')}>
               <source src={cdnAsset(primaryMedia.info, 'm3u8', 't_streaming_video')} type="application/x-mpegURL" />
               <source src={cdnAsset(primaryMedia.info, 'mp4', 't_progressive_video')} type="video/mp4" />
               {/*                    
@@ -170,7 +187,6 @@ export class BbListing {
           <div style={{ position: 'absolute', paddingTop: '1rem', bottom: '0', left: '0', width: '100%', color: '#fff' }}>
             <div style={{ display: 'flex', alignItems: 'flex-end', margin: '0.5rem' }}>
               <div style={{ flex: 'auto' }}>
-                <div style={{ fontWeight: '600', fontSize: '1.5rem', margin: '0 0 0.25rem 0' }}>{shortTitle.join(' · ')}</div>
                 {listing.location && <div style={{ color: 'inherit', opacity: '0.5', fontWeight: '400' }}><ion-icon name="pin"></ion-icon>{listing.location}</div>}
               </div>
               <div style={{ flex: 'auto', textAlign: 'right' }}>
@@ -343,13 +359,25 @@ export class BbListing {
         </div>}
 
         <div style={{ margin: '1rem' }}>
-          <h2 style={{ fontSize: '1.25rem' }}>Subscribe to news and updates about this listing...</h2>
-          <form class="watch-form" onSubmit={this.watchListing}>
-            <input class="watch-input" required type="email" name="email" autocomplete="email" placeholder="Enter your email address..." value={this.watch.email} onChange={(event) => this.watch = { ...this.watch, email: (event.target as HTMLInputElement).value }}></input>
-            <button class="watch-button" type="submit">Watch</button>
-          </form>
+          <div style={{ backgroundColor: '#f1f1f1', borderRadius: '0.5rem', padding: '1rem' }}>
+            <h2 style={{ fontSize: '1.25rem', margin: '0 0 0.5rem 0' }}>Follow this boat..</h2>
+            <form class="watch-form" onSubmit={this.watchListing}>
+              <input class="watch-input" required type="email" name="email" autocomplete="email" placeholder="Enter your email address..." value={this.watch.email} onChange={(event) => this.watch = { ...this.watch, email: (event.target as HTMLInputElement).value }}></input>
+              <button class="watch-button" type="submit">Watch</button>
+            </form>
+          </div>
           <div style={{ opacity: '0.5', padding: '0.5rem 0' }}>Listing Created on {(new Date(listing.created)).toDateString()}</div>
         </div>
+
+        {this.updatesResponse?.updates?.length ?
+          <div style={{ margin: '1rem' }}>
+            <h2 style={{ borderBottom: '2px solid #f1f1f1', paddingBottom: '0.5rem' }}>Updates</h2>
+            {this.updatesResponse.updates.map((update) => (<div key={update.id}>
+              <h3 style={{ fontWeight: '500', margin: '0' }}>{update.title}</h3>
+              <h4 style={{ fontWeight: '300', opacity: '0.5', fontSize: '0.75rem', margin: '0 0 1rem 0' }}>{(new Date(update.created)).toDateString()}</h4>
+              <bb-content content={update.content}></bb-content>
+            </div>))}
+          </div> : <div></div>}
 
 
       </Host>
