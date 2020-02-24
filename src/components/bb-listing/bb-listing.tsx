@@ -233,8 +233,8 @@ export class BbListing {
             {specs.loa ? <li><h3>Length Overall</h3><span>{converter('length', 'm', 'ft', specs.loa)} <small>ft</small></span></li> : null}
             {specs.lwl ? <li><h3>Length At Waterline</h3><span>{converter('length', 'm', 'ft', specs.lwl)} <small>ft</small></span></li> : null}
 
-            {specs.beam ? <li><h3>Beam</h3><span>{converter('length', 'm', 'ft', specs.beam).toFixed(2)} <small>ft</small></span></li> : null}
-            {specs.draft ? <li><h3>Draft</h3><span>{converter('length', 'm', 'ft', specs.draft).toFixed(2)} <small>ft</small></span></li> : null}
+            {specs.beam ? <li><h3>Beam</h3><span>{converter('length', 'm', 'ft', specs.beam)} <small>ft</small></span></li> : null}
+            {specs.draft ? <li><h3>Draft</h3><span>{converter('length', 'm', 'ft', specs.draft)} <small>ft</small></span></li> : null}
 
             {specs.haw ? <li><h3>Height Above Waterline</h3><span>{converter('length', 'm', 'ft', specs.haw)} <small>ft</small></span></li> : null}
 
@@ -242,17 +242,19 @@ export class BbListing {
             {specs.material && <li><h3>Material</h3><span>{specs.material}</span></li>}
 
 
-            {specs.displacement ? <li><h3>Displacement</h3><span>{specs.displacement.toFixed(2)} <small>kg</small></span></li> : null}
-            {specs.weight ? <li><h3>Weight</h3><span>{specs.weight.toFixed(2)} <small>kg</small></span></li> : null}
+            {specs.displacement ? <li><h3>Displacement</h3><span>{converter('mass', 'kg', 'lb', specs.displacement)} <small>lb</small></span></li> : null}
+            {specs.weight ? <li><h3>Weight</h3><span>{converter('mass', 'kg', 'lb', specs.weight)} <small>lb</small></span></li> : null}
 
 
             {specs.propulsion && <li><h3>Propulsion</h3><span>{specs.propulsion}</span></li>}
             {specs.engines ? <li><h3>Engines</h3><span>{specs.engines}</span></li> : null}
 
-            {specs.power ? <li><h3>Engine Power</h3><span>{specs.power.toFixed(2)} <small>kw</small></span></li> : null}
+            {specs.power ? <li><h3>Engine Power</h3><span>{converter('power', 'kw', 'hp', specs.power)}<small>hp</small></span></li> : null}
 
-            {specs.fuelcapacity ? <li><h3>Fuel Capacity</h3><span>{specs.fuelcapacity.toFixed(2)} <small>l</small></span></li> : null}
-            {specs.watercapacity ? <li><h3>Water Capacity</h3><span>{specs.watercapacity.toFixed(2)} <small>l</small></span></li> : null}
+            {specs.fuelcapacity ? <li><h3>Fuel Capacity</h3><span>{converter('volume', 'l', 'gal', specs.fuelcapacity)} <small>gal</small></span></li> : null}
+            {specs.watercapacity ? <li><h3>Water Capacity</h3><span>{converter('volume', 'l', 'gal', specs.watercapacity)} <small>gal</small></span></li> : null}
+            {specs.holdingtank ? <li><h3>Holding Tank Capacity</h3><span>{converter('volume', 'l', 'gal', specs.holdingtank)} <small>gal</small></span></li> : null}
+            {specs.ballast ? <li><h3>Ballast</h3><span>{converter('mass', 'kg', 'lb', specs.ballast)} <small>lb</small></span></li> : null}
 
             {specs.berths ? <li><h3>Berths</h3><span>{specs.berths}</span></li> : null}
             {specs.cabins ? <li><h3>Cabins</h3><span>{specs.cabins}</span></li> : null}

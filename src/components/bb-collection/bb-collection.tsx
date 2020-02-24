@@ -1,4 +1,5 @@
 import { Component, h, Host, Prop, State, Watch } from '@stencil/core';
+import { cdnAsset } from '../../utils/utils';
 
 //let BB_API = 'http://localhost:5000/api'
 let BB_API = 'https://www.boaterbase.com/api';
@@ -99,7 +100,7 @@ export class BbCollection {
       filteredListings = filteredListings.filter(l => l.data.profile?.data?.handle == this.profileFilter);
     }
     return (<Host>
-      {this.collectionHeader == 'overlay' && <div class="header" style={{ backgroundColor: collection?.header?.info?.colors[0]?.color, backgroundImage: collection.header && collection.header.info && collection.header.info.secure_url && `url('${collection.header.info.secure_url}')` }}>
+      {this.collectionHeader == 'overlay' && <div class="header" style={{ backgroundColor: collection?.header?.info?.colors[0]?.color, backgroundImage: collection.header && collection.header.info && collection.header.info.secure_url && `url('${cdnAsset(collection.header.info, 'jpg', 't_large_image')}')` }}>
         <svg viewBox="0 0 2 1" style={{ display: 'block', width: '100%', minHeight: '300px' }}></svg>
         <div class="header-overlay">
           <div class="header-text">
