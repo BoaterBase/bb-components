@@ -1,6 +1,6 @@
 import { Component, h, Host, Prop, State, Watch, Element } from '@stencil/core';
 import { converter } from '../../utils/converter';
-import { cdnAsset, formatCurrency } from '../../utils/utils';
+import { cdnAsset, formatCurrency, formatNumber } from '../../utils/utils';
 
 //let BB_API = 'http://localhost:5000/api'
 let BB_API = 'https://www.boaterbase.com/api';
@@ -230,31 +230,31 @@ export class BbListing {
             {specs.designer && <li><h3>Designer</h3><span>{specs.designer}</span></li>}
             {specs.builder && <li><h3>Builder</h3><span>{specs.builder}</span></li>}
 
-            {specs.loa ? <li><h3>Length Overall</h3><span>{converter('length', 'm', 'ft', specs.loa)} <small>ft</small></span></li> : null}
-            {specs.lwl ? <li><h3>Length At Waterline</h3><span>{converter('length', 'm', 'ft', specs.lwl)} <small>ft</small></span></li> : null}
+            {specs.loa ? <li><h3>Length Overall</h3><span>{formatNumber(converter('length', 'm', 'ft', specs.loa))} <small>ft</small></span></li> : null}
+            {specs.lwl ? <li><h3>Length At Waterline</h3><span>{formatNumber(converter('length', 'm', 'ft', specs.lwl))} <small>ft</small></span></li> : null}
 
-            {specs.beam ? <li><h3>Beam</h3><span>{converter('length', 'm', 'ft', specs.beam)} <small>ft</small></span></li> : null}
-            {specs.draft ? <li><h3>Draft</h3><span>{converter('length', 'm', 'ft', specs.draft)} <small>ft</small></span></li> : null}
+            {specs.beam ? <li><h3>Beam</h3><span>{formatNumber(converter('length', 'm', 'ft', specs.beam))} <small>ft</small></span></li> : null}
+            {specs.draft ? <li><h3>Draft</h3><span>{formatNumber(converter('length', 'm', 'ft', specs.draft))} <small>ft</small></span></li> : null}
 
-            {specs.haw ? <li><h3>Height Above Waterline</h3><span>{converter('length', 'm', 'ft', specs.haw)} <small>ft</small></span></li> : null}
+            {specs.haw ? <li><h3>Height Above Waterline</h3><span>{formatNumber(converter('length', 'm', 'ft', specs.haw))} <small>ft</small></span></li> : null}
 
             {specs.profile && <li><h3>Profile</h3><span>{specs.profile}</span></li>}
             {specs.material && <li><h3>Material</h3><span>{specs.material}</span></li>}
 
 
-            {specs.displacement ? <li><h3>Displacement</h3><span>{converter('mass', 'kg', 'lb', specs.displacement)} <small>lb</small></span></li> : null}
-            {specs.weight ? <li><h3>Weight</h3><span>{converter('mass', 'kg', 'lb', specs.weight)} <small>lb</small></span></li> : null}
+            {specs.displacement ? <li><h3>Displacement</h3><span>{formatNumber(converter('mass', 'kg', 'lb', specs.displacement))} <small>lb</small></span></li> : null}
+            {specs.weight ? <li><h3>Weight</h3><span>{formatNumber(converter('mass', 'kg', 'lb', specs.weight))} <small>lb</small></span></li> : null}
 
 
             {specs.propulsion && <li><h3>Propulsion</h3><span>{specs.propulsion}</span></li>}
             {specs.engines ? <li><h3>Engines</h3><span>{specs.engines}</span></li> : null}
 
-            {specs.power ? <li><h3>Engine Power</h3><span>{converter('power', 'kw', 'hp', specs.power)}<small>hp</small></span></li> : null}
+            {specs.power ? <li><h3>Engine Power</h3><span>{formatNumber(converter('power', 'kw', 'hp', specs.power))} <small>hp</small></span></li> : null}
 
-            {specs.fuelcapacity ? <li><h3>Fuel Capacity</h3><span>{converter('volume', 'l', 'gal', specs.fuelcapacity)} <small>gal</small></span></li> : null}
-            {specs.watercapacity ? <li><h3>Water Capacity</h3><span>{converter('volume', 'l', 'gal', specs.watercapacity)} <small>gal</small></span></li> : null}
-            {specs.holdingtank ? <li><h3>Holding Tank Capacity</h3><span>{converter('volume', 'l', 'gal', specs.holdingtank)} <small>gal</small></span></li> : null}
-            {specs.ballast ? <li><h3>Ballast</h3><span>{converter('mass', 'kg', 'lb', specs.ballast)} <small>lb</small></span></li> : null}
+            {specs.fuelcapacity ? <li><h3>Fuel Capacity</h3><span>{formatNumber(converter('volume', 'l', 'gal', specs.fuelcapacity))} <small>gal</small></span></li> : null}
+            {specs.watercapacity ? <li><h3>Water Capacity</h3><span>{formatNumber(converter('volume', 'l', 'gal', specs.watercapacity))} <small>gal</small></span></li> : null}
+            {specs.holdingtank ? <li><h3>Holding Tank Capacity</h3><span>{formatNumber(converter('volume', 'l', 'gal', specs.holdingtank))} <small>gal</small></span></li> : null}
+            {specs.ballast ? <li><h3>Ballast</h3><span>{formatNumber(converter('mass', 'kg', 'lb', specs.ballast))} <small>lb</small></span></li> : null}
 
             {specs.berths ? <li><h3>Berths</h3><span>{specs.berths}</span></li> : null}
             {specs.cabins ? <li><h3>Cabins</h3><span>{specs.cabins}</span></li> : null}

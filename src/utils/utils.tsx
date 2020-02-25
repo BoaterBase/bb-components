@@ -27,6 +27,14 @@ export function formatCurrency(amount, currency = 'USD') {
   })).format(amount);
 }
 
+export function formatNumber(amount) {
+  return (new Intl.NumberFormat('en-US', {
+    useGrouping: true,
+    minimumFractionDigits: 0,
+    maximumSignificantDigits: 2
+  })).format(amount);
+}
+
 /* Remove junk from user entered text */
 export function cleanText(text) {
   return text.replace(/[^a-zA-Z0-9\-\s]/g, '');
