@@ -31,12 +31,12 @@
 
 ### Depends on
 
-- ion-icon
+- [bb-icon](../icon)
 
 ### Graph
 ```mermaid
 graph TD;
-  bb-listing-card --> ion-icon
+  bb-listing-card --> bb-icon
   bb-collection --> bb-listing-card
   bb-profile --> bb-listing-card
   style bb-listing-card fill:#f9f,stroke:#333,stroke-width:4px

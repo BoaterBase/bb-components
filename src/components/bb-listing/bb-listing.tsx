@@ -187,7 +187,7 @@ export class BbListing {
           <div style={{ position: 'absolute', paddingTop: '1rem', bottom: '0', left: '0', width: '100%', color: '#fff' }}>
             <div style={{ display: 'flex', alignItems: 'flex-end', margin: '0.5rem' }}>
               <div style={{ flex: 'auto' }}>
-                {listing.location && <div style={{ color: 'inherit', opacity: '0.5', fontWeight: '400' }}><ion-icon name="pin"></ion-icon>{listing.location}</div>}
+                {listing.location && <div style={{ color: 'inherit', opacity: '0.5', fontWeight: '400' }}><bb-icon icon="gridicons:location" color="#ffffff"></bb-icon> {listing.location}</div>}
               </div>
               <div style={{ flex: 'auto', textAlign: 'right' }}>
                 <div style={{ fontSize: '0.8rem', fontWeight: '500', textTransform: 'uppercase', opacity: '0.5' }}>{listing.label}</div>
@@ -207,9 +207,9 @@ export class BbListing {
 
               <span style={{ fontSize: '1rem', opacity: '0.8', fontWeight: 'bold' }}>{listing.profile && listing.profile.data && listing.profile.data.name ? ` ${listing.profile.data.name}` : 'Owner'}</span>
               <div style={{ fontSize: '1.5rem' }}>
-                {listing.profile?.data?.twitter && <a style={{ color: '#ccc' }} href={`https://twitter.com/${listing.profile.data.twitter}`}><ion-icon name="logo-twitter"></ion-icon></a>}
-                {listing.profile?.data?.facebook && <a style={{ color: '#ccc' }} href={`https://facebook.com/${listing.profile.data.facebook}`}><ion-icon name="logo-facebook"></ion-icon></a>}
-                {listing.profile?.data?.website && <a style={{ color: '#ccc' }} href={`${listing.profile.data.website}`}><ion-icon name="link"></ion-icon></a>}
+                {listing.profile?.data?.twitter && <a style={{ color: '#ccc' }} href={`https://twitter.com/${listing.profile.data.twitter}`}><bb-icon icon="brandico:twitter-bird"></bb-icon></a>}
+                {listing.profile?.data?.facebook && <a style={{ color: '#ccc' }} href={`https://facebook.com/${listing.profile.data.facebook}`}><bb-icon icon="brandico:facebook"></bb-icon></a>}
+                {listing.profile?.data?.website && <a style={{ color: '#ccc' }} href={`${listing.profile.data.website}`}><bb-icon icon="entypo:link"></bb-icon></a>}
               </div>
 
               <div style={{ display: 'flex', padding: '0.25rem' }}>
@@ -270,7 +270,7 @@ export class BbListing {
           <div class="media-flex">
             {mediaStack.map((m, i) => (<div><img class="hover-zoom" onClick={() => { this.overlay = { kind: 'media', selected: i } }} src={cdnAsset(m.info, 'jpg', 't_small_image')} /></div>))}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1rem', background: '#eee', color: '#666', borderRadius: '0.25rem' }} class="hover-zoom" onClick={() => { this.overlay = { kind: 'media', selected: 0 } }}>
-              <ion-icon name="photos"></ion-icon>
+              <bb-icon icon="fa-regular:images"></bb-icon>
               {mediaLength}
             </div>
           </div>
@@ -308,14 +308,14 @@ export class BbListing {
 
         {this.overlay && this.overlay.kind == 'spinner' && <div style={{ position: 'fixed', zIndex: '999999', top: '0', left: '0', width: '100%', height: '100%', background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(5px)' }}>
           <button onClick={() => this.overlay = null} style={{ cursor: 'pointer', position: 'absolute', top: '3px', right: '3px', padding: '9px', borderRadius: '3px', appearance: 'none', border: 'none', background: 'rgba(0,0,0,0.5)', color: 'white' }}>
-            <ion-icon name="close" size="large"></ion-icon>
+            <bb-icon icon="fe:close" color="white" size="2rem"></bb-icon>
           </button>
-          <ion-icon name="help-buoy" class="spin" style={{ width: '2rem', display: 'block', margin: '40vh auto', color: '#cde' }}></ion-icon>
+          <bb-icon icon="icomoon-free:spinner9" class="spin" size="2rem" color="#cde" style={{ x: '-1rem', width: '2rem', display: 'block', margin: '40vh auto' }}></bb-icon>
         </div>}
 
         {this.overlay && this.overlay.kind == 'contact' && <div style={{ position: 'fixed', zIndex: '999999', top: '0', left: '0', width: '100%', height: '100%', background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(5px)' }}>
           <button onClick={() => this.overlay = null} style={{ cursor: 'pointer', position: 'absolute', top: '3px', right: '3px', padding: '9px', borderRadius: '3px', appearance: 'none', border: 'none', background: 'rgba(0,0,0,0.5)', color: 'white' }}>
-            <ion-icon name="close" size="large"></ion-icon>
+            <bb-icon icon="fe:close" color="white" size="2rem"></bb-icon>
           </button>
           <form onSubmit={this.sendMessage} class="contact-form" style={{ display: 'flex', flexDirection: 'column' }}>
             <h2>Contact {listing.profile && listing.profile.data && listing.profile.data.name ? ` ${listing.profile.data.name}` : 'Owner'}</h2>
@@ -349,13 +349,13 @@ export class BbListing {
           </div>
 
           <button onClick={() => { this.overlay = { kind: 'media', selected: Math.max(0, this.overlay.selected - 1) } }} style={{ display: this.overlay.selected == 0 ? 'none' : 'block', cursor: 'pointer', position: 'absolute', left: '3px', top: '50%', padding: '9px', borderRadius: '3px', appearance: 'none', border: 'none', background: 'rgba(0,0,0,0.1)', color: 'white' }}>
-            <ion-icon name="arrow-back" size="large"></ion-icon>
+            <bb-icon icon="ic:sharp-arrow-back" color="white" size="2rem"></bb-icon>
           </button>
           <button onClick={() => { this.overlay = { kind: 'media', selected: Math.min(media.length - 1, this.overlay.selected + 1) } }} style={{ display: this.overlay.selected == media.length - 1 ? 'none' : 'block', cursor: 'pointer', position: 'absolute', right: '3px', top: '50%', padding: '9px', borderRadius: '3px', appearance: 'none', border: 'none', background: 'rgba(0,0,0,0.1)', color: 'white' }}>
-            <ion-icon name="arrow-forward" size="large"></ion-icon>
+            <bb-icon icon="ic:sharp-arrow-forward" color="white" size="2rem"></bb-icon>
           </button>
           <button onClick={() => this.overlay = null} style={{ cursor: 'pointer', position: 'absolute', top: '3px', right: '3px', padding: '9px', borderRadius: '3px', appearance: 'none', border: 'none', background: 'rgba(0,0,0,0.1)', color: 'white' }}>
-            <ion-icon name="close" size="large"></ion-icon>
+            <bb-icon icon="fe:close" color="white" size="2rem"></bb-icon>
           </button>
           <div style={{ position: 'absolute', top: '5px', height: '50px', left: '60px', right: '60px', color: 'white', opacity: '0.9', display: 'block', textOverflow: 'ellipsis', fontWeight: '300', lineHeight: '16px', fontSize: '14px', textAlign: 'center', overflow: 'hidden', lineClamp: '3' }}>{selectedMedia.description}</div>
         </div>}

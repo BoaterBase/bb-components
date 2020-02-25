@@ -48,6 +48,11 @@ export namespace Components {
   interface BbContent {
     'content': any[];
   }
+  interface BbIcon {
+    'color': string;
+    'icon': string;
+    'size': string;
+  }
   interface BbListing {
     'listingPath': string;
     'root': string;
@@ -96,6 +101,12 @@ declare global {
     new (): HTMLBbContentElement;
   };
 
+  interface HTMLBbIconElement extends Components.BbIcon, HTMLStencilElement {}
+  var HTMLBbIconElement: {
+    prototype: HTMLBbIconElement;
+    new (): HTMLBbIconElement;
+  };
+
   interface HTMLBbListingElement extends Components.BbListing, HTMLStencilElement {}
   var HTMLBbListingElement: {
     prototype: HTMLBbListingElement;
@@ -124,6 +135,7 @@ declare global {
     'bb-connector': HTMLBbConnectorElement;
     'bb-contact-form': HTMLBbContactFormElement;
     'bb-content': HTMLBbContentElement;
+    'bb-icon': HTMLBbIconElement;
     'bb-listing': HTMLBbListingElement;
     'bb-listing-card': HTMLBbListingCardElement;
     'bb-media': HTMLBbMediaElement;
@@ -170,6 +182,11 @@ declare namespace LocalJSX {
   interface BbContent {
     'content'?: any[];
   }
+  interface BbIcon {
+    'color'?: string;
+    'icon'?: string;
+    'size'?: string;
+  }
   interface BbListing {
     'listingPath'?: string;
     'root'?: string;
@@ -197,6 +214,7 @@ declare namespace LocalJSX {
     'bb-connector': BbConnector;
     'bb-contact-form': BbContactForm;
     'bb-content': BbContent;
+    'bb-icon': BbIcon;
     'bb-listing': BbListing;
     'bb-listing-card': BbListingCard;
     'bb-media': BbMedia;
@@ -214,6 +232,7 @@ declare module "@stencil/core" {
       'bb-connector': LocalJSX.BbConnector & JSXBase.HTMLAttributes<HTMLBbConnectorElement>;
       'bb-contact-form': LocalJSX.BbContactForm & JSXBase.HTMLAttributes<HTMLBbContactFormElement>;
       'bb-content': LocalJSX.BbContent & JSXBase.HTMLAttributes<HTMLBbContentElement>;
+      'bb-icon': LocalJSX.BbIcon & JSXBase.HTMLAttributes<HTMLBbIconElement>;
       'bb-listing': LocalJSX.BbListing & JSXBase.HTMLAttributes<HTMLBbListingElement>;
       'bb-listing-card': LocalJSX.BbListingCard & JSXBase.HTMLAttributes<HTMLBbListingCardElement>;
       'bb-media': LocalJSX.BbMedia & JSXBase.HTMLAttributes<HTMLBbMediaElement>;

@@ -35,7 +35,7 @@
 ```mermaid
 graph TD;
   bb-profile --> bb-listing-card
-  bb-listing-card --> ion-icon
+  bb-listing-card --> bb-icon
   bb-connector --> bb-profile
   style bb-profile fill:#f9f,stroke:#333,stroke-width:4px
 ```

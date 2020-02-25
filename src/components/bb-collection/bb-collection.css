@@ -74,7 +74,7 @@
   border: none;
   background: rgba(200, 200, 200, 0.8);
   border-radius: var(--bb-border-radius);
-  padding: 0.5rem;
+  padding: 0.4rem 0.5rem;
   background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeD0iMTJweCIgeT0iMHB4IiB3aWR0aD0iMjRweCIgaGVpZ2h0PSIzcHgiIHZpZXdCb3g9IjAgMCA2IDMiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDYgMyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHBvbHlnb24gcG9pbnRzPSI1Ljk5MiwwIDIuOTkyLDMgLTAuMDA4LDAgIi8+PC9zdmc+);
   background-position: calc(100% - 10px) center;
   background-size: 10px 10px;
@@ -111,4 +111,45 @@
 .card-grid-item {
   flex: 1 1 var(--list-card-width);
   margin: 0.5rem;
+}
+
+
+
+.sort-form {
+  margin: 0 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.sort-title {
+  margin: 0;
+  padding: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #444;
+  flex: 1 0 120px;
+}
+
+.sort-order {
+  flex: 0 1 200px;
+  margin: 0;
+  padding: 0.25rem 0.5rem;
+  font-weight: 300;
+  font-size: 1rem;
+  color: #444;
+  opacity: 0.9;
+  appearance: none;
+  border: none;
+  background: rgba(243, 243, 243, 0.8);
+  border-radius: var(--bb-border-radius);
+  background-image: url('https://api.iconify.design/ls:sort.svg?color=gray');
+  background-position: calc(100% - 10px) center;
+  background-size: 10px 10px;
+  background-repeat: no-repeat;
+  outline: none;
+}
+
+.sort-layout {
+  flex: 2 1 200px;
+  display: none;
 }

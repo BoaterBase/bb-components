@@ -39,12 +39,11 @@ graph TD;
   bb-connector --> bb-listing
   bb-connector --> bb-profile
   bb-connector --> bb-collection
-  bb-listing --> ion-icon
+  bb-listing --> bb-icon
   bb-listing --> bb-content
   bb-content --> bb-media
   bb-profile --> bb-listing-card
-  bb-listing-card --> ion-icon
-  bb-collection --> ion-icon
+  bb-listing-card --> bb-icon
   bb-collection --> bb-listing-card
   style bb-connector fill:#f9f,stroke:#333,stroke-width:4px
 ```

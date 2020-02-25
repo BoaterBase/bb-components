@@ -68,10 +68,10 @@ export class BbListingCard {
 
               <div style={{ flex: 'auto' }}>
                 <div class="title" style={{ fontWeight: '600', fontSize: '0.9rem', display: 'flex', alignItems: 'center' }}>
-                  <ion-icon name="information-circle" style={{ marginRight: '3px', opacity: '0.5' }}></ion-icon>
+                  <bb-icon icon="entypo:info-with-circle" style={{ marginRight: '3px', opacity: '0.5' }}></bb-icon>
                   {shortTitle.join(' · ')}</div>
                 {(listing.location || listing.profile?.data?.name) && <div style={{ display: 'flex', alignItems: 'center', color: 'inherit', opacity: '0.5', fontWeight: '400', fontSize: '0.9rem' }}>
-                  <ion-icon name="compass" style={{ marginRight: '3px', opacity: '0.5' }}></ion-icon>
+                  <bb-icon icon="gridicons:location" style={{ marginRight: '3px', opacity: '0.5' }}></bb-icon>
                   {[listing.profile?.data?.name, listing.location].filter(Boolean).join(', ')}
                 </div>}
               </div>
@@ -97,7 +97,7 @@ export class BbListingCard {
                   <div style={{ flex: 'auto' }}>
                     <div class="title" style={{ fontWeight: '600' }}>{shortTitle.join(' · ')}</div>
                     {this.listingData.location && <div style={{ color: 'inherit', opacity: '0.5', fontWeight: '400' }}>
-                      <ion-icon name="pin"></ion-icon>
+                      <bb-icon icon="gridicons:location" color="white"></bb-icon>
                       {this.listingData.location}
                     </div>}
                   </div>

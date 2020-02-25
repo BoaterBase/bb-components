@@ -32,6 +32,8 @@ export class BbCollection {
   @State() profileFilter = '';
   @State() specsFilter = {};
 
+  @State() sortOrder = 'featured';
+
   @State() order = 'index';
 
   get collectionId() {
@@ -51,7 +53,7 @@ export class BbCollection {
   async componentWillLoad() {
     //console.log('componentWillLoad')
     this.collectionResponse = await this.fetchData().then(response => response.json());
-    console.log(this.collectionResponse)
+    //console.log(this.collectionResponse)
   }
 
   @Watch('collectionPath')
@@ -64,7 +66,7 @@ export class BbCollection {
   render() {
     if (!this.collectionResponse)
       return <Host>
-        <ion-icon name="help-buoy" class="spin" style={{ width: '2rem', display: 'block', margin: '40vh auto', color: '#cde' }}></ion-icon>
+        Loading...
       </Host>
     if (!this.collectionResponse)
       return <Host>Missing</Host>
@@ -99,6 +101,47 @@ export class BbCollection {
     if (this.profileFilter) {
       filteredListings = filteredListings.filter(l => l.data.profile?.data?.handle == this.profileFilter);
     }
+    if (this.sortOrder == 'price_asc') {
+      filteredListings = filteredListings.sort((a, b) => ((a.data.price || 0) - (b.data.price || 0)));
+    }
+    if (this.sortOrder == 'price_desc') {
+      filteredListings = filteredListings.sort((a, b) => ((b.data.price || 0) - (a.data.price || 0)));
+    }
+    if (this.sortOrder == 'length_asc') {
+      filteredListings = filteredListings.sort((a, b) => ((a.data.specifications?.loa || 0) - (b.data.specifications?.loa || 0)));
+    }
+    if (this.sortOrder == 'length_desc') {
+      filteredListings = filteredListings.sort((a, b) => ((b.data.specifications?.loa || 0) - (a.data.specifications?.loa || 0)));
+    }
+    if (this.sortOrder == 'year_asc') {
+      filteredListings = filteredListings.sort((a, b) => ((a.data.specifications?.year || 0) - (b.data.specifications?.year || 0)));
+    }
+    if (this.sortOrder == 'year_desc') {
+      filteredListings = filteredListings.sort((a, b) => ((b.data.specifications?.year || 0) - (a.data.specifications?.year || 0)));
+    }
+    if (this.sortOrder == 'updated_asc') {
+      filteredListings = filteredListings.sort((a, b) => {
+        if (a.data.updated > b.data.updated) {
+          return 1;
+        }
+        if (a.data.updated < b.data.updated) {
+          return -1;
+        }
+        return 0;
+      });
+    }
+    if (this.sortOrder == 'updated_desc') {
+      filteredListings = filteredListings.sort((a, b) => {
+        if (a.data.updated < b.data.updated) {
+          return 1;
+        }
+        if (a.data.updated > b.data.updated) {
+          return -1;
+        }
+        return 0;
+      });
+    }
+
     return (<Host>
       {this.collectionHeader == 'overlay' && <div class="header" style={{ backgroundColor: collection?.header?.info?.colors[0]?.color, backgroundImage: collection.header && collection.header.info && collection.header.info.secure_url && `url('${cdnAsset(collection.header.info, 'jpg', 't_large_image')}')` }}>
         <svg viewBox="0 0 2 1" style={{ display: 'block', width: '100%', minHeight: '300px' }}></svg>
@@ -125,7 +168,35 @@ export class BbCollection {
 
         </div>
       </div>}
-
+      {filteredListings && <form class="sort-form">
+        <h2 class="sort-title">{filteredListings.length} Listings</h2>
+        <div class="sort-layout">
+          <button>Card <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="10.5" cy="10.5" r="9.5" fill="#FFB056" stroke="#F2994A" stroke-width="2" />
+          </svg>
+          </button>
+          <button><iconify-icon class="iconify" data-icon="mdi-home"></iconify-icon> List</button>
+          <button>
+            <i style={{ display: 'inline-block', width: '1rem', height: '1rem', background: `url('https://api.iconify.design/ion:grid.svg')` }}></i>
+            <span>Gallery</span>
+          </button>
+        </div>
+        <select class="sort-order" onChange={({ target }) => { this.sortOrder = (target as HTMLSelectElement).value }}>
+          <option value="featured">Featured</option>
+          <hr />
+          <option value="price_asc">Price ↑</option>
+          <option value="price_desc">Price ↓</option>
+          <hr />
+          <option value="length_asc">Length ↑</option>
+          <option value="length_desc">Length ↓</option>
+          <hr />
+          <option value="year_asc">Year ↑</option>
+          <option value="year_desc">Year ↓</option>
+          <hr />
+          <option value="updated_asc">Updated ↑</option>
+          <option value="updated_desc">Updated ↓</option>
+        </select>
+      </form>}
       {filteredListings && <div class="card-grid">
         {filteredListings.map(listing => {
           let mergedListing = {
@@ -135,7 +206,7 @@ export class BbCollection {
             messageDisplay: listing.messageDisplay
           };
 
-          return <div class="card-grid-item"><bb-listing-card listingId={listing.id} listingData={mergedListing} root={this.root} display={this.collectionList}></bb-listing-card></div>
+          return <div key={listing.id} class="card-grid-item"><bb-listing-card listingId={listing.id} listingData={mergedListing} root={this.root} display={this.collectionList}></bb-listing-card></div>
         })}
         <div class="card-grid-item"></div>
       </div>}

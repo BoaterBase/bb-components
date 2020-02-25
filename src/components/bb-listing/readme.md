@@ -21,13 +21,13 @@
 
 ### Depends on
 
-- ion-icon
+- [bb-icon](../icon)
 - [bb-content](../content)
 
 ### Graph
 ```mermaid
 graph TD;
-  bb-listing --> ion-icon
+  bb-listing --> bb-icon
   bb-listing --> bb-content
   bb-content --> bb-media
   bb-connector --> bb-listing
