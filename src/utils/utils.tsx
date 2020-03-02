@@ -1,14 +1,4 @@
 import { h } from '@stencil/core';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-
-export const fb = firebase.initializeApp({
-  apiKey: "AIzaSyDkBS1qwcm0DT0vyMDea8DkLB-adsA8xzk",
-  projectId: "boaterbase-v2",
-  appId: "1:790141979706:web:3a818ed389e9773a45b903"
-}, "boaterbase-v2");
-
-
 
 const imagePath = `https://res.cloudinary.com/boaterbase/`;
 

@@ -102,19 +102,19 @@ export class BbCollection {
       filteredListings = filteredListings.filter(l => l.data.profile?.data?.handle == this.profileFilter);
     }
     if (this.sortOrder == 'price_asc') {
-      filteredListings = filteredListings.sort((a, b) => ((a.data.price || 0) - (b.data.price || 0)));
+      filteredListings = filteredListings.sort((a, b) => ((a.data.price || Number.MAX_VALUE) - (b.data.price || Number.MAX_VALUE)));
     }
     if (this.sortOrder == 'price_desc') {
       filteredListings = filteredListings.sort((a, b) => ((b.data.price || 0) - (a.data.price || 0)));
     }
     if (this.sortOrder == 'length_asc') {
-      filteredListings = filteredListings.sort((a, b) => ((a.data.specifications?.loa || 0) - (b.data.specifications?.loa || 0)));
+      filteredListings = filteredListings.sort((a, b) => ((a.data.specifications?.loa || Number.MAX_VALUE) - (b.data.specifications?.loa || Number.MAX_VALUE)));
     }
     if (this.sortOrder == 'length_desc') {
       filteredListings = filteredListings.sort((a, b) => ((b.data.specifications?.loa || 0) - (a.data.specifications?.loa || 0)));
     }
     if (this.sortOrder == 'year_asc') {
-      filteredListings = filteredListings.sort((a, b) => ((a.data.specifications?.year || 0) - (b.data.specifications?.year || 0)));
+      filteredListings = filteredListings.sort((a, b) => ((a.data.specifications?.year || Number.MAX_VALUE) - (b.data.specifications?.year || Number.MAX_VALUE)));
     }
     if (this.sortOrder == 'year_desc') {
       filteredListings = filteredListings.sort((a, b) => ((b.data.specifications?.year || 0) - (a.data.specifications?.year || 0)));

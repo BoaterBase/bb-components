@@ -1,6 +1,6 @@
 import { Component, Prop, Host, h, State, Event, EventEmitter, Watch } from '@stencil/core';
-import { fb } from '../../utils/utils';
-import { firestore } from 'firebase';
+
+let BB_API = 'https://www.boaterbase.com/api';
 
 @Component({
   tag: 'bb-profile',
@@ -14,8 +14,7 @@ export class BbProfile {
 
   @Prop() profileHeader: 'none' | 'overlay' | 'image' = 'overlay';
 
-  @State() profileSnaphot: firestore.DocumentSnapshot;
-  @State() collectionsSnaphot: firestore.QuerySnapshot;
+  @State() profileResponse: any;
 
   @State() filter = {
     collection: '',
@@ -41,28 +40,25 @@ export class BbProfile {
     }
   }
 
-  async componentWillLoad() {
-    // Handles is a list so we must do a query and grab the first item
-    const profilesSnaphot = await fb.firestore().collection('profiles').where('handles', 'array-contains', this.profilePath).get();
-
-    this.profileSnaphot = profilesSnaphot.docs && profilesSnaphot.docs[0];
-
-    if (this.profileSnaphot) {
-      // TODO - use attached collections NOT a query
-      this.collectionsSnaphot = await fb.firestore().collection('collections').where('uid', '==', this.profileSnaphot.get('uid')).get();
-    }
+  fetchData() {
+    return fetch(`${BB_API}/profiles/${this.profilePath}`, {
+      headers: {
+        'Accept': 'application/json',
+      },
+      method: 'GET'
+    }).then();
   }
 
-  async componentWillUpdate() {
-    // Handles is a list so we must do a query and grab the first item
-    const profilesSnaphot = await fb.firestore().collection('profiles').where('handles', 'array-contains', this.profilePath).get();
+  async componentWillLoad() {
+    //console.log('componentWillLoad')
+    this.profileResponse = await this.fetchData().then(response => response.json());
+    //console.log(this.collectionResponse)
+  }
 
-    this.profileSnaphot = profilesSnaphot.docs && profilesSnaphot.docs[0];
-
-    if (this.profileSnaphot) {
-      // TODO - use attached collections NOT a query
-      this.collectionsSnaphot = await fb.firestore().collection('collections').where('uid', '==', this.profileSnaphot.get('uid')).get();
-    }
+  @Watch('profilePath')
+  async watchPath() {
+    //console.log('Path Changed', newValue, oldValue)
+    this.profileResponse = await this.fetchData().then(response => response.json());
   }
 
   @State() loadCount = 6;
@@ -98,28 +94,27 @@ export class BbProfile {
   }
 
   render() {
-    if (!this.profileSnaphot)
+    console.log('profile', this.profileResponse);
+
+    if (!this.profileResponse)
       return <Host>Loading...</Host>
-    else if (!this.profileSnaphot.exists)
+    else if (!this.profileResponse.id)
       return <Host>Missing!</Host>
     else {
-      const profile = this.profileSnaphot.data();
-      const collections = this.collectionsSnaphot && this.collectionsSnaphot.docs.map(doc => ({
-        id: doc.id,
-        ref: doc.ref,
-        data: doc.data()
-      }));
+      const profile = this.profileResponse;
+      const collections = this.profileResponse.collections;
 
       //const featuredCollection = collections && collections[0];
 
       // Combine all collections
-      let allListings = collections && collections.reduce((prev, collection) => prev.concat(collection.data.listings), []);
+      let allListings: any = this.profileResponse.listings || [];
+
       // Only unique
       allListings = allListings && allListings.filter((obj, index, arr) => arr.findIndex(f => (f.id === obj.id)) === index);
 
-      const models = allListings && [...new Set(allListings.map(l => l.data.specifications.model).filter(Boolean))];
-      const manufacturers = allListings && [...new Set(allListings.map(l => l.data.specifications.manufacturer).filter(Boolean))];
-      const locations = allListings && [...new Set(allListings.map(l => l.data.location).filter(Boolean))];
+      const models: any = allListings && [...new Set(allListings.map(l => l.data.specifications.model).filter(Boolean))];
+      const manufacturers: any = allListings && [...new Set(allListings.map(l => l.data.specifications.manufacturer).filter(Boolean))];
+      const locations: any = allListings && [...new Set(allListings.map(l => l.data.location).filter(Boolean))];
 
       let filteredListings = allListings;
 
