@@ -1,5 +1,6 @@
 import { Component, h, Host, Prop, State, Watch } from '@stencil/core';
 import { cdnAsset } from '../../utils/utils';
+import fetch from 'isomorphic-unfetch';
 
 //let BB_API = 'http://localhost:5000/api'
 let BB_API = 'https://www.boaterbase.com/api';

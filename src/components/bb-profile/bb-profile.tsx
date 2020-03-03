@@ -1,4 +1,5 @@
 import { Component, Prop, Host, h, State, Event, EventEmitter, Watch } from '@stencil/core';
+import fetch from 'isomorphic-unfetch';
 
 let BB_API = 'https://www.boaterbase.com/api';
 
