@@ -9,7 +9,7 @@
 
 | Property        | Attribute        | Description | Type                             | Default     |
 | --------------- | ---------------- | ----------- | -------------------------------- | ----------- |
-| `profileHeader` | `profile-header` |             | `"image" \| "none" \| "overlay"` | `'overlay'` |
+| `profileHeader` | `profile-header` |             | `"image" or "none" or "overlay"` | `'overlay'` |
 | `profilePath`   | `profile-path`   |             | `string`                         | `undefined` |
 | `root`          | `root`           |             | `string`                         | `'/'`       |
 

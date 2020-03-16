@@ -1,5 +1,6 @@
 import { Component, Prop, Host, h, State, Event, EventEmitter, Watch } from '@stencil/core';
-import fetch from 'isomorphic-unfetch';
+import { cdnAsset, buildMetaData } from '../../utils/utils';
+import { Head } from 'stencil-head';
 
 let BB_API = 'https://www.boaterbase.com/api';
 
@@ -138,8 +139,12 @@ export class BbProfile {
       const filteredCount = filteredListings ? filteredListings.length : 0;
       filteredListings = filteredListings && filteredListings.slice(0, this.loadCount);
 
+      const meta = buildMetaData(profile.title, profile.summary, 'profile', profile?.header?.info?.secure_url && cdnAsset(profile.header.info, 'jpg', 't_large_image'));
+
       return <Host>
-        {this.profileHeader == 'overlay' && <div class="header" style={{ backgroundImage: profile.header && profile.header.info && profile.header.info.secure_url && `url('${profile.header.info.secure_url}')` }}>
+        <div style={{ display: 'none' }}><Head data={meta}></Head></div>
+
+        {this.profileHeader == 'overlay' && <div class="header" style={{ backgroundImage: profile.header && profile.header.info && profile.header.info.secure_url && `url('${cdnAsset(profile.header.info, 'jpg', 't_large_image')}')` }}>
           <svg viewBox="0 0 2 1" style={{ display: 'block', width: '100%' }}></svg>
           <div class="header-overlay">
             {profile.avatar && profile.avatar.info && profile.avatar.info.secure_url && <img src={profile.avatar.info.secure_url} class="header-avatar" />}

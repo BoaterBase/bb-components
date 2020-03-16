@@ -10,8 +10,8 @@
 | Property                   | Attribute                    | Description | Type                             | Default                |
 | -------------------------- | ---------------------------- | ----------- | -------------------------------- | ---------------------- |
 | `collectionFilters`        | `collection-filters`         |             | `string`                         | `'manufacturer,model'` |
-| `collectionHeader`         | `collection-header`          |             | `"image" \| "none" \| "overlay"` | `'overlay'`            |
-| `collectionList`           | `collection-list`            |             | `"card" \| "overlay"`            | `'overlay'`            |
+| `collectionHeader`         | `collection-header`          |             | `"image" or "none" or "overlay"` | `'overlay'`            |
+| `collectionList`           | `collection-list`            |             | `"card" or "overlay"`            | `'overlay'`            |
 | `collectionLocationFilter` | `collection-location-filter` |             | `string`                         | `'All Locations'`      |
 | `collectionPath`           | `collection-path`            |             | `string`                         | `undefined`            |
 | `collectionProfileFilter`  | `collection-profile-filter`  |             | `string`                         | `'All Profiles'`       |

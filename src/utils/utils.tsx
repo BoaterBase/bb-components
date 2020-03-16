@@ -1,4 +1,5 @@
 import { h } from '@stencil/core';
+import { HeadInterface } from 'stencil-head';
 
 const imagePath = `https://res.cloudinary.com/boaterbase/`;
 
@@ -51,4 +52,57 @@ export function markdown(text) {
     }
   });
   return out; //text.split(/[\r?\n|\r]\s*[\r?\n|\r]/).map(p => <p>{p} </p>)
+}
+
+/*
+  Meta Data
+*/
+export function buildMetaData(title: string, description: string, type = 'website', image?): HeadInterface {
+  const head: HeadInterface = {
+    title,
+    metas: [
+      // Standard
+      {
+        name: 'description',
+        content: description
+      },
+      // OpenGraph
+      {
+        property: 'og:type',
+        content: type
+      },
+      {
+        property: 'og:title',
+        content: title
+      },
+      {
+        property: 'og:description',
+        content: description
+      },
+      // Twitter
+      {
+        property: 'twitter:title',
+        content: title
+      },
+      {
+        property: 'twitter:description',
+        content: description
+      },
+    ]
+  };
+
+  if (image) {
+    head.metas.push({
+      property: 'og:image',
+      content: image
+    }, {
+      property: 'twitter:card',
+      content: 'summary_large_image',
+    }, {
+      property: 'twitter:image',
+      content: image
+    })
+  }
+
+  return head;
 }

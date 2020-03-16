@@ -1,6 +1,6 @@
 import { Component, h, Host, Prop, State, Watch } from '@stencil/core';
-import { cdnAsset } from '../../utils/utils';
-import fetch from 'isomorphic-unfetch';
+import { cdnAsset, buildMetaData } from '../../utils/utils';
+import { Head } from 'stencil-head';
 
 //let BB_API = 'http://localhost:5000/api'
 let BB_API = 'https://www.boaterbase.com/api';
@@ -54,7 +54,6 @@ export class BbCollection {
   async componentWillLoad() {
     //console.log('componentWillLoad')
     this.collectionResponse = await this.fetchData().then(response => response.json());
-    //console.log(this.collectionResponse)
   }
 
   @Watch('collectionPath')
@@ -143,7 +142,11 @@ export class BbCollection {
       });
     }
 
+    const meta = buildMetaData(collection.title, collection.summary, 'website', collection?.header?.info?.secure_url && cdnAsset(collection.header.info, 'jpg', 't_large_image'));
+
     return (<Host>
+      <div style={{ display: 'none' }}><Head data={meta}></Head></div>
+
       {this.collectionHeader == 'overlay' && <div class="header" style={{ backgroundColor: collection?.header?.info?.colors[0]?.color, backgroundImage: collection.header && collection.header.info && collection.header.info.secure_url && `url('${cdnAsset(collection.header.info, 'jpg', 't_large_image')}')` }}>
         <svg viewBox="0 0 2 1" style={{ display: 'block', width: '100%', minHeight: '300px' }}></svg>
         <div class="header-overlay">

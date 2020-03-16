@@ -9,7 +9,7 @@
 
 | Property      | Attribute      | Description | Type                            | Default     |
 | ------------- | -------------- | ----------- | ------------------------------- | ----------- |
-| `display`     | `display`      |             | `"card" \| "list" \| "overlay"` | `'overlay'` |
+| `display`     | `display`      |             | `"card" or "list" or "overlay"` | `'overlay'` |
 | `listingData` | `listing-data` |             | `any`                           | `undefined` |
 | `listingId`   | `listing-id`   |             | `string`                        | `undefined` |
 | `root`        | `root`         |             | `string`                        | `'/'`       |
