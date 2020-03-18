@@ -247,7 +247,7 @@ export class BbListing {
 
 
           {specs.displacement ? <li><h3>Displacement</h3><span>{formatNumber(converter('mass', 'kg', 'lb', specs.displacement))} <small>lb</small></span></li> : null}
-          {specs.weight ? <li><h3>Weight</h3><span>{formatNumber(converter('mass', 'kg', 'lb', specs.weight))} <small>lb</small></span></li> : null}
+          {specs.weight ? <li><h3>Dry Weight</h3><span>{formatNumber(converter('mass', 'kg', 'lb', specs.weight))} <small>lb</small></span></li> : null}
 
 
           {specs.propulsion && <li><h3>Propulsion</h3><span>{specs.propulsion}</span></li>}
@@ -377,7 +377,7 @@ export class BbListing {
 
       {this.updatesResponse?.updates?.length ?
         <div style={{ margin: '1rem' }}>
-          <h2 style={{ borderBottom: '2px solid #f1f1f1', paddingBottom: '0.5rem' }}>Updates</h2>
+          <h2 style={{ borderBottom: '2px solid #f1f1f1', paddingBottom: '0.5rem' }}>Blog</h2>
           {this.updatesResponse.updates.map((update) => (<div key={update.id}>
             <h3 style={{ fontWeight: '500', margin: '0' }}>{update.title}</h3>
             <h4 style={{ fontWeight: '300', opacity: '0.5', fontSize: '0.75rem', margin: '0 0 1rem 0' }}>{(new Date(update.created)).toDateString()}</h4>

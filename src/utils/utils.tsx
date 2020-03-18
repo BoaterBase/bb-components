@@ -68,6 +68,10 @@ export function buildMetaData(title: string, description: string, type = 'websit
       },
       // OpenGraph
       {
+        property: 'og:url',
+        content: document.location.href
+      },
+      {
         property: 'og:type',
         content: type
       },
@@ -78,6 +82,11 @@ export function buildMetaData(title: string, description: string, type = 'websit
       {
         property: 'og:description',
         content: description
+      },
+      //Facebook
+      {
+        property: 'fb:app-id',
+        content: '486371204871561'
       },
       // Twitter
       {
