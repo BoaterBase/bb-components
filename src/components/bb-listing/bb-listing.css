@@ -296,3 +296,17 @@
 .watch-button:hover {
   background-color: dodgerblue;
 }
+
+.avatar:hover img {
+  box-shadow: 0 0 0 2px cornflowerblue;
+  cursor: pointer;
+}
+
+.share-button {
+  background-color: deepskyblue;
+  width: 2rem;
+  height: 2rem;
+  margin: 0.25rem;
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+}

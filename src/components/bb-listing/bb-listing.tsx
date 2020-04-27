@@ -1,7 +1,7 @@
-import { Component, h, Host, Prop, State, Watch, Element } from '@stencil/core';
+import { Component, h, Host, Prop, State, Watch, Element, Event, EventEmitter } from '@stencil/core';
 import { converter } from '../../utils/converter';
 import { cdnAsset, buildMetaData, formatCurrency, formatNumber } from '../../utils/utils';
-import { Head } from 'stencil-head';
+import { BaseHead } from 'stencil-head';
 
 //let BB_API = 'http://localhost:5000/api'
 let BB_API = 'https://www.boaterbase.com/api';
@@ -17,6 +17,7 @@ export class BbListing {
 
   @Prop() listingPath: string;
   @Prop() root: string = '/';
+  @Prop() canonicalRoot: string = 'https://www.boaterbase.com';
 
   @State() listingResponse: any;
   @State() updatesResponse: any;
@@ -38,6 +39,23 @@ export class BbListing {
   };
 
   @State() showContent = false;
+
+  @Event({
+    eventName: 'linkClick',
+    composed: true,
+    cancelable: true,
+    bubbles: true,
+  }) linkClick: EventEmitter;
+
+  linkClickHandler = (path) => (ev) => {
+    let event = this.linkClick.emit({
+      path: path
+    });
+
+    if (event.defaultPrevented) {
+      ev.preventDefault();
+    }
+  }
 
 
   get listingId() {
@@ -65,13 +83,55 @@ export class BbListing {
 
   async componentWillLoad() {
     this.listingResponse = await this.fetchData().then(response => response.json());
-    // Change meta data
-    //document.title = this.listingResponse.title ? this.listingResponse.title : 'Listing Not Found';
+
+    //console.log(this.listingResponse)
+    if (this.listingResponse) {
+      const listing = this.listingResponse;
+      const primaryMedia = listing.media[0];
+
+      const meta = buildMetaData(listing.title, listing.summary, 'article', primaryMedia?.info?.secure_url && cdnAsset(primaryMedia.info, 'jpg', 't_large_image'), this.canonicalRoot);
+
+      //const headHtml = new BaseHead(meta).html();
+      //console.log(headHtml)
+      //function timeout(ms) {
+      //  return new Promise(resolve => setTimeout(resolve, ms));
+      //}
+
+      await new BaseHead(meta).createHead();
+      // if (Build.isServer) {
+      //   function nextTick() {
+      //     return new Promise(resolve => process.nextTick(resolve));
+      //   }
+      //   await nextTick();
+      //   window['prerenderReady'] = true;
+      // }else{
+
+      // }
+      //function wait() {
+      //  return new Promise(resolve => window.requestAnimationFrame(resolve));
+      //}
+      //await wait();
+
+
+      // Change meta data
+      //document.title = this.listingResponse.title ? this.listingResponse.title : 'Listing Not Found';
+    }
   }
 
   async componentDidLoad() {
+    //console.log(this.el.scrollIntoView)
+    //this.el.scrollIntoView && this.el.scrollIntoView(true);
+    window.scrollTo(0, 0);
+
+    // Let render service know we rendered after a short delay
+    window.setTimeout(() => {
+      window['prerenderReady'] = true;
+      console.log('Rendered');
+    }, 100);
+
+
     this.updatesResponse = await this.fetchUpdates();
-    this.el.scrollIntoView && this.el.scrollIntoView();
+
   }
 
   @Watch('listingPath')
@@ -168,10 +228,8 @@ export class BbListing {
     let mediaLength = (listing.media || []).length;
     let mediaStack = (listing.media || []).slice(0, 12);
 
-    const meta = buildMetaData(listing.title, listing.summary, 'article', primaryMedia?.info?.secure_url && cdnAsset(primaryMedia.info, 'jpg', 't_large_image'));
-
     return (<Host>
-      <div style={{ display: 'none' }}><Head data={meta}></Head></div>
+
 
       <div class="hover-zoom" style={{ margin: '1rem', position: 'relative', borderRadius: 'var(--bb-border-radius)' }} >
         <svg viewBox="0 0 16 9" style={{ display: 'block', width: '100%', background: 'lightblue', borderRadius: 'var(--bb-border-radius)' }}></svg>
@@ -188,28 +246,26 @@ export class BbListing {
           </video>}
         </div>}
         {listing.message && <div style={{ position: 'absolute', top: '0.5rem', left: '0.5rem', background: 'rgba(255,50,0,0.8)', color: 'white', fontSize: '0.85rem', fontWeight: '600', padding: '0.5rem', borderRadius: '3px' }}>{listing.message}</div>}
-        <div style={{ position: 'absolute', paddingTop: '1rem', bottom: '0', left: '0', width: '100%', color: '#fff' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-end', margin: '0.5rem' }}>
-            <div style={{ flex: 'auto' }}>
-              {listing.location && <div style={{ color: 'inherit', opacity: '0.5', fontWeight: '400' }}><bb-icon icon="gridicons:location" color="#ffffff"></bb-icon> {listing.location}</div>}
-            </div>
-            <div style={{ flex: 'auto', textAlign: 'right' }}>
-              <div style={{ fontSize: '0.8rem', fontWeight: '500', textTransform: 'uppercase', opacity: '0.5' }}>{listing.label}</div>
-              <div style={{ fontSize: '1.3rem', fontWeight: '700' }}>{listing.price && formatCurrency(listing.price, listing.currency)}</div>
-            </div>
-          </div>
-        </div>
       </div>
       <div>
         <div style={{ margin: '1rem', display: 'flex', flexWrap: 'wrap' }}>
           <div style={{ flex: '5 1 600px', paddingRight: '1rem', paddingBottom: '1rem' }}>
-            <h1 class="title">{listing.title}</h1>
+            <div style={{ display: 'flex' }}>
+              <div>
+                <h1 class="title">{listing.title}</h1>
+                {listing.location && <div style={{ color: 'inherit', opacity: '0.75', fontWeight: '400', marginBottom: '0.75rem' }}><bb-icon icon="gridicons:location" color="#cccccc"></bb-icon> {listing.location}</div>}
+              </div>
+              <div style={{ flex: 'auto', textAlign: 'right' }}>
+                <div style={{ fontSize: '0.8rem', fontWeight: '500', textTransform: 'uppercase', opacity: '0.5' }}>{listing.label}</div>
+                <div style={{ fontSize: '1.3rem', fontWeight: '700' }}>{listing.price && formatCurrency(listing.price, listing.currency)}</div>
+              </div>
+            </div>
             <p class="summary">{listing.summary}</p>
           </div>
           <div style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', alignItems: 'center', border: '1px solid #f1f1f1', borderRadius: '0.25rem', paddingTop: '0.5rem' }}>
-            <img src={listing.profile?.data?.avatar?.info ? listing.profile.data.avatar.info.thumbnail_url : `https://gravatar.com/avatar/b6de1b5951e1ab139a39968f907c4f77?d=mp`} style={{ display: 'inline-block', border: '1px solid #eeeeee', borderRadius: '100%', width: '4rem', height: '4rem' }} />
+            {listing.profile?.data && <a class="avatar" onClick={this.linkClickHandler(`profiles/${listing.profile.data.handle}`)}><img src={listing.profile.data?.avatar?.info ? listing.profile.data.avatar.info.thumbnail_url : `https://gravatar.com/avatar/b6de1b5951e1ab139a39968f907c4f77?d=mp`} style={{ display: 'inline-block', border: '1px solid #eeeeee', borderRadius: '100%', width: '4rem', height: '4rem' }} /></a>}
 
-            <span style={{ fontSize: '1rem', opacity: '0.8', fontWeight: 'bold' }}>{listing.profile && listing.profile.data && listing.profile.data.name ? ` ${listing.profile.data.name}` : 'Owner'}</span>
+            {listing.profile?.data && <span onClick={this.linkClickHandler(`profiles/${listing.profile.data.handle}`)} style={{ fontSize: '1rem', opacity: '0.8', fontWeight: 'bold' }}>{listing.profile && listing.profile.data && listing.profile.data.name ? ` ${listing.profile.data.name}` : 'Owner'}</span>}
             <div style={{ fontSize: '1.5rem' }}>
               {listing.profile?.data?.twitter && <a style={{ color: '#ccc' }} href={`https://twitter.com/${listing.profile.data.twitter}`}><bb-icon icon="brandico:twitter-bird"></bb-icon></a>}
               {listing.profile?.data?.facebook && <a style={{ color: '#ccc' }} href={`https://facebook.com/${listing.profile.data.facebook}`}><bb-icon icon="brandico:facebook"></bb-icon></a>}
@@ -228,7 +284,7 @@ export class BbListing {
           {specs.category && <li><h3>Category</h3><span>{specs.category}</span></li>}
           {specs.classification && <li><h3>Classification</h3><span>{specs.classification}</span></li>}
 
-          {specs.manufacturer && <li><h3>Manufacturer</h3><span>{specs.manufacturer}</span></li>}
+          {specs.manufacturer && <li><h3>Make or Manufacturer</h3><span>{specs.manufacturer}</span></li>}
           {specs.model && <li><h3>Model</h3><span>{specs.model}</span></li>}
 
           {specs.designer && <li><h3>Designer</h3><span>{specs.designer}</span></li>}
@@ -252,6 +308,10 @@ export class BbListing {
 
           {specs.propulsion && <li><h3>Propulsion</h3><span>{specs.propulsion}</span></li>}
           {specs.engines ? <li><h3>Engines</h3><span>{specs.engines}</span></li> : null}
+          {specs.engineManufacturer && <li><h3>Engine Manufacturer</h3><span>{specs.engineManufacturer}</span></li>}
+          {specs.fuel ? <li><h3>Fuel</h3><span>{specs.fuel}</span></li> : null}
+
+
 
           {specs.power ? <li><h3>Engine Power</h3><span>{formatNumber(converter('power', 'kw', 'hp', specs.power))} <small>hp</small></span></li> : null}
 
@@ -262,7 +322,7 @@ export class BbListing {
 
           {specs.berths ? <li><h3>Berths</h3><span>{specs.berths}</span></li> : null}
           {specs.cabins ? <li><h3>Cabins</h3><span>{specs.cabins}</span></li> : null}
-
+          {specs.heads ? <li><h3>Heads</h3><span>{specs.heads}</span></li> : null}
 
           {specs.certification && <li><h3>Certification</h3><span>{specs.certification}</span></li>}
           {specs.hullid && <li><h3>Hull Id</h3><span>{specs.hullid}</span></li>}
@@ -365,12 +425,22 @@ export class BbListing {
       </div>}
 
       <div style={{ margin: '1rem' }}>
-        <div style={{ backgroundColor: '#f1f1f1', borderRadius: '0.5rem', padding: '1rem' }}>
-          <h2 style={{ fontSize: '1.25rem', margin: '0 0 0.5rem 0' }}>Follow this boat..</h2>
-          <form class="watch-form" onSubmit={this.watchListing}>
-            <input class="watch-input" required type="email" name="email" autocomplete="email" placeholder="Enter your email address..." value={this.watch.email} onChange={(event) => this.watch = { ...this.watch, email: (event.target as HTMLInputElement).value }}></input>
-            <button class="watch-button" type="submit">Watch</button>
-          </form>
+        <div style={{ display: 'flex', backgroundColor: '#f1f1f1', borderRadius: '0.5rem', padding: '0.5rem' }}>
+          <div style={{ flex: 'auto', padding: '0.5rem' }}>
+            <h2 style={{ fontSize: '1.25rem', margin: '0 0 0.5rem 0' }}>Follow this boat...</h2>
+            <form class="watch-form" onSubmit={this.watchListing}>
+              <input class="watch-input" required type="email" name="email" autocomplete="email" placeholder="Enter your email address..." value={this.watch.email} onChange={(event) => this.watch = { ...this.watch, email: (event.target as HTMLInputElement).value }}></input>
+              <button class="watch-button" type="submit">Watch</button>
+            </form>
+          </div>
+          <div style={{ padding: '0.5rem' }}>
+            <h2 style={{ fontSize: '1.25rem', margin: '0 0 0.5rem 0' }}>Share...</h2>
+            <div style={{ display: 'flex' }}>
+              <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(this.canonicalRoot + document.location.pathname)}`} class="share-button"><bb-icon icon="fa-brands:facebook-square" color="white" size="2rem"></bb-icon></a>
+              <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(listing.title + ' ' + this.canonicalRoot + document.location.pathname)}`} class="share-button"><bb-icon icon="fa-brands:twitter-square" color="white" size="2rem"></bb-icon></a>
+              <a href={`mailto:?subject=${encodeURIComponent(listing.title)}&body=${encodeURIComponent(this.canonicalRoot + document.location.pathname)}`} class="share-button"><bb-icon icon="topcoat:email" color="white" size="2rem"></bb-icon></a>
+            </div>
+          </div>
         </div>
         <div style={{ opacity: '0.5', padding: '0.5rem 0' }}>Listing Created on {(new Date(listing.created)).toDateString()}</div>
       </div>

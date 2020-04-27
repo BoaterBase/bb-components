@@ -18,6 +18,17 @@ export class BbProfile {
 
   @State() profileResponse: any;
 
+  @State() overlay: { kind: '' | 'spinner' | 'contact', selected?: number } = {
+    kind: '',
+    selected: 0,
+  };
+
+  @State() message = {
+    name: '',
+    email: '',
+    telephone: '',
+    content: ''
+  };
   @State() filter = {
     collection: '',
     model: '',
@@ -55,6 +66,10 @@ export class BbProfile {
     //console.log('componentWillLoad')
     this.profileResponse = await this.fetchData().then(response => response.json());
     //console.log(this.collectionResponse)
+  }
+
+  async componentDidLoad() {
+    window.scrollTo(0, 0);
   }
 
   @Watch('profilePath')
@@ -95,6 +110,40 @@ export class BbProfile {
     this.loadCount = this.loadCount + 6;
   }
 
+  sendMessage = async (ev: Event) => {
+    ev.preventDefault();
+
+    this.overlay = {
+      kind: 'spinner',
+      selected: 0
+    };
+
+    let response = await fetch(`${BB_API}/profiles/${this.profileResponse.id}/messages`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: "POST",
+      body: JSON.stringify(this.message)
+    });
+
+    if (response.status != 200) {
+      this.overlay = {
+        kind: 'contact',
+        selected: 0
+      };
+      alert('There was an error, please try again!');
+
+      console.log(response);
+    } else {
+      this.overlay = {
+        kind: '',
+        selected: 0
+      };
+    }
+  }
+
+
   render() {
     console.log('profile', this.profileResponse);
 
@@ -104,11 +153,12 @@ export class BbProfile {
       return <Host>Missing!</Host>
     else {
       const profile = this.profileResponse;
-      const collections = this.profileResponse.collections;
+      let collections: any[] = this.profileResponse.collections || [];
 
-      //const featuredCollection = collections && collections[0];
+      // TODO - temporary hack to push featured to top
+      collections = collections.sort((a: any, _b: any) => (a.data.title.toLowerCase().includes('feature') ? -1 : 1))
 
-      // Combine all collections
+      // All listings fallback
       let allListings: any = this.profileResponse.listings || [];
 
       // Only unique
@@ -139,49 +189,100 @@ export class BbProfile {
       const filteredCount = filteredListings ? filteredListings.length : 0;
       filteredListings = filteredListings && filteredListings.slice(0, this.loadCount);
 
-      const meta = buildMetaData(profile.title, profile.summary, 'profile', profile?.header?.info?.secure_url && cdnAsset(profile.header.info, 'jpg', 't_large_image'));
+      const meta = buildMetaData(profile.name || profile.handle, profile.summary, 'profile', profile?.header?.info?.secure_url && cdnAsset(profile.header.info, 'jpg', 't_large_image'));
 
       return <Host>
         <div style={{ display: 'none' }}><Head data={meta}></Head></div>
 
         {this.profileHeader == 'overlay' && <div class="header" style={{ backgroundImage: profile.header && profile.header.info && profile.header.info.secure_url && `url('${cdnAsset(profile.header.info, 'jpg', 't_large_image')}')` }}>
-          <svg viewBox="0 0 2 1" style={{ display: 'block', width: '100%' }}></svg>
-          <div class="header-overlay">
+          <svg viewBox="0 0 3 1" style={{ display: 'block', width: '100%' }}></svg>
+          <div class="header-overlay" style={{ display: 'none' }}>
             {profile.avatar && profile.avatar.info && profile.avatar.info.secure_url && <img src={profile.avatar.info.secure_url} class="header-avatar" />}
-            <h1 style={{ margin: '0.5rem 1rem' }}>{profile.name}</h1>
-            <div style={{ display: 'none', margin: '0.5rem 1rem' }}>{profile.summary}</div>
+            <h1 style={{ margin: '0.5rem 1rem' }}>{profile.name || profile.handle}</h1>
+            <div style={{ margin: '0.5rem 1rem' }}>{profile.summary}</div>
+            <div style={{ display: 'flex', padding: '0.25rem' }}>
+              <button class="contact-button" onClick={() => this.overlay = { kind: 'contact' }}>Send Message</button>
+              {profile?.data?.email && <a class="contact-button" href={`javascript:window.location.href='mailto:'+atob('${btoa(profile?.data?.email)}')`}>Email</a>}
+              {profile?.data?.telephone && <a class="contact-button" href={`javascript:window.location.href='tel:'+atob('${btoa(profile?.data?.telephone)}')`}>Call</a>}
+            </div>
           </div>
         </div>}
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'end' }}>
+          {profile.avatar && profile.avatar.info && profile.avatar.info.secure_url && <img src={profile.avatar.info.secure_url} class="header-avatar" />}
+          <div style={{ flex: '1 1 500px', display: 'flex', alignItems: 'start', margin: '0 1rem 2rem 1rem' }}>
+            <div>
+              <h1 style={{ margin: '0', fontSize: '1.35rem', fontWeight: '600' }}>{profile.name || profile.handle}</h1>
+              <p style={{ margin: '0', fontSize: '1rem', opacity: '0.75' }}>{profile.summary}</p>
+              <div style={{ fontSize: '0.9rem', opacity: '0.5', marginTop: '0.25rem' }}>{profile.location} {profile.website && <a href={profile.website} class="link-button"><i style={{ display: 'inline-block', width: '1rem', height: '1rem', background: `url('https://api.iconify.design/fa-solid:link.svg')` }}></i> Website</a>} {profile.twitter && <a href={profile.twitter} class="link-button"><i style={{ display: 'inline-block', width: '1rem', height: '1rem', background: `url('https://api.iconify.design/fa:twitter-square.svg')` }}></i> Twitter</a>} {profile.facebook && <a href={profile.facebook} class="link-button"><i style={{ display: 'inline-block', width: '1rem', height: '1rem', background: `url('https://api.iconify.design/brandico:facebook-rect.svg')` }}></i> Facebook</a>}</div>
+            </div>
+          </div>
+          <div style={{ padding: '0.25rem', margin: '0 1rem', flex: 'none' }}>
+            <button class="contact-button" onClick={() => this.overlay = { kind: 'contact' }}>Send Message</button>
+            {profile?.email && <a class="contact-button" href={`javascript:window.location.href='mailto:'+atob('${btoa(profile?.email)}')`}>Email</a>}
+            {profile?.telephone && <a class="contact-button" href={`javascript:window.location.href='tel:'+atob('${btoa(profile?.telephone)}')`}>Call</a>}
+          </div>
+        </div>
 
-        {collections && <div style={{ display: 'flex', margin: '-0.5rem 0.5rem', overflow: 'auto' }}>
-          {collections.map((collection) => (<a onClick={this.linkClickHandler(`collections/${collection.id}`)} href={`${this.root}collections/${collection.id}`} class={`collection-header collection-header-${collection.id}`}>
-            <svg viewBox="0 0 4 1" style={{ display: 'block', width: '100%' }}></svg>
-            <div style={{ position: 'absolute', left: '0', width: '100%', bottom: '0', padding: '0.5rem' }}>{collection.data.title}</div>
-          </a>))}
+
+        {collections && <div>
+          {collections.map((collection) => (<div>
+
+            <a style={{ display: 'flex', alignItems: 'center', margin: '0.5rem 1rem', fontWeight: '300', textDecoration: 'none', color: 'inherit', }} onClick={this.linkClickHandler(`collections/${collection.id}`)} href={`${this.root}collections/${collection.id}`}>
+              <h2 style={{ flex: 'auto', textDecoration: 'none', color: 'inherit', margin: '0', fontSize: '1.3rem' }}>{collection.data.title}</h2>
+              <span>All <i style={{ display: 'inline-block', width: '1rem', height: '1rem', background: `url('https://api.iconify.design/ion:arrow-forward-sharp.svg')` }}></i></span>
+            </a>
+            <div class="card-grid">
+              {collection.listings.map(listing => <div class="card-grid-item">
+                <bb-listing-card listingId={listing.id} listingData={listing.data} root={this.root}></bb-listing-card>
+              </div>)}
+              <div class="card-grid-item"></div>
+              <div class="card-grid-item"></div>
+            </div>
+
+
+          </div>))}
         </div>}
 
-        <form style={{ display: 'none' }} class="search-form">
-          <select class="search-form-select" onChange={({ target }) => this.filter = { ...this.filter, location: (target as HTMLSelectElement).value }}>
-            <option selected={this.filter.location == ''} value="">All Locations</option>
-            {locations && locations.map(location => <option selected={this.filter.location == location} value={location}>{location}</option>)}
-          </select>
-          <select class="search-form-select" onChange={({ target }) => this.filter = { ...this.filter, model: (target as HTMLSelectElement).value }}>
-            <option selected={this.filter.model == ''} value="">All Models</option>
-            {models && models.map(model => <option selected={this.filter.model == model} value={model}>{model}</option>)}
-          </select>
-          <select class="search-form-select" onChange={({ target }) => this.filter = { ...this.filter, manufacturer: (target as HTMLSelectElement).value }}>
-            <option selected={this.filter.manufacturer == ''} value="">All Manufacturers</option>
-            {manufacturers && manufacturers.map(manufacturer => <option selected={this.filter.manufacturer == manufacturer} value={manufacturer}>{manufacturer}</option>)}
-          </select>
-        </form>
+        {(!collections || collections.length == 0) && <div>
+          <form class="search-form">
+            <select class="search-form-select" onChange={({ target }) => this.filter = { ...this.filter, location: (target as HTMLSelectElement).value }}>
+              <option selected={this.filter.location == ''} value="">All Locations</option>
+              {locations && locations.map(location => <option selected={this.filter.location == location} value={location}>{location}</option>)}
+            </select>
+            <select class="search-form-select" onChange={({ target }) => this.filter = { ...this.filter, model: (target as HTMLSelectElement).value }}>
+              <option selected={this.filter.model == ''} value="">All Models</option>
+              {models && models.map(model => <option selected={this.filter.model == model} value={model}>{model}</option>)}
+            </select>
+            <select class="search-form-select" onChange={({ target }) => this.filter = { ...this.filter, manufacturer: (target as HTMLSelectElement).value }}>
+              <option selected={this.filter.manufacturer == ''} value="">All Manufacturers</option>
+              {manufacturers && manufacturers.map(manufacturer => <option selected={this.filter.manufacturer == manufacturer} value={manufacturer}>{manufacturer}</option>)}
+            </select>
+          </form>
 
-        {filteredListings && <div class="card-grid">
-          {filteredListings.map(listing => <div class="card-grid-item">
-            <bb-listing-card listingId={listing.id} listingData={listing.data} root={this.root}></bb-listing-card>
-          </div>)}
-          <div class="card-grid-item"></div>
+          {filteredListings && <div class="card-grid">
+            {filteredListings.map(listing => <div class="card-grid-item">
+              <bb-listing-card listingId={listing.id} listingData={listing.data} root={this.root}></bb-listing-card>
+            </div>)}
+            <div class="card-grid-item"></div>
+            <div class="card-grid-item"></div>
+          </div>}
+          {(this.loadCount < filteredCount) && <button ref={this.loadMoreRefHandler} onClick={this.loadMoreClickHandler}>Load More</button>}
         </div>}
-        {(this.loadCount < filteredCount) && <button ref={this.loadMoreRefHandler} onClick={this.loadMoreClickHandler}>Load More</button>}
+
+        {this.overlay && this.overlay.kind == 'contact' && <div style={{ position: 'fixed', zIndex: '999999', top: '0', left: '0', width: '100%', height: '100%', background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(5px)' }}>
+          <button onClick={() => this.overlay = null} style={{ cursor: 'pointer', position: 'absolute', top: '3px', right: '3px', padding: '9px', borderRadius: '3px', appearance: 'none', border: 'none', background: 'rgba(0,0,0,0.5)', color: 'white' }}>
+            <bb-icon icon="fe:close" color="white" size="2rem"></bb-icon>
+          </button>
+          <form onSubmit={this.sendMessage} class="contact-form" style={{ display: 'flex', flexDirection: 'column' }}>
+            <h2>Contact {profile.name || profile.handle || profile.id}</h2>
+            <input type="text" required placeholder="Name *" value={this.message.name} onChange={(event) => this.message = { ...this.message, name: (event.target as HTMLInputElement).value }}></input>
+            <input type="email" required placeholder="Email *" value={this.message.email} onChange={(event) => this.message = { ...this.message, email: (event.target as HTMLInputElement).value }}></input>
+            <input type="telephone" placeholder="Telephone" value={this.message.telephone} onChange={(event) => this.message = { ...this.message, telephone: (event.target as HTMLInputElement).value }}></input>
+            <textarea required placeholder="Message *" value={this.message.content} onChange={(event) => this.message = { ...this.message, content: (event.target as HTMLInputElement).value }}></textarea>
+            <button type="submit">Send Message</button>
+
+          </form>
+        </div>}
       </Host>
     }
   }

@@ -2,6 +2,12 @@
   display: block;
 }
 
+.content {
+  overflow: hidden;
+  margin: 1px 0;
+  padding: 1px 0;
+}
+
 .content h2 {
   font-size: 1.5rem;
   font-weight: 300;

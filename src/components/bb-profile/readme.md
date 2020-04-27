@@ -9,7 +9,7 @@
 
 | Property        | Attribute        | Description | Type                             | Default     |
 | --------------- | ---------------- | ----------- | -------------------------------- | ----------- |
-| `profileHeader` | `profile-header` |             | `"image" or "none" or "overlay"` | `'overlay'` |
+| `profileHeader` | `profile-header` |             | `"image" \| "none" \| "overlay"` | `'overlay'` |
 | `profilePath`   | `profile-path`   |             | `string`                         | `undefined` |
 | `root`          | `root`           |             | `string`                         | `'/'`       |
 
@@ -30,11 +30,13 @@
 ### Depends on
 
 - [bb-listing-card](../bb-listing-card)
+- [bb-icon](../icon)
 
 ### Graph
 ```mermaid
 graph TD;
   bb-profile --> bb-listing-card
+  bb-profile --> bb-icon
   bb-listing-card --> bb-icon
   bb-connector --> bb-profile
   style bb-profile fill:#f9f,stroke:#333,stroke-width:4px

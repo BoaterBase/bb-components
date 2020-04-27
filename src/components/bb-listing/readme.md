@@ -7,10 +7,18 @@
 
 ## Properties
 
-| Property      | Attribute      | Description | Type     | Default     |
-| ------------- | -------------- | ----------- | -------- | ----------- |
-| `listingPath` | `listing-path` |             | `string` | `undefined` |
-| `root`        | `root`         |             | `string` | `'/'`       |
+| Property        | Attribute        | Description | Type     | Default                        |
+| --------------- | ---------------- | ----------- | -------- | ------------------------------ |
+| `canonicalRoot` | `canonical-root` |             | `string` | `'https://www.boaterbase.com'` |
+| `listingPath`   | `listing-path`   |             | `string` | `undefined`                    |
+| `root`          | `root`           |             | `string` | `'/'`                          |
+
+
+## Events
+
+| Event       | Description | Type               |
+| ----------- | ----------- | ------------------ |
+| `linkClick` |             | `CustomEvent<any>` |
 
 
 ## Dependencies

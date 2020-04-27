@@ -7,15 +7,23 @@
 
 ## Properties
 
-| Property                   | Attribute                    | Description | Type                             | Default                |
-| -------------------------- | ---------------------------- | ----------- | -------------------------------- | ---------------------- |
-| `collectionFilters`        | `collection-filters`         |             | `string`                         | `'manufacturer,model'` |
-| `collectionHeader`         | `collection-header`          |             | `"image" or "none" or "overlay"` | `'overlay'`            |
-| `collectionList`           | `collection-list`            |             | `"card" or "overlay"`            | `'overlay'`            |
-| `collectionLocationFilter` | `collection-location-filter` |             | `string`                         | `'All Locations'`      |
-| `collectionPath`           | `collection-path`            |             | `string`                         | `undefined`            |
-| `collectionProfileFilter`  | `collection-profile-filter`  |             | `string`                         | `'All Profiles'`       |
-| `root`                     | `root`                       |             | `string`                         | `'/'`                  |
+| Property                   | Attribute                    | Description | Type                                           | Default                |
+| -------------------------- | ---------------------------- | ----------- | ---------------------------------------------- | ---------------------- |
+| `collectionFilters`        | `collection-filters`         |             | `string`                                       | `'manufacturer,model'` |
+| `collectionHeader`         | `collection-header`          |             | `"image" \| "none" \| "overlay"`               | `'overlay'`            |
+| `collectionList`           | `collection-list`            |             | `"card" \| "overlay"`                          | `'overlay'`            |
+| `collectionLocationFilter` | `collection-location-filter` |             | `string`                                       | `'All Locations'`      |
+| `collectionPath`           | `collection-path`            |             | `string`                                       | `undefined`            |
+| `collectionProfileFilter`  | `collection-profile-filter`  |             | `string`                                       | `'All Profiles'`       |
+| `collectionQuery`          | --                           |             | `{ location?: ""; profile?: ""; specs?: ""; }` | `{}`                   |
+| `root`                     | `root`                       |             | `string`                                       | `'/'`                  |
+
+
+## Events
+
+| Event       | Description | Type               |
+| ----------- | ----------- | ------------------ |
+| `linkClick` |             | `CustomEvent<any>` |
 
 
 ## Dependencies

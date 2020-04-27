@@ -1,10 +1,15 @@
-import { Component, h, Host, Prop, State, Watch } from '@stencil/core';
+import { Component, h, Host, Prop, State, Watch, Event, EventEmitter } from '@stencil/core';
 import { cdnAsset, buildMetaData } from '../../utils/utils';
 import { Head } from 'stencil-head';
+import { orderBy } from 'natural-orderby';
+import groupArray from 'group-array';
 
 //let BB_API = 'http://localhost:5000/api'
 let BB_API = 'https://www.boaterbase.com/api';
 
+//const groupBy = function (a, k) {
+//  return a.reduce((acc, item) => ((acc[item[k]] = [...(acc[item[k]] || []), item]), acc), {});
+//};
 
 @Component({
   tag: 'bb-collection',
@@ -15,6 +20,11 @@ export class BbCollection {
   @Prop() root: string = '/';
 
   @Prop() collectionPath: string;
+  @Prop() collectionQuery: {
+    location?: '',
+    profile?: '',
+    specs?: ''
+  } = {};
 
   @Prop() collectionHeader: 'none' | 'overlay' | 'image' = 'overlay';
   @Prop() collectionList: 'card' | 'overlay' = 'overlay';
@@ -37,6 +47,13 @@ export class BbCollection {
 
   @State() order = 'index';
 
+  @Event({
+    eventName: 'linkClick',
+    composed: true,
+    cancelable: true,
+    bubbles: true,
+  }) linkClick: EventEmitter;
+
   get collectionId() {
     // Allow for pretty urls where the id is at the end
     return this.collectionPath.split('-').pop();
@@ -51,9 +68,29 @@ export class BbCollection {
     }).then();
   }
 
+
   async componentWillLoad() {
     //console.log('componentWillLoad')
     this.collectionResponse = await this.fetchData().then(response => response.json());
+
+    if (this.collectionQuery.location) {
+      this.locationFilter = this.collectionQuery.location;
+    }
+    if (this.collectionQuery.profile) {
+      this.profileFilter = this.collectionQuery.profile;
+    }
+    if (this.collectionQuery.specs) {
+      try {
+        this.specsFilter = JSON.parse(this.collectionQuery.specs);
+      }
+      catch{
+        this.specsFilter = {};
+      }
+    }
+  }
+
+  async componentDidLoad() {
+    window.scrollTo(0, 0);
   }
 
   @Watch('collectionPath')
@@ -62,6 +99,12 @@ export class BbCollection {
     this.collectionResponse = await this.fetchData().then(response => response.json());
   }
 
+  updateRouteFilter() {
+
+    this.linkClick.emit({
+      path: `?location=${this.locationFilter}&profile=${this.profileFilter}&specs=${JSON.stringify(this.specsFilter)}`
+    });
+  }
 
   render() {
     if (!this.collectionResponse)
@@ -78,15 +121,37 @@ export class BbCollection {
       return {
         key,
         title: 'All ' + key.charAt(0).toUpperCase() + key.slice(1) + 's',
-        items: [...new Set(allListings.map(l => l.data.specifications[key]).filter(Boolean))]
+        items: orderBy([...new Set(allListings.map(l => l.data.specifications[key]).filter(Boolean))])
       };
     });
 
-    const allLocations = [...new Set(allListings.map(l => l.data.location).filter(Boolean))];
+    let allLocations = [...new Set(allListings.map(l => l.data.location && l.data.location.trim()).filter(Boolean))];
 
-    const allProfiles = allListings.map(l => (l.data.profile?.data?.handle && { handle: l.data.profile?.data?.handle, name: l.data.profile?.data?.name || l.data.profile?.data?.handle })).filter(Boolean).filter((obj, pos, arr) => {
+    allLocations = orderBy(
+      allLocations
+    );
+
+    let splitLocations = allLocations.map((l: string) => {
+      let ls = l.split(',').filter(Boolean).map(i => i.trim());
+      return {
+        country: ls.pop(),
+        region: ls.pop()
+      }
+    });
+
+
+    let groupedLocations = groupArray(splitLocations, 'country', 'region');
+
+    //console.log(splitLocations, groupedLocations);
+
+    let allProfiles = allListings.map(l => (l.data.profile?.data?.handle && { handle: l.data.profile?.data?.handle, name: l.data.profile?.data?.name || l.data.profile?.data?.handle })).filter(Boolean).filter((obj, pos, arr) => {
       return arr.map(mapObj => mapObj.handle).indexOf(obj.handle) === pos;
     })
+
+    allProfiles = orderBy(
+      allProfiles,
+      [(l: any) => l.name]
+    );
 
     // Filters
     let filteredListings: any[any] = collection.listings;
@@ -96,50 +161,63 @@ export class BbCollection {
       }
     }
     if (this.locationFilter) {
-      filteredListings = filteredListings.filter(l => l.data.location == this.locationFilter);
+      filteredListings = filteredListings.filter(l => l.data.location && l.data.location.includes(this.locationFilter));
     }
     if (this.profileFilter) {
       filteredListings = filteredListings.filter(l => l.data.profile?.data?.handle == this.profileFilter);
     }
+
     if (this.sortOrder == 'price_asc') {
       filteredListings = filteredListings.sort((a, b) => ((a.data.price || Number.MAX_VALUE) - (b.data.price || Number.MAX_VALUE)));
     }
-    if (this.sortOrder == 'price_desc') {
-      filteredListings = filteredListings.sort((a, b) => ((b.data.price || 0) - (a.data.price || 0)));
-    }
-    if (this.sortOrder == 'length_asc') {
-      filteredListings = filteredListings.sort((a, b) => ((a.data.specifications?.loa || Number.MAX_VALUE) - (b.data.specifications?.loa || Number.MAX_VALUE)));
-    }
-    if (this.sortOrder == 'length_desc') {
-      filteredListings = filteredListings.sort((a, b) => ((b.data.specifications?.loa || 0) - (a.data.specifications?.loa || 0)));
-    }
-    if (this.sortOrder == 'year_asc') {
-      filteredListings = filteredListings.sort((a, b) => ((a.data.specifications?.year || Number.MAX_VALUE) - (b.data.specifications?.year || Number.MAX_VALUE)));
-    }
-    if (this.sortOrder == 'year_desc') {
-      filteredListings = filteredListings.sort((a, b) => ((b.data.specifications?.year || 0) - (a.data.specifications?.year || 0)));
-    }
-    if (this.sortOrder == 'updated_asc') {
-      filteredListings = filteredListings.sort((a, b) => {
-        if (a.data.updated > b.data.updated) {
-          return 1;
-        }
-        if (a.data.updated < b.data.updated) {
-          return -1;
-        }
-        return 0;
-      });
-    }
-    if (this.sortOrder == 'updated_desc') {
-      filteredListings = filteredListings.sort((a, b) => {
-        if (a.data.updated < b.data.updated) {
-          return 1;
-        }
-        if (a.data.updated > b.data.updated) {
-          return -1;
-        }
-        return 0;
-      });
+    switch (this.sortOrder) {
+      case 'price_desc':
+        filteredListings = filteredListings.sort((a, b) => ((b.data.price || 0) - (a.data.price || 0)));
+        break;
+      case 'length_asc':
+        filteredListings = filteredListings.sort((a, b) => ((a.data.specifications?.loa || Number.MAX_VALUE) - (b.data.specifications?.loa || Number.MAX_VALUE)));
+        break;
+      case 'length_desc':
+        filteredListings = filteredListings.sort((a, b) => ((b.data.specifications?.loa || 0) - (a.data.specifications?.loa || 0)));
+        break;
+      case 'year_asc':
+        filteredListings = filteredListings.sort((a, b) => ((a.data.specifications?.year || Number.MAX_VALUE) - (b.data.specifications?.year || Number.MAX_VALUE)));
+        break;
+      case 'year_desc':
+        filteredListings = filteredListings.sort((a, b) => ((b.data.specifications?.year || 0) - (a.data.specifications?.year || 0)));
+        break;
+      case 'updated_asc':
+        filteredListings = filteredListings.sort((a, b) => {
+          if (a.data.updated > b.data.updated) {
+            return 1;
+          }
+          if (a.data.updated < b.data.updated) {
+            return -1;
+          }
+          return 0;
+        });
+        break;
+      case 'updated_desc':
+        filteredListings = filteredListings.sort((a, b) => {
+          if (a.data.updated < b.data.updated) {
+            return 1;
+          }
+          if (a.data.updated > b.data.updated) {
+            return -1;
+          }
+          return 0;
+        });
+        break;
+      default:
+        //TODO - check for default sort option
+
+        // Randomish by id % current day
+        filteredListings = filteredListings.sort((a, b) => {
+          const rnd = (new Date()).getHours();
+          const ai = rnd % a.id.length;
+          const bi = rnd % b.id.length;
+          return a.id.charCodeAt(ai) - b.id.charCodeAt(bi);
+        });
     }
 
     const meta = buildMetaData(collection.title, collection.summary, 'website', collection?.header?.info?.secure_url && cdnAsset(collection.header.info, 'jpg', 't_large_image'));
@@ -155,16 +233,17 @@ export class BbCollection {
             <p>{collection.summary}</p>
           </div>
           <form class="search-form">
-            {specFilters.map((f) => (<select class="search-form-select" onChange={({ target }) => this.specsFilter = { ...this.specsFilter, [f.key]: (target as HTMLSelectElement).value }}>
+            {specFilters.map((f) => (<select class="search-form-select" onChange={({ target }) => { this.specsFilter = { ...this.specsFilter, [f.key]: (target as HTMLSelectElement).value }; this.updateRouteFilter(); }}>
               <option selected={this.specsFilter[f.key] == ''} value="">{f.title}</option>
               {f.items.map((item: string) => <option selected={this.specsFilter[f.key] == item} value={item}>{item}</option>)}
             </select>
             ))}
-            <select class="search-form-select" onChange={({ target }) => { this.locationFilter = (target as HTMLSelectElement).value }}>
-              <option selected={this.locationFilter == ''} value="">{this.collectionLocationFilter}</option>
-              {allLocations.map((item: any) => <option selected={this.locationFilter == item} value={item}>{item}</option>)}
+            <select class="search-form-select" onChange={({ target }) => { this.locationFilter = (target as HTMLSelectElement).value; this.updateRouteFilter(); }}>
+              <option selected={this.locationFilter == ''} value={''}>{this.collectionLocationFilter}</option>
+              <hr />
+              {Object.keys(groupedLocations).map(c => ([<option selected={this.locationFilter == c} value={c}>{c}</option>, orderBy(Object.keys(groupedLocations[c])).map(r => ([<option selected={this.locationFilter == `${r}, ${c}`} value={`${r}, ${c}`}>— {r}</option>])), <hr />]))}
             </select>
-            <select class="search-form-select" onChange={({ target }) => { this.profileFilter = (target as HTMLSelectElement).value }}>
+            <select class="search-form-select" onChange={({ target }) => { this.profileFilter = (target as HTMLSelectElement).value; this.updateRouteFilter(); }}>
               <option selected={this.profileFilter == ''} value="">{this.collectionProfileFilter}</option>
               {allProfiles.map((item: any) => <option selected={this.profileFilter == item.handle} value={item.handle}>{item.name}</option>)}
             </select>
@@ -186,7 +265,7 @@ export class BbCollection {
           </button>
         </div>
         <select class="sort-order" onChange={({ target }) => { this.sortOrder = (target as HTMLSelectElement).value }}>
-          <option value="featured">Featured</option>
+          <option value="featured">Sort</option>
           <hr />
           <option value="price_asc">Price ↑</option>
           <option value="price_desc">Price ↓</option>

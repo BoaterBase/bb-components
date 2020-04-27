@@ -10,12 +10,12 @@
 | Property                   | Attribute                    | Description                                    | Type                             | Default                |
 | -------------------------- | ---------------------------- | ---------------------------------------------- | -------------------------------- | ---------------------- |
 | `collectionFilters`        | `collection-filters`         |                                                | `string`                         | `'manufacturer,model'` |
-| `collectionHeader`         | `collection-header`          | Collection header layout .                     | `"image" or "none" or "overlay"` | `'overlay'`            |
-| `collectionList`           | `collection-list`            | Collection list layout .                       | `"card" or "overlay"`            | `'overlay'`            |
+| `collectionHeader`         | `collection-header`          | Collection header layout .                     | `"image" \| "none" \| "overlay"` | `'overlay'`            |
+| `collectionList`           | `collection-list`            | Collection list layout .                       | `"card" \| "overlay"`            | `'overlay'`            |
 | `collectionLocationFilter` | `collection-location-filter` |                                                | `string`                         | `'All Locations'`      |
 | `collectionProfileFilter`  | `collection-profile-filter`  |                                                | `string`                         | `'All Profiles'`       |
 | `path`                     | `path`                       | The path of the component you want to display. | `string`                         | `undefined`            |
-| `profileHeader`            | `profile-header`             | Profile header layout .                        | `"image" or "none" or "overlay"` | `'overlay'`            |
+| `profileHeader`            | `profile-header`             | Profile header layout .                        | `"image" \| "none" \| "overlay"` | `'overlay'`            |
 | `root`                     | `root`                       | The root for mapping urls e.g. listing/id .    | `string`                         | `'#/'`                 |
 
 
@@ -43,6 +43,7 @@ graph TD;
   bb-listing --> bb-content
   bb-content --> bb-media
   bb-profile --> bb-listing-card
+  bb-profile --> bb-icon
   bb-listing-card --> bb-icon
   bb-collection --> bb-listing-card
   style bb-connector fill:#f9f,stroke:#333,stroke-width:4px

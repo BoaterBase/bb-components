@@ -1,6 +1,6 @@
 {
   "name": "@boaterbase/bb-components",
-  "version": "0.1.10",
+  "version": "0.1.28",
   "description": "BoaterBase Web Components",
   "repository": {
     "type": "git",
@@ -28,12 +28,14 @@
     "deploy": "npm publish --access public"
   },
   "devDependencies": {
-    "@stencil/core": "^1.10.0",
+    "@stencil/core": "^1.11.2",
     "@types/node": "^13.9.1"
   },
   "license": "MIT",
   "dependencies": {
     "@stencil/router": "^1.0.1",
+    "group-array": "^1.0.0",
+    "natural-orderby": "^2.0.3",
     "slugify": "^1.4.0",
     "stencil-head": "^1.1.0"
   }

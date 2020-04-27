@@ -19,6 +19,10 @@ export class Media {
               <svg viewBox="0 0 4 3" style={{ display: 'block', width: '100%', background: 'lightblue', borderRadius: 'var(--bb-border-radius)' }}></svg>
               {item.info.resource_type == 'image' && <img class="display-grid-image" src={cdnAsset(item.info, 'jpg', 't_small_image')} />}
             </a>))}
+            <span>&nbsp;</span>
+            <span>&nbsp;</span>
+            <span>&nbsp;</span>
+            <span>&nbsp;</span>
           </div>
         </Host>
       );

@@ -20,12 +20,14 @@
 
  - [bb-listing](../bb-listing)
  - [bb-listing-card](../bb-listing-card)
+ - [bb-profile](../bb-profile)
 
 ### Graph
 ```mermaid
 graph TD;
   bb-listing --> bb-icon
   bb-listing-card --> bb-icon
+  bb-profile --> bb-icon
   style bb-icon fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

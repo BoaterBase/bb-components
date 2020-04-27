@@ -46,7 +46,9 @@ export class BbListingCard {
     const specs = listing.specifications || {};
 
     const primaryMedia = listing.media[this.selectedMedia];
-    const shortTitle = ([specs.loa && Math.round(converter('length', 'm', 'ft', specs.loa)) + "'", specs.year, specs.manufacturer, specs.manufacturer && specs.model, specs.category, specs.classification]).filter(Boolean).slice(0, 3);
+    const shortTitle = ([specs.loa && Math.round(converter('length', 'm', 'ft', specs.loa)) + "'", specs.year, specs.manufacturer, specs.manufacturer && specs.model, specs.category, specs.classification]).filter(Boolean).slice(0, 4);
+
+    const shortLocation = listing.location ? listing.location.split(',').slice(-2).join(',') : listing.location;
 
     if (this.display == 'card')
       return (
@@ -72,7 +74,7 @@ export class BbListingCard {
                   {shortTitle.join(' · ')}</div>
                 {(listing.location || listing.profile?.data?.name) && <div style={{ display: 'flex', alignItems: 'center', color: 'inherit', opacity: '0.5', fontWeight: '400', fontSize: '0.9rem' }}>
                   <bb-icon icon="gridicons:location" style={{ marginRight: '3px', opacity: '0.5' }}></bb-icon>
-                  {[listing.profile?.data?.name, listing.location].filter(Boolean).join(', ')}
+                  {[listing.profile?.data?.name, shortLocation].filter(Boolean).join(', ')}
                 </div>}
               </div>
               <div style={{ flex: 'auto', textAlign: 'right' }}>
@@ -98,7 +100,7 @@ export class BbListingCard {
                     <div class="title" style={{ fontWeight: '600' }}>{shortTitle.join(' · ')}</div>
                     {this.listingData.location && <div style={{ color: 'inherit', opacity: '0.5', fontWeight: '400' }}>
                       <bb-icon icon="gridicons:location" color="white"></bb-icon>
-                      {this.listingData.location}
+                      {shortLocation}
                     </div>}
                   </div>
                   <div style={{ flex: 'auto', textAlign: 'right', alignItems: 'flex-end' }}>

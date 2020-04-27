@@ -68,6 +68,7 @@ export class BbConnector {
 
     event.preventDefault();
     this.history.push(this.routerRoot + '/' + event.detail.path);
+
   }
 
   render() {
@@ -86,6 +87,8 @@ export class BbConnector {
             this.isPathValid && this.base == 'profile' && <stencil-route-switch>
               <stencil-route url={[this.routerRoot, this.routerRoot + '/']} exact={true} routeRender={(props) => { this.history = props.history; return <bb-profile profilePath={this.id} root={this.root} profileHeader={this.profileHeader}></bb-profile> }}></stencil-route>
               <stencil-route url={this.routerRoot + '/listings/:listingId'} exact={true} routeRender={(props) => { this.history = props.history; return <bb-listing listingPath={props.match.params.listingId} root={this.root}></bb-listing> }}></stencil-route>
+              <stencil-route url={this.routerRoot + '/profiles/:profileId'} exact={true} routeRender={(props) => { this.history = props.history; return <bb-profile profilePath={props.match.params.profileId} root={this.root}></bb-profile> }}></stencil-route>
+
               <stencil-route url={this.routerRoot + '/collections/:collectionId'} exact={true} routeRender={(props) => {
                 this.history = props.history;
                 return <bb-collection
@@ -101,8 +104,10 @@ export class BbConnector {
             this.isPathValid && this.base == 'collection' && <stencil-route-switch>
               <stencil-route url={[this.routerRoot, this.routerRoot + '/']} exact={true} routeRender={(props) => {
                 this.history = props.history;
+                // console.log(props)
                 return <bb-collection
                   collectionPath={this.id}
+                  collectionQuery={props.history.location.query}
                   collectionHeader={this.collectionHeader} collectionList={this.collectionList}
                   collectionFilters={this.collectionFilters} collectionLocationFilter={this.collectionLocationFilter} collectionProfileFilter={this.collectionProfileFilter}
                   root={this.root}></bb-collection>
@@ -110,6 +115,8 @@ export class BbConnector {
               <stencil-route url={this.routerRoot + '/listings/:listingId'} exact={true} routeRender={(props) => {
                 return <bb-listing key={props.match.params.listingId} listingPath={props.match.params.listingId} root={this.root}></bb-listing>
               }}></stencil-route>
+              <stencil-route url={this.routerRoot + '/profiles/:profileId'} exact={true} routeRender={(props) => { this.history = props.history; return <bb-profile profilePath={props.match.params.profileId} root={this.root}></bb-profile> }}></stencil-route>
+
               <stencil-route routeRender={() => (<div>404 - Collection</div>)}></stencil-route>
             </stencil-route-switch>
           }

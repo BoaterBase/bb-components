@@ -13,6 +13,11 @@ export namespace Components {
         "collectionLocationFilter": string;
         "collectionPath": string;
         "collectionProfileFilter": string;
+        "collectionQuery": {
+            location?: "";
+            profile?: "";
+            specs?: "";
+        };
         "root": string;
     }
     interface BbConnector {
@@ -51,6 +56,7 @@ export namespace Components {
         "size": string;
     }
     interface BbListing {
+        "canonicalRoot": string;
         "listingPath": string;
         "root": string;
     }
@@ -145,6 +151,12 @@ declare namespace LocalJSX {
         "collectionLocationFilter"?: string;
         "collectionPath"?: string;
         "collectionProfileFilter"?: string;
+        "collectionQuery"?: {
+            location?: "";
+            profile?: "";
+            specs?: "";
+        };
+        "onLinkClick"?: (event: CustomEvent<any>) => void;
         "root"?: string;
     }
     interface BbConnector {
@@ -183,7 +195,9 @@ declare namespace LocalJSX {
         "size"?: string;
     }
     interface BbListing {
+        "canonicalRoot"?: string;
         "listingPath"?: string;
+        "onLinkClick"?: (event: CustomEvent<any>) => void;
         "root"?: string;
     }
     interface BbListingCard {

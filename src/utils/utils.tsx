@@ -57,7 +57,7 @@ export function markdown(text) {
 /*
   Meta Data
 */
-export function buildMetaData(title: string, description: string, type = 'website', image?): HeadInterface {
+export function buildMetaData(title: string, description: string, type = 'website', image?, canonicalRoot = 'https://www.boaterbase.com'): HeadInterface {
   const head: HeadInterface = {
     title,
     metas: [
@@ -69,7 +69,8 @@ export function buildMetaData(title: string, description: string, type = 'websit
       // OpenGraph
       {
         property: 'og:url',
-        content: document.location.href
+        // TODO - the path needs to be built from the resource not location as we need to work for # type links
+        content: canonicalRoot + document.location.pathname
       },
       {
         property: 'og:type',
