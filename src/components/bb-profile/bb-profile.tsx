@@ -207,7 +207,7 @@ export class BbProfile {
             </div>
           </div>
         </div>}
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'end' }}>
+        {this.profileHeader == 'image' && <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'end' }}>
           {profile.avatar && profile.avatar.info && profile.avatar.info.secure_url && <img src={profile.avatar.info.secure_url} class="header-avatar" />}
           <div style={{ flex: '1 1 500px', display: 'flex', alignItems: 'start', margin: '0 1rem 2rem 1rem' }}>
             <div>
@@ -221,11 +221,11 @@ export class BbProfile {
             {profile?.email && <a class="contact-button" href={`javascript:window.location.href='mailto:'+atob('${btoa(profile?.email)}')`}>Email</a>}
             {profile?.telephone && <a class="contact-button" href={`javascript:window.location.href='tel:'+atob('${btoa(profile?.telephone)}')`}>Call</a>}
           </div>
-        </div>
+        </div>}
 
 
         {collections && <div>
-          {collections.map((collection) => (<div>
+          {collections.map((collection) => (collection.listings && collection.listings.length > 0 && <div>
 
             <a style={{ display: 'flex', alignItems: 'center', margin: '0.5rem 1rem', fontWeight: '300', textDecoration: 'none', color: 'inherit', }} onClick={this.linkClickHandler(`collections/${collection.id}`)} href={`${this.root}collections/${collection.id}`}>
               <h2 style={{ flex: 'auto', textDecoration: 'none', color: 'inherit', margin: '0', fontSize: '1.3rem' }}>{collection.data.title}</h2>
