@@ -21,6 +21,10 @@ export namespace Components {
         "root": string;
     }
     interface BbConnector {
+        /**
+          * The root domain for building share linksfor mapping urls e.g. listing/id .
+         */
+        "canonicalRoot": string;
         "collectionFilters": string;
         /**
           * Collection header layout .
@@ -160,6 +164,10 @@ declare namespace LocalJSX {
         "root"?: string;
     }
     interface BbConnector {
+        /**
+          * The root domain for building share linksfor mapping urls e.g. listing/id .
+         */
+        "canonicalRoot"?: string;
         "collectionFilters"?: string;
         /**
           * Collection header layout .

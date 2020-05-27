@@ -37,6 +37,8 @@ export class BbCollection {
   @Prop() collectionLocationFilter: string = 'All Locations';
   @Prop() collectionProfileFilter: string = 'All Profiles';
 
+  @State() loaded = false;
+
   @State() collectionResponse: any;
 
   @State() locationFilter = '';
@@ -59,8 +61,8 @@ export class BbCollection {
     return this.collectionPath.split('-').pop();
   }
 
-  fetchData() {
-    return fetch(`${BB_API}/collections/${this.collectionId}`, {
+  fetchData(limit = 999) {
+    return fetch(`${BB_API}/collections/${this.collectionId}?limit=${limit}`, {
       headers: {
         'Accept': 'application/json',
       },
@@ -71,7 +73,7 @@ export class BbCollection {
 
   async componentWillLoad() {
     //console.log('componentWillLoad')
-    this.collectionResponse = await this.fetchData().then(response => response.json());
+    this.collectionResponse = await this.fetchData(6).then(response => response.json());
 
     if (this.collectionQuery.location) {
       this.locationFilter = this.collectionQuery.location;
@@ -91,6 +93,12 @@ export class BbCollection {
 
   async componentDidLoad() {
     window.scrollTo(0, 0);
+
+    // TODO - only need this load if more to load
+    this.collectionResponse = await this.fetchData(999).then(response => response.json());
+
+    this.loaded = true;
+
   }
 
   @Watch('collectionPath')
@@ -208,9 +216,7 @@ export class BbCollection {
           return 0;
         });
         break;
-      default:
-        //TODO - check for default sort option
-
+      case 'random':
         // Randomish by id % current day
         filteredListings = filteredListings.sort((a, b) => {
           const rnd = (new Date()).getHours();
@@ -218,6 +224,10 @@ export class BbCollection {
           const bi = rnd % b.id.length;
           return a.id.charCodeAt(ai) - b.id.charCodeAt(bi);
         });
+      default:
+      //TODO - check for default sort option only do random if not default
+
+
     }
 
     const meta = buildMetaData(collection.title, collection.summary, 'website', collection?.header?.info?.secure_url && cdnAsset(collection.header.info, 'jpg', 't_large_image'));
@@ -252,7 +262,7 @@ export class BbCollection {
         </div>
       </div>}
       {filteredListings && <form class="sort-form">
-        <h2 class="sort-title">{filteredListings.length} Listings</h2>
+        <h2 class="sort-title">{this.loaded ? filteredListings.length : 'Loading'} Listings</h2>
         <div class="sort-layout">
           <button>Card <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="10.5" cy="10.5" r="9.5" fill="#FFB056" stroke="#F2994A" stroke-width="2" />
@@ -265,7 +275,7 @@ export class BbCollection {
           </button>
         </div>
         <select class="sort-order" onChange={({ target }) => { this.sortOrder = (target as HTMLSelectElement).value }}>
-          <option value="featured">Sort</option>
+          <option value="random">Sort</option>
           <hr />
           <option value="price_asc">Price ↑</option>
           <option value="price_desc">Price ↓</option>
