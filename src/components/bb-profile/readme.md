@@ -7,11 +7,11 @@
 
 ## Properties
 
-| Property        | Attribute        | Description | Type                             | Default     |
-| --------------- | ---------------- | ----------- | -------------------------------- | ----------- |
-| `profileHeader` | `profile-header` |             | `"image" \| "none" \| "overlay"` | `'overlay'` |
-| `profilePath`   | `profile-path`   |             | `string`                         | `undefined` |
-| `root`          | `root`           |             | `string`                         | `'/'`       |
+| Property        | Attribute        | Description | Type                                       | Default     |
+| --------------- | ---------------- | ----------- | ------------------------------------------ | ----------- |
+| `profileHeader` | `profile-header` |             | `"full" \| "image" \| "none" \| "overlay"` | `'full'`    |
+| `profilePath`   | `profile-path`   |             | `string`                                   | `undefined` |
+| `root`          | `root`           |             | `string`                                   | `'/'`       |
 
 
 ## Events

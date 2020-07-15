@@ -14,7 +14,7 @@ export class BbProfile {
   @Prop() profilePath: string;
   @Prop() root: string = '/';
 
-  @Prop() profileHeader: 'none' | 'overlay' | 'image' = 'overlay';
+  @Prop() profileHeader: 'none' | 'overlay' | 'image' | 'full' = 'full';
 
   @State() profileResponse: any;
 
@@ -196,7 +196,7 @@ export class BbProfile {
 
         {this.profileHeader == 'overlay' && <div class="header" style={{ backgroundImage: profile.header && profile.header.info && profile.header.info.secure_url && `url('${cdnAsset(profile.header.info, 'jpg', 't_large_image')}')` }}>
           <svg viewBox="0 0 3 1" style={{ display: 'block', width: '100%' }}></svg>
-          <div class="header-overlay" style={{ display: 'none' }}>
+          <div class="header-overlay">
             {profile.avatar && profile.avatar.info && profile.avatar.info.secure_url && <img src={profile.avatar.info.secure_url} class="header-avatar" />}
             <h1 style={{ margin: '0.5rem 1rem' }}>{profile.name || profile.handle}</h1>
             <div style={{ margin: '0.5rem 1rem' }}>{profile.summary}</div>
@@ -207,22 +207,32 @@ export class BbProfile {
             </div>
           </div>
         </div>}
-        {this.profileHeader == 'image' && <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'end' }}>
-          {profile.avatar && profile.avatar.info && profile.avatar.info.secure_url && <img src={profile.avatar.info.secure_url} class="header-avatar" />}
-          <div style={{ flex: '1 1 500px', display: 'flex', alignItems: 'start', margin: '0 1rem 2rem 1rem' }}>
+
+        {this.profileHeader == 'image' && <div class="header" style={{ backgroundImage: profile.header && profile.header.info && profile.header.info.secure_url && `url('${cdnAsset(profile.header.info, 'jpg', 't_large_image')}')` }}>
+          <svg viewBox="0 0 3 1" style={{ display: 'block', width: '100%' }}></svg>
+        </div>
+        }
+
+        {this.profileHeader == 'full' && <div><div class="header" style={{ backgroundImage: profile.header && profile.header.info && profile.header.info.secure_url && `url('${cdnAsset(profile.header.info, 'jpg', 't_large_image')}')` }}>
+          <svg viewBox="0 0 3 1" style={{ display: 'block', width: '100%' }}></svg>
+        </div>
+          <div style={{ display: 'flex', alignItems: 'center', margin: '0 1rem 1rem 1rem' }}>
+            {profile.avatar && profile.avatar.info && profile.avatar.info.secure_url && <img src={profile.avatar.info.secure_url} class="full-avatar" />}
+            <div style={{ width: '1rem', height: '1rem', flex: 'none' }}></div>
             <div>
               <h1 style={{ margin: '0', fontSize: '1.35rem', fontWeight: '600' }}>{profile.name || profile.handle}</h1>
               <p style={{ margin: '0', fontSize: '1rem', opacity: '0.75' }}>{profile.summary}</p>
               <div style={{ fontSize: '0.9rem', opacity: '0.5', marginTop: '0.25rem' }}>{profile.location} {profile.website && <a href={profile.website} class="link-button"><i style={{ display: 'inline-block', width: '1rem', height: '1rem', background: `url('https://api.iconify.design/fa-solid:link.svg')` }}></i> Website</a>} {profile.twitter && <a href={profile.twitter} class="link-button"><i style={{ display: 'inline-block', width: '1rem', height: '1rem', background: `url('https://api.iconify.design/fa:twitter-square.svg')` }}></i> Twitter</a>} {profile.facebook && <a href={profile.facebook} class="link-button"><i style={{ display: 'inline-block', width: '1rem', height: '1rem', background: `url('https://api.iconify.design/brandico:facebook-rect.svg')` }}></i> Facebook</a>}</div>
             </div>
-          </div>
-          <div style={{ padding: '0.25rem', margin: '0 1rem', flex: 'none' }}>
-            <button class="contact-button" onClick={() => this.overlay = { kind: 'contact' }}>Send Message</button>
-            {profile?.email && <a class="contact-button" href={`javascript:window.location.href='mailto:'+atob('${btoa(profile?.email)}')`}>Email</a>}
-            {profile?.telephone && <a class="contact-button" href={`javascript:window.location.href='tel:'+atob('${btoa(profile?.telephone)}')`}>Call</a>}
-          </div>
-        </div>}
+            <div style={{ padding: '0.25rem', margin: '0 1rem', flex: 'none' }}>
+              <button class="contact-button" onClick={() => this.overlay = { kind: 'contact' }}>Send Message</button>
+              {profile?.email && <a class="contact-button" href={`javascript:window.location.href='mailto:'+atob('${btoa(profile?.email)}')`}>Email</a>}
+              {profile?.telephone && <a class="contact-button" href={`javascript:window.location.href='tel:'+atob('${btoa(profile?.telephone)}')`}>Call</a>}
+            </div>
 
+          </div>
+        </div>
+        }
 
         {collections && <div>
           {collections.map((collection) => (collection.listings && collection.listings.length > 0 && <div>

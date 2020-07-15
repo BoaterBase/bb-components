@@ -75,7 +75,7 @@ export namespace Components {
         "items": any[];
     }
     interface BbProfile {
-        "profileHeader": "none" | "overlay" | "image";
+        "profileHeader": "none" | "overlay" | "image" | "full";
         "profilePath": string;
         "root": string;
     }
@@ -221,7 +221,7 @@ declare namespace LocalJSX {
     }
     interface BbProfile {
         "onLinkClick"?: (event: CustomEvent<any>) => void;
-        "profileHeader"?: "none" | "overlay" | "image";
+        "profileHeader"?: "none" | "overlay" | "image" | "full";
         "profilePath"?: string;
         "root"?: string;
     }
