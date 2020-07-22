@@ -41,6 +41,7 @@ graph TD;
   bb-connector --> bb-profile
   bb-connector --> bb-collection
   bb-listing --> bb-icon
+  bb-listing --> bb-map
   bb-listing --> bb-content
   bb-content --> bb-media
   bb-profile --> bb-listing-card

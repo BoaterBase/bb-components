@@ -2,7 +2,7 @@ import { Component, Prop, Host, h, State, Event, EventEmitter, Watch } from '@st
 import { cdnAsset, buildMetaData } from '../../utils/utils';
 import { Head } from 'stencil-head';
 
-let BB_API = 'https://www.boaterbase.com/api';
+let BB_API = 'https://api.boaterbase.com/api';
 
 @Component({
   tag: 'bb-profile',

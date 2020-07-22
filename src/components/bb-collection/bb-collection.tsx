@@ -5,7 +5,7 @@ import { orderBy } from 'natural-orderby';
 import groupArray from 'group-array';
 
 //let BB_API = 'http://localhost:5000/api'
-let BB_API = 'https://www.boaterbase.com/api';
+let BB_API = 'https://api.boaterbase.com/api';
 
 //const groupBy = function (a, k) {
 //  return a.reduce((acc, item) => ((acc[item[k]] = [...(acc[item[k]] || []), item]), acc), {});

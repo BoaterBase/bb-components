@@ -30,12 +30,14 @@
 ### Depends on
 
 - [bb-icon](../icon)
+- [bb-map](../bb-map)
 - [bb-content](../content)
 
 ### Graph
 ```mermaid
 graph TD;
   bb-listing --> bb-icon
+  bb-listing --> bb-map
   bb-listing --> bb-content
   bb-content --> bb-media
   bb-connector --> bb-listing

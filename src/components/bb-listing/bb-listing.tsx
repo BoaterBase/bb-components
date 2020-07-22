@@ -4,7 +4,7 @@ import { cdnAsset, buildMetaData, formatCurrency, formatNumber } from '../../uti
 import { BaseHead } from 'stencil-head';
 
 //let BB_API = 'http://localhost:5000/api'
-let BB_API = 'https://www.boaterbase.com/api';
+let BB_API = 'https://api.boaterbase.com/api';
 
 
 @Component({
@@ -203,6 +203,8 @@ export class BbListing {
     }
   }
 
+  //private geoContainer?: HTMLDivElement;
+
   render() {
     //console.log(this.listingResponse)
 
@@ -253,7 +255,6 @@ export class BbListing {
             <div style={{ display: 'flex' }}>
               <div>
                 <h1 class="title">{listing.title}</h1>
-                {listing.location && <div style={{ color: 'inherit', opacity: '0.75', fontWeight: '400', marginBottom: '0.75rem' }}><bb-icon icon="gridicons:location" color="#cccccc"></bb-icon> {listing.location}</div>}
               </div>
               <div style={{ flex: 'auto', textAlign: 'right' }}>
                 <div style={{ fontSize: '0.8rem', fontWeight: '500', textTransform: 'uppercase', opacity: '0.5' }}>{listing.label}</div>
@@ -261,6 +262,12 @@ export class BbListing {
               </div>
             </div>
             <p class="summary">{listing.summary}</p>
+
+            {listing.location && <div style={{ width: '100%', borderTop: '2px solid #eee', paddingTop: '0.5rem', marginTop: '0.5rem' }}>
+              {listing.location && <div style={{ color: 'inherit', opacity: '0.5', fontWeight: '400', marginBottom: '0.75rem' }}><bb-icon icon="gridicons:location" color="#cccccc"></bb-icon> {listing.location}</div>}
+              {listing.geo && listing.geo._latitude && <div style={{ position: 'relative', marginBottom: '0.5rem', borderRadius: '0.25rem', overflow: 'hidden', width: '100%', height: '300px' }}><bb-map latitude={listing.geo._latitude} longitude={listing.geo._longitude}></bb-map></div>}
+            </div>}
+
           </div>
           <div style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', alignItems: 'center', border: '1px solid #f1f1f1', borderRadius: '0.25rem', paddingTop: '0.5rem' }}>
             {listing.profile?.data && <a class="avatar" onClick={this.linkClickHandler(`profiles/${listing.profile.data.handle}`)}><img src={listing.profile.data?.avatar?.info ? listing.profile.data.avatar.info.thumbnail_url : `https://gravatar.com/avatar/b6de1b5951e1ab139a39968f907c4f77?d=mp`} style={{ display: 'inline-block', border: '1px solid #eeeeee', borderRadius: '100%', width: '4rem', height: '4rem' }} /></a>}

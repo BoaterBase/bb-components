@@ -70,6 +70,10 @@ export namespace Components {
         "listingId": string;
         "root": string;
     }
+    interface BbMap {
+        "latitude": number;
+        "longitude": number;
+    }
     interface BbMedia {
         "display": string;
         "items": any[];
@@ -123,6 +127,12 @@ declare global {
         prototype: HTMLBbListingCardElement;
         new (): HTMLBbListingCardElement;
     };
+    interface HTMLBbMapElement extends Components.BbMap, HTMLStencilElement {
+    }
+    var HTMLBbMapElement: {
+        prototype: HTMLBbMapElement;
+        new (): HTMLBbMapElement;
+    };
     interface HTMLBbMediaElement extends Components.BbMedia, HTMLStencilElement {
     }
     var HTMLBbMediaElement: {
@@ -143,6 +153,7 @@ declare global {
         "bb-icon": HTMLBbIconElement;
         "bb-listing": HTMLBbListingElement;
         "bb-listing-card": HTMLBbListingCardElement;
+        "bb-map": HTMLBbMapElement;
         "bb-media": HTMLBbMediaElement;
         "bb-profile": HTMLBbProfileElement;
     }
@@ -215,6 +226,10 @@ declare namespace LocalJSX {
         "onLinkClick"?: (event: CustomEvent<any>) => void;
         "root"?: string;
     }
+    interface BbMap {
+        "latitude"?: number;
+        "longitude"?: number;
+    }
     interface BbMedia {
         "display"?: string;
         "items"?: any[];
@@ -233,6 +248,7 @@ declare namespace LocalJSX {
         "bb-icon": BbIcon;
         "bb-listing": BbListing;
         "bb-listing-card": BbListingCard;
+        "bb-map": BbMap;
         "bb-media": BbMedia;
         "bb-profile": BbProfile;
     }
@@ -248,6 +264,7 @@ declare module "@stencil/core" {
             "bb-icon": LocalJSX.BbIcon & JSXBase.HTMLAttributes<HTMLBbIconElement>;
             "bb-listing": LocalJSX.BbListing & JSXBase.HTMLAttributes<HTMLBbListingElement>;
             "bb-listing-card": LocalJSX.BbListingCard & JSXBase.HTMLAttributes<HTMLBbListingCardElement>;
+            "bb-map": LocalJSX.BbMap & JSXBase.HTMLAttributes<HTMLBbMapElement>;
             "bb-media": LocalJSX.BbMedia & JSXBase.HTMLAttributes<HTMLBbMediaElement>;
             "bb-profile": LocalJSX.BbProfile & JSXBase.HTMLAttributes<HTMLBbProfileElement>;
         }
