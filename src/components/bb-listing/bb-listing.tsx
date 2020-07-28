@@ -127,7 +127,7 @@ export class BbListing {
     window.setTimeout(() => {
       window['prerenderReady'] = true;
       console.log('Rendered');
-    }, 100);
+    }, 1000);
 
 
     this.updatesResponse = await this.fetchUpdates();
