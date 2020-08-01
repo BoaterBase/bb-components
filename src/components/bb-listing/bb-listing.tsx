@@ -230,6 +230,8 @@ export class BbListing {
     let mediaLength = (listing.media || []).length;
     let mediaStack = (listing.media || []).slice(0, 12);
 
+    console.log(listing)
+
     return (<Host>
 
 
@@ -281,8 +283,8 @@ export class BbListing {
 
             <div style={{ display: 'flex', padding: '0.25rem' }}>
               <button class="contact-button" onClick={() => this.overlay = { kind: 'contact' }}>Message</button>
-              {listing.profile?.data?.email && <a class="contact-button" href={`javascript:window.location.href='mailto:'+atob('${btoa(listing.profile?.data?.email)}')`}>Email</a>}
-              {listing.profile?.data?.telephone && <a class="contact-button" href={`javascript:window.location.href='tel:'+atob('${btoa(listing.profile?.data?.telephone)}')`}>Call</a>}
+              {listing.profile?.data?.email && <a class="contact-button" href={`mailto:${listing.profile?.data?.email}`}>Email</a>}
+              {listing.profile?.data?.telephone && <a class="contact-button" href={`tel:${listing.profile?.data?.telephone}`}>Call</a>}
             </div>
           </div>
         </div>

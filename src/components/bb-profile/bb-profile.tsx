@@ -202,8 +202,8 @@ export class BbProfile {
             <div style={{ margin: '0.5rem 1rem' }}>{profile.summary}</div>
             <div style={{ display: 'flex', padding: '0.25rem' }}>
               <button class="contact-button" onClick={() => this.overlay = { kind: 'contact' }}>Send Message</button>
-              {profile?.data?.email && <a class="contact-button" href={`javascript:window.location.href='mailto:'+atob('${btoa(profile?.data?.email)}')`}>Email</a>}
-              {profile?.data?.telephone && <a class="contact-button" href={`javascript:window.location.href='tel:'+atob('${btoa(profile?.data?.telephone)}')`}>Call</a>}
+              {profile?.data?.email && <a class="contact-button" href={`mailto:${profile?.data?.email}`}>Email</a>}
+              {profile?.data?.telephone && <a class="contact-button" href={`tel:${profile?.data?.telephone}`}>Call</a>}
             </div>
           </div>
         </div>}
@@ -226,8 +226,8 @@ export class BbProfile {
             </div>
             <div style={{ padding: '0.25rem', margin: '0 1rem', flex: 'none' }}>
               <button class="contact-button" onClick={() => this.overlay = { kind: 'contact' }}>Send Message</button>
-              {profile?.email && <a class="contact-button" href={`javascript:window.location.href='mailto:'+atob('${btoa(profile?.email)}')`}>Email</a>}
-              {profile?.telephone && <a class="contact-button" href={`javascript:window.location.href='tel:'+atob('${btoa(profile?.telephone)}')`}>Call</a>}
+              {profile?.email && <a class="contact-button" href={`mailto:${profile?.email}`}>Email</a>}
+              {profile?.telephone && <a class="contact-button" href={`tel:${profile?.telephone}`}>Call</a>}
             </div>
 
           </div>
